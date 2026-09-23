@@ -76,3 +76,27 @@ create policy "respostas quiz public insert" on public.respostas_quiz for insert
 revoke select on public.quiz_sessions from anon;
 revoke select on public.quiz_answers from anon;
 revoke select on public.respostas_quiz from anon;
+
+
+-- Painel agregado de visitantes (não expõe dados individuais)
+create or replace view public.analytics_visitors_overview as
+select
+  count(*)::bigint as total_visitors,
+  count(*) filter (where started_at::date = current_date)::bigint as visitors_today,
+  count(*) filter (where started_at >= now() - interval '7 days')::bigint as visitors_7d,
+  count(*) filter (where started_at >= now() - interval '30 days')::bigint as visitors_30d,
+  count(*) filter (where completed_at is not null)::bigint as completed_quizzes,
+  count(*) filter (where completed_at is null)::bigint as unfinished_quizzes
+from public.quiz_sessions;
+
+create or replace view public.analytics_visitors_daily as
+select
+  started_at::date as day,
+  count(*)::bigint as visitors
+from public.quiz_sessions
+where started_at >= current_date - interval '29 days'
+group by started_at::date
+order by day;
+
+grant select on public.analytics_visitors_overview to anon;
+grant select on public.analytics_visitors_daily to anon;
