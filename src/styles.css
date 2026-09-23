@@ -898,3 +898,14 @@
   .quiz-v3-card h2{font-size:19px;margin-right:32px}
   .quiz-v3-options button{font-size:9.5px}
 }
+
+
+/* Smooth quiz question transitions */
+.quiz-v3-transitioning .quiz-v3-card,
+.quiz-v3-transitioning .quiz-v3-intro,
+.quiz-v3-transitioning .quiz-v3-progress{
+  opacity:.72;
+  transform:translateY(2px);
+  transition:opacity .12s ease,transform .12s ease;
+}
+.quiz-v3-card,.quiz-v3-intro,.quiz-v3-progress{transition:opacity .12s ease,transform .12s ease;}
