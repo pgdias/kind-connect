@@ -154,7 +154,25 @@ async function getCampaignFunnelWithFallback(): Promise<LoadResult<CampaignFunne
     "Funil por campanha",
     "analytics_campaign_funnel?select=*&order=unique_checkout_visitors.desc,unique_quiz_completions.desc,unique_visitors.desc"
   );
-  if (!primary.error || !primary.error.includes("analytics_campaign_funnel")) return primary;
+  if (!primary.error) return primary;
+
+  if (primary.error.includes("analytics_campaign_funnel")) {
+    const rpc = await getData<CampaignFunnel[]>(
+      "Funil por campanha",
+      "rpc/get_analytics_campaign_funnel"
+    );
+    if (!rpc.error) {
+      return {
+        label: "Funil por campanha",
+        data: [...(rpc.data ?? [])].sort((a, b) =>
+          b.unique_checkout_visitors - a.unique_checkout_visitors ||
+          b.unique_quiz_completions - a.unique_quiz_completions ||
+          b.unique_visitors - a.unique_visitors ||
+          b.sessions - a.sessions
+        ),
+      };
+    }
+  }
 
   const [sessions, events] = await Promise.all([
     getData<QuizSessionRow[]>(
@@ -167,11 +185,17 @@ async function getCampaignFunnelWithFallback(): Promise<LoadResult<CampaignFunne
     ),
   ]);
 
-  if (sessions.error || events.error) {
-    return { label: "Funil por campanha", error: primary.error };
+  if (!sessions.error && !events.error) {
+    return {
+      label: "Funil por campanha",
+      data: buildCampaignFunnel(sessions.data ?? [], events.data ?? []),
+    };
   }
 
-  return { label: "Funil por campanha", data: buildCampaignFunnel(sessions.data ?? [], events.data ?? []) };
+  return {
+    label: "Funil por campanha",
+    error: [primary.error, sessions.error, events.error].filter(Boolean).join(" | "),
+  };
 }
 
 
