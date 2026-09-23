@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { saveQuizAnswer, saveQuizSummary, startQuizSession, trackEvent } from "../lib/supabase";
+import { recordQuizCompletion, saveQuizAnswer, saveQuizSummary, startQuizSession, trackEvent } from "../lib/supabase";
 
 type Answer = { questionId: number; value: string };
 type Question = { id: number; tag: string; title: string; subtitle?: string; options: string[] };
@@ -129,13 +129,10 @@ function QuizPage() {
       await saveQuizAnswer(question.id, value, true);
       await trackEvent("quiz_answered", { question_id: question.id });
 
-      // Completion is the critical conversion event. Send it only after
-      // the session and final answer are already persisted, then retry once
-      // if the first request fails transiently.
-      let completed = await trackEvent("quiz_completed");
+      let completed = await recordQuizCompletion();
       if (!completed) {
         await new Promise((resolve) => setTimeout(resolve, 500));
-        completed = await trackEvent("quiz_completed");
+        completed = await recordQuizCompletion();
       }
 
       await saveQuizSummary(next, []);
