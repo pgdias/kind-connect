@@ -77,7 +77,6 @@ revoke select on public.quiz_sessions from anon;
 revoke select on public.quiz_answers from anon;
 revoke select on public.respostas_quiz from anon;
 
-
 create table if not exists public.quiz_events (
   id uuid primary key default gen_random_uuid(),
   session_id text not null references public.quiz_sessions(session_id) on delete cascade,
@@ -97,13 +96,52 @@ create policy "quiz events public insert" on public.quiz_events for insert to an
 
 revoke select on public.quiz_events from anon;
 
--- Permissões explícitas para o papel público usado pelo frontend.
 grant insert on public.quiz_sessions to anon;
 grant update on public.quiz_sessions to anon;
 grant insert on public.quiz_answers to anon;
 grant update on public.quiz_answers to anon;
 grant insert on public.quiz_events to anon;
 grant insert on public.respostas_quiz to anon;
+
+-- Endpoint seguro para registrar a conclusão.
+-- Ele valida que a sessão existe antes de gravar o evento.
+create or replace function public.record_quiz_completion(p_session_id text)
+returns boolean
+language plpgsql
+security definer
+set search_path = public
+as $$
+begin
+  if not exists (
+    select 1
+    from public.quiz_sessions
+    where session_id = p_session_id
+  ) then
+    return false;
+  end if;
+
+  insert into public.quiz_events (
+    session_id,
+    event_name,
+    metadata
+  )
+  values (
+    p_session_id,
+    'quiz_completed',
+    '{}'::jsonb
+  );
+
+  update public.quiz_sessions
+  set completed_at = coalesce(completed_at, now()),
+      current_step = 8
+  where session_id = p_session_id;
+
+  return true;
+end;
+$$;
+
+revoke all on function public.record_quiz_completion(text) from public;
+grant execute on function public.record_quiz_completion(text) to anon;
 
 -- Painel agregado do funil
 create or replace view public.analytics_funnel_overview as
@@ -117,8 +155,7 @@ select
 
 grant select on public.analytics_funnel_overview to anon;
 
-
--- Painel agregado de visitantes (não expõe dados individuais)
+-- Painel agregado de visitantes
 create or replace view public.analytics_visitors_overview as
 select
   count(*)::bigint as total_visitors,
