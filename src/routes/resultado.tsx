@@ -222,7 +222,7 @@ function ResultPage() {
               {offerReady && (
                 <section className="delayed-offer">
                   <a className="delayed-buy-button" href={CHECKOUT_URL}>
-                    QUERO CONFERIR MEU CASO COM MAIS DETALHES <span>→</span>
+                    QUERO BLINDAR MEU BOLSA FAMÍLIA <span>→</span>
                   </a>
                 </section>
               )}
