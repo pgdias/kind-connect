@@ -4,7 +4,7 @@ const SUPABASE_KEY = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY as string | u
 const SESSION_STORAGE_KEY = "blindaQuizSessionId";
 const SESSION_CREATED_KEY = "blindaQuizSessionCreated";
 const SESSION_VERSION_KEY = "blindaQuizSessionVersion";
-const SESSION_VERSION = "3";
+const SESSION_VERSION = "4";
 let sessionCreationPromise: Promise<string> | null = null;
 
 function getSessionId() {
@@ -87,6 +87,34 @@ export async function trackEvent(
       metadata,
     }),
   });
+}
+
+export async function recordQuizCompletion() {
+  const sessionId = await startQuizSession();
+  if (!sessionId || !SUPABASE_URL || !SUPABASE_KEY) return false;
+
+  try {
+    const response = await fetch(`${SUPABASE_URL}/rest/v1/rpc/record_quiz_completion`, {
+      method: "POST",
+      headers: {
+        apikey: SUPABASE_KEY,
+        Authorization: `Bearer ${SUPABASE_KEY}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ p_session_id: sessionId }),
+    });
+
+    if (!response.ok) {
+      const body = await response.text().catch(() => "");
+      console.error(`[Blinda Bolsa] Supabase ${response.status} em record_quiz_completion`, body);
+      return false;
+    }
+
+    return true;
+  } catch (error) {
+    console.error("[Blinda Bolsa] Falha de rede em record_quiz_completion", error);
+    return false;
+  }
 }
 
 export async function startQuizSession() {
