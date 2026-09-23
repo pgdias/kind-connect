@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import type { ReactNode } from "react";
 
 export const Route = createFileRoute("/")({ component: Index });
 
@@ -10,7 +11,7 @@ function Header() {
   return <header className="site-header"><div className="container header-inner"><a className="brand" href="/"><span className="brand-mark"><Shield /></span><span><strong>BLINDA</strong><small>BOLSA FAMÍLIA</small></span></a><span className="header-pill">Teste informativo</span></div></header>;
 }
 
-function CTA({children}:{children:React.ReactNode}) {
+function CTA({children}:{children:ReactNode}) {
   return <Link className="primary-button" to="/quiz">{children}<span>→</span></Link>;
 }
 
