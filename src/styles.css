@@ -132,3 +132,65 @@ footer{background:#071f16;color:#b5c5bd;padding:43px 0}.footer-inner{display:gri
  .guarantee-box{text-align:left}
  .final-cta{padding:32px 20px}
 }
+
+
+/* ===== VSL SALES PAGE V3 ===== */
+.vsl-sales-page{background:#050706}
+.vsl-sales-page .quiz-header{background:#050706;border-bottom:1px solid #1b1f1d;color:#fff}
+.vsl-sales-page .quiz-brand strong{color:#fff}
+.vsl-sales-page .quiz-brand-mark{background:#b30d16}
+.vsl-sales-page .quiz-safe{background:#111514;border-color:#282e2b;color:#9ba7a1}
+.vsl-sales-container{width:min(780px,100%)}
+.live-result-banner{display:flex;align-items:center;justify-content:center;gap:9px;flex-wrap:wrap;margin:0 auto;padding:11px 15px;background:#090b0a;border:1px solid #3a1013;border-left:4px solid #d5121c;color:#fff;box-shadow:0 0 0 1px rgba(213,18,28,.08),0 10px 35px rgba(0,0,0,.25)}
+.live-result-dot{width:9px;height:9px;border-radius:50%;background:#e31520;box-shadow:0 0 0 4px rgba(227,21,32,.13),0 0 14px rgba(227,21,32,.6);animation:livePulse 1.2s infinite}
+.live-result-banner strong{font-size:8px;letter-spacing:.16em;color:#ffb3b7}
+.live-result-divider{width:1px;height:14px;background:#363b38}
+.live-result-banner b{font-size:8px;letter-spacing:.1em;color:#fff}
+@keyframes livePulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.55;transform:scale(.8)}}
+.vsl-headline{text-align:center;padding:30px 12px 27px}
+.vsl-headline h1{color:#fff;font-size:clamp(31px,5vw,52px);line-height:1.03;margin:0 auto 18px;max-width:730px;letter-spacing:-.05em}
+.vsl-headline h1 em{font-style:normal;color:#ff2631}
+.vsl-headline p{margin:0 auto;color:#aab2ae;font-size:14px;line-height:1.6;max-width:670px}
+.vsl-headline p strong{color:#fff;font-size:15px;letter-spacing:.02em}
+.vsl-video-wrap{border:1px solid #292e2b;background:#0b0d0c;padding:7px;box-shadow:0 25px 80px rgba(0,0,0,.45)}
+.vsl-video-placeholder{aspect-ratio:16/9;min-height:390px;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;background:radial-gradient(circle at 50% 45%,#202523 0%,#0b0d0c 53%,#030403 100%);color:#fff}
+.vsl-video-placeholder:before{content:"";position:absolute;inset:0;background:linear-gradient(120deg,rgba(213,18,28,.11),transparent 35%,rgba(255,255,255,.025) 65%,transparent)}
+.vsl-video-top{position:absolute;top:20px;left:22px;right:22px;display:flex;justify-content:space-between;color:#727b76;font-size:7px;font-weight:900;letter-spacing:.18em}
+.vsl-video-center{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;text-align:center;padding:25px}
+.vsl-big-play{width:76px;height:76px;border-radius:50%;display:grid;place-items:center;padding-left:4px;background:#d5121c;color:#fff;font-size:23px;box-shadow:0 0 0 9px rgba(213,18,28,.1),0 14px 35px rgba(0,0,0,.4);margin-bottom:19px}
+.vsl-video-center strong{font-size:11px;letter-spacing:.18em}
+.vsl-video-center>span{max-width:440px;margin-top:10px;color:#8e9993;font-size:10px;line-height:1.5}
+.vsl-video-bottom{position:absolute;bottom:18px;left:22px;right:22px;display:flex;align-items:center;gap:9px;color:#69736e;font-size:8px}
+.vsl-video-bottom>div{height:3px;flex:1;background:#272c29;border-radius:9px;overflow:hidden}
+.vsl-video-bottom i{display:block;width:3%;height:100%;background:#d5121c}
+.delayed-offer{margin:30px auto 0;padding:29px 25px 27px;text-align:center;background:linear-gradient(145deg,#141816,#090b0a);border:1px solid #303633;box-shadow:0 20px 60px rgba(0,0,0,.3);animation:offerReveal .55s ease both}
+.delayed-offer-kicker{color:#ff4a53;font-size:8px;font-weight:950;letter-spacing:.18em}
+.delayed-offer h2{max-width:640px;margin:9px auto 10px;color:#fff;font-size:clamp(25px,4vw,36px);line-height:1.08;letter-spacing:-.04em}
+.delayed-offer p{max-width:570px;margin:0 auto 17px;color:#929c97;font-size:11px;line-height:1.6}
+.delayed-price{color:#fff;font-size:32px;font-weight:950;letter-spacing:-.04em;margin-bottom:16px}
+.delayed-price small{display:block;margin-top:2px;color:#69736e;font-size:8px;font-weight:700;letter-spacing:.08em}
+.delayed-buy-button{display:flex;align-items:center;justify-content:center;gap:9px;width:min(640px,100%);margin:auto;padding:17px 19px;border:0;border-radius:7px;background:linear-gradient(135deg,#e01823,#b90d16);color:#fff;font-size:11px;font-weight:950;line-height:1.25;letter-spacing:.015em;box-shadow:0 12px 30px rgba(213,18,28,.24);transition:transform .18s ease,filter .18s ease}
+.delayed-buy-button:hover{transform:translateY(-2px);filter:brightness(1.08)}
+.delayed-buy-button span{font-size:18px;flex:0 0 auto}
+@keyframes offerReveal{from{opacity:0;transform:translateY(15px)}to{opacity:1;transform:translateY(0)}}
+.delayed-offer-wait{padding:24px 15px;text-align:center;color:#656e69}
+.delayed-offer-wait span{font-size:8px;font-weight:950;letter-spacing:.16em;color:#a1aaa5}
+.delayed-offer-wait p{font-size:9px;margin:6px 0 0}
+.vsl-sales-page .result-notice{margin-top:26px;background:#0b0e0c;border-color:#202522}
+.vsl-sales-page .result-notice>span{background:#1a211d;color:#9da9a2}
+.vsl-sales-page .result-notice p{color:#737d78}
+@media(max-width:600px){
+ .vsl-sales-page .result-main{padding:30px 13px 55px}
+ .live-result-banner{justify-content:flex-start}
+ .vsl-headline{padding:25px 4px 22px}
+ .vsl-headline h1{font-size:32px}
+ .vsl-headline p{font-size:13px}
+ .vsl-video-placeholder{min-height:225px}
+ .vsl-video-top{left:15px;right:15px;top:14px}
+ .vsl-video-bottom{left:15px;right:15px;bottom:13px}
+ .vsl-big-play{width:62px;height:62px;font-size:19px}
+ .vsl-video-center strong{font-size:9px}
+ .vsl-video-center>span{font-size:8px}
+ .delayed-offer{padding:25px 17px}
+ .delayed-buy-button{font-size:10px;padding:16px 13px}
+}
