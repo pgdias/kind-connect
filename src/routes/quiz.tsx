@@ -1,4 +1,4 @@
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 
 type Answer = { questionId: number; value: string };
@@ -65,58 +65,80 @@ const questions: Question[] = [
 
 export const Route = createFileRoute("/quiz")({ component: QuizPage });
 
+function readStep() {
+  if (typeof window === "undefined") return 1;
+  const value = Number(new URLSearchParams(window.location.search).get("step") || "1");
+  return Number.isFinite(value) ? Math.min(Math.max(Math.trunc(value), 1), questions.length) : 1;
+}
+
+function readAnswers(): Answer[] {
+  if (typeof window === "undefined") return [];
+  try {
+    const parsed = JSON.parse(sessionStorage.getItem("blindaQuizAnswers") || "[]");
+    return Array.isArray(parsed) ? parsed : [];
+  } catch {
+    return [];
+  }
+}
+
 function QuizPage() {
-  const navigate = useNavigate();
-  const [current, setCurrent] = useState(() => {
-    if (typeof window === "undefined") return 0;
-    const step = Number(new URLSearchParams(window.location.search).get("step") || "1");
-    return Math.min(Math.max(step - 1, 0), questions.length - 1);
-  });
-  const [answers, setAnswers] = useState<Answer[]>(() => {
-    if (typeof window === "undefined") return [];
-    try {
-      return JSON.parse(sessionStorage.getItem("blindaQuizAnswers") || "[]");
-    } catch {
-      return [];
-    }
-  });
-  const [processing, setProcessing] = useState(false);\n  const [transitioning, setTransitioning] = useState(false);\n\n  useEffect(() => {\n    setTransitioning(false);\n  }, [current]);
+  const [current, setCurrent] = useState(() => readStep() - 1);
+  const [answers, setAnswers] = useState<Answer[]>(readAnswers);
+  const [processing, setProcessing] = useState(false);
+
+  useEffect(() => {
+    const onPopState = () => setCurrent(readStep() - 1);
+    window.addEventListener("popstate", onPopState);
+    return () => window.removeEventListener("popstate", onPopState);
+  }, []);
 
   const question = questions[current];
   const selected = answers.find((answer) => answer.questionId === question.id)?.value;
   const progress = ((current + 1) / questions.length) * 100;
 
+  const goToStep = (nextIndex: number, replace = false) => {
+    const step = nextIndex + 1;
+    const url = "/quiz?step=" + step;
+    if (replace) window.history.replaceState({}, "", url);
+    else window.history.pushState({}, "", url);
+    setCurrent(nextIndex);
+    window.scrollTo({ top: 0, behavior: "instant" as ScrollBehavior });
+  };
+
   const answer = (value: string) => {
-    const next = [...answers.filter((item) => item.questionId !== question.id), { questionId: question.id, value }];
+    if (processing) return;
+
+    const next = [
+      ...answers.filter((item) => item.questionId !== question.id),
+      { questionId: question.id, value },
+    ];
+
+    setAnswers(next);
     sessionStorage.setItem("blindaQuizAnswers", JSON.stringify(next));
 
     if (current === questions.length - 1) {
-      finish(next);
+      setProcessing(true);
+      window.location.assign("/resultado");
       return;
     }
 
-    window.location.assign("/quiz?step=" + (current + 2));
-  };
-
-  const finish = (finalAnswers: Answer[]) => {
-    setProcessing(true);
-    sessionStorage.setItem("blindaQuizAnswers", JSON.stringify(finalAnswers));
-    window.setTimeout(() => navigate({ to: "/resultado" }), 1500);
+    goToStep(current + 1);
   };
 
   const back = () => {
-    if (current === 0) return navigate({ to: "/" });
-    setTransitioning(true);
-    window.history.pushState({}, "", "/quiz?step=" + current);
-    requestAnimationFrame(() => {
-      setCurrent((number) => number - 1);
-    });
+    if (processing) return;
+    if (current === 0) {
+      window.history.pushState({}, "", "/");
+      window.location.assign("/");
+      return;
+    }
+    goToStep(current - 1);
   };
 
   if (processing) return <ProcessingScreen />;
 
   return (
-    <main className={"quiz-v3" + (transitioning ? " quiz-v3-transitioning" : "")}>
+    <main className="quiz-v3">
       <header className="quiz-v3-header">
         <Link to="/" className="quiz-v3-brand">
           <span>✓</span>
@@ -128,7 +150,7 @@ function QuizPage() {
       <section className="quiz-v3-main">
         <div className="quiz-v3-container">
           <div className="quiz-v3-top">
-            <button onClick={back}>← Voltar</button>
+            <button type="button" onClick={back}>← Voltar</button>
             <span>{current + 1} / {questions.length}</span>
           </div>
 
@@ -141,7 +163,7 @@ function QuizPage() {
           </div>
 
           <div className="quiz-v3-card">
-            <div className="quiz-v3-number">0{current + 1}</div>
+            <div className="quiz-v3-number">{String(current + 1).padStart(2, "0")}</div>
             <div className="quiz-v3-tag">{question.tag}</div>
             <h2>{question.title}</h2>
             {question.subtitle && <p className="quiz-v3-subtitle">{question.subtitle}</p>}
@@ -178,11 +200,8 @@ function ProcessingScreen() {
       <div className="quiz-v3-processing-card">
         <div className="quiz-v3-spinner" />
         <span>ANALISANDO SUAS RESPOSTAS</span>
-        <h1>Separando os pontos que você marcou para conferir.</h1>
-        <p>Estamos organizando sua avaliação com base nas respostas que você acabou de dar.</p>
-        <div><b>✓</b> Respostas registradas</div>
-        <div><b>✓</b> Pontos de atenção identificados</div>
-        <div><b>•</b> Preparando seu resultado</div>
+        <h1>Preparando sua avaliação.</h1>
+        <p>Suas respostas foram registradas.</p>
       </div>
     </main>
   );
