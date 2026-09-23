@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { saveQuizAnswer, saveQuizSummary, startQuizSession } from "../lib/supabase";
+import { saveQuizAnswer, saveQuizSummary, startQuizSession, trackEvent } from "../lib/supabase";
 
 type Answer = { questionId: number; value: string };
 type Question = { id: number; tag: string; title: string; subtitle?: string; options: string[] };
@@ -89,6 +89,7 @@ function QuizPage() {
 
   useEffect(() => {
     void startQuizSession();
+    void trackEvent("quiz_started");
   }, []);
 
   useEffect(() => {
@@ -123,6 +124,7 @@ function QuizPage() {
 
     const isLastQuestion = current === questions.length - 1;
     void saveQuizAnswer(question.id, value, isLastQuestion);
+    void trackEvent("quiz_answered", { question_id: question.id });
 
     if (isLastQuestion) {
       setProcessing(true);
