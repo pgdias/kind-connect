@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
+import { trackEvent } from "../lib/supabase";
 
 type Answer = { questionId: number; value: string };
 
@@ -158,6 +159,7 @@ function ResultPage() {
   const [availabilitySeconds, setAvailabilitySeconds] = useState(1800);
 
   useEffect(() => {
+    void trackEvent("result_viewed");
     try {
       const raw = sessionStorage.getItem("blindaQuizAnswers");
       if (raw) {
@@ -312,7 +314,7 @@ function ResultPage() {
 
               {offerReady && (
                 <section className="delayed-offer">
-                  <a className="delayed-buy-button" href={CHECKOUT_URL}>
+                  <a className="delayed-buy-button" href={CHECKOUT_URL} onClick={() => void trackEvent("checkout_click")}>
                     QUERO BLINDAR MEU BOLSA FAMÍLIA <span>→</span>
                   </a>
                 </section>
