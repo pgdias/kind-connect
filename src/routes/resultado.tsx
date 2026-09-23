@@ -121,15 +121,6 @@ function ResultPage() {
                   </a>
                 </section>
               )}
-
-              <div className="result-notice">
-                <span>i</span>
-                <p>
-                  Esta página é independente e informativa. O teste não consulta o Cadastro Único nem determina
-                  bloqueio ou cancelamento. Para confirmar sua situação, use os canais oficiais do Governo Federal.
-                  Não informe CPF, senha, número do cartão ou dados bancários.
-                </p>
-              </div>
             </>
           ) : (
             <div className="result-hero">
