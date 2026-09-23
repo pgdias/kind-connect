@@ -79,10 +79,11 @@ function QuizPage() {
     const next = [...answers.filter((item) => item.questionId !== question.id), { questionId: question.id, value }];
     setAnswers(next);
 
-    window.setTimeout(() => {
-      if (current === questions.length - 1) finish(next);
-      else setCurrent((number) => number + 1);
-    }, 360);
+    if (current === questions.length - 1) {
+      finish(next);
+    } else {
+      setCurrent((number) => number + 1);
+    }
   };
 
   const finish = (finalAnswers: Answer[]) => {
@@ -132,6 +133,7 @@ function QuizPage() {
             <div className="quiz-v3-options">
               {question.options.map((option) => (
                 <button
+                  type="button"
                   key={option}
                   className={selected === option ? "selected" : ""}
                   onClick={() => answer(option)}
