@@ -20,7 +20,7 @@ const ACTIVITY_CITIES = [
 
 function ActivityNotifications({ active }: { active: boolean }) {
   const [index, setIndex] = useState(0);
-  const [visible, setVisible] = useState(true);
+  const [visible, setVisible] = useState(false);
 
   useEffect(() => {
     if (!active) {
@@ -31,9 +31,11 @@ function ActivityNotifications({ active }: { active: boolean }) {
     setVisible(true);
     const rotation = window.setInterval(() => {
       setVisible(false);
-      window.setTimeout(() => setIndex((current) => (current + 1) % ACTIVITY_CITIES.length), 180);
-      window.setTimeout(() => setVisible(true), 260);
-    }, 5200);
+      window.setTimeout(() => {
+        setIndex((current) => (current + 1) % ACTIVITY_CITIES.length);
+        setVisible(true);
+      }, 120);
+    }, 2500);
 
     return () => window.clearInterval(rotation);
   }, [active]);
@@ -44,9 +46,9 @@ function ActivityNotifications({ active }: { active: boolean }) {
     <div className="activity-notification" role="status" aria-live="polite">
       <div className="activity-notification-icon">✓</div>
       <div>
-        <strong>ATIVIDADE RECENTE</strong>
+        <strong>COMPRA REALIZADA</strong>
         <p>
-          Pessoas de <b>{ACTIVITY_CITIES[index]}</b> estão conferindo o Blinda Bolsa Família.
+          Uma pessoa de <b>{ACTIVITY_CITIES[index]}</b> acabou de adquirir o <b>Blinda Bolsa Família</b>.
         </p>
         <small>Agora mesmo</small>
       </div>
