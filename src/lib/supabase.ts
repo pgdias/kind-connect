@@ -7,6 +7,7 @@ let sessionCreationPromise: Promise<string> | null = null;
 
 function getSessionId() {
   if (typeof window === "undefined") return "";
+
   const existing = window.localStorage.getItem(SESSION_STORAGE_KEY);
   if (existing) return existing;
 
@@ -84,10 +85,15 @@ export async function startQuizSession() {
   const sessionId = getSessionId();
   if (!sessionId || typeof window === "undefined") return "";
 
-  if (window.localStorage.getItem(SESSION_CREATED_KEY) === "1") return sessionId;
   if (sessionCreationPromise) return sessionCreationPromise;
 
   sessionCreationPromise = (async () => {
+    const alreadyCreated = window.localStorage.getItem(SESSION_CREATED_KEY) === "1";
+
+    if (alreadyCreated) {
+      return sessionId;
+    }
+
     const utm = getUtmParams();
 
     const ok = await request("quiz_sessions", {
@@ -121,21 +127,14 @@ export async function saveQuizAnswer(
   const sessionId = await startQuizSession();
   if (!sessionId) return false;
 
-  const answerSaved = await request(
-    "quiz_answers",
-    {
-      method: "POST",
-      body: JSON.stringify({
-        session_id: sessionId,
-        question_id: questionId,
-        answer,
-      }),
-    },
-  );
-
-  // Completion is tracked as an event so the public browser never needs
-  // SELECT access to quiz_sessions in order to update a session row.
-  return answerSaved;
+  return request("quiz_answers", {
+    method: "POST",
+    body: JSON.stringify({
+      session_id: sessionId,
+      question_id: questionId,
+      answer,
+    }),
+  });
 }
 
 type QuizAnswer = {
