@@ -28,38 +28,68 @@ const ACTIVITY_BUYERS = [
   ["Letícia Moreira", "Guarulhos (SP)"],
 ] as const;
 
+let notificationAudioContext: AudioContext | null = null;
+
+function getNotificationAudioContext() {
+  const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+  if (!AudioContextClass) return null;
+
+  if (!notificationAudioContext) {
+    notificationAudioContext = new AudioContextClass();
+  }
+
+  return notificationAudioContext;
+}
+
 function playNotificationSound() {
   try {
-    const AudioContextClass = window.AudioContext || window.webkitAudioContext;
-    if (!AudioContextClass) return;
+    const context = getNotificationAudioContext();
+    if (!context) return;
 
-    const context = new AudioContextClass();
     const start = () => {
       const now = context.currentTime;
-      const gain = context.createGain();
-      const oscillator = context.createOscillator();
+      const master = context.createGain();
 
-      oscillator.type = "sine";
-      oscillator.frequency.setValueAtTime(880, now);
-      oscillator.frequency.exponentialRampToValueAtTime(1174, now + 0.09);
+      master.gain.setValueAtTime(0.0001, now);
+      master.gain.exponentialRampToValueAtTime(0.13, now + 0.018);
+      master.gain.exponentialRampToValueAtTime(0.0001, now + 0.62);
+      master.connect(context.destination);
 
-      gain.gain.setValueAtTime(0.0001, now);
-      gain.gain.exponentialRampToValueAtTime(0.045, now + 0.012);
-      gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.16);
+      const notes = [
+        { frequency: 659.25, start: 0, duration: 0.18 },
+        { frequency: 783.99, start: 0.11, duration: 0.2 },
+        { frequency: 1046.5, start: 0.22, duration: 0.34 },
+      ];
 
-      oscillator.connect(gain);
-      gain.connect(context.destination);
-      oscillator.start(now);
-      oscillator.stop(now + 0.17);
+      notes.forEach(({ frequency, start: offset, duration }) => {
+        const oscillator = context.createOscillator();
+        const gain = context.createGain();
+
+        oscillator.type = "sine";
+        oscillator.frequency.setValueAtTime(frequency, now + offset);
+
+        gain.gain.setValueAtTime(0.0001, now + offset);
+        gain.gain.exponentialRampToValueAtTime(0.72, now + offset + 0.012);
+        gain.gain.exponentialRampToValueAtTime(0.0001, now + offset + duration);
+
+        oscillator.connect(gain);
+        gain.connect(master);
+        oscillator.start(now + offset);
+        oscillator.stop(now + offset + duration + 0.02);
+      });
 
       window.setTimeout(() => {
-        void context.close();
-      }, 300);
+        if (notificationAudioContext === context) {
+          void context.close();
+          notificationAudioContext = null;
+        }
+      }, 900);
     };
 
     if (context.state === "suspended") {
       void context.resume().then(start).catch(() => {
         void context.close();
+        notificationAudioContext = null;
       });
     } else {
       start();
@@ -250,7 +280,6 @@ function ResultPage() {
                 </h1>
                 <p>
                   <strong className="vsl-urgent-line">ASSISTA ESSE VÍDEO ANTES QUE SEJA TARDE.</strong><br />
-
                 </p>
               </section>
 
