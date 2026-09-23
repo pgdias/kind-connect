@@ -6,7 +6,7 @@ const VISITOR_STORAGE_KEY = "blindaVisitorId";
 const SESSION_CREATED_KEY = "blindaQuizSessionCreated";
 const SESSION_LAST_ACTIVITY_KEY = "blindaQuizSessionLastActivity";
 const SESSION_VERSION_KEY = "blindaQuizSessionVersion";
-const SESSION_VERSION = "5";
+const SESSION_VERSION = "6";
 const SESSION_TIMEOUT_MS = 30 * 60 * 1000;
 let sessionCreationPromise: Promise<string> | null = null;
 
