@@ -43,8 +43,15 @@ function QuizPage() {
   const setAnswer = (value: string) => {
     setAnswers((prev) => [...prev.filter((a) => a.questionId !== question.id), { questionId: question.id, value }]);
     setDetails([]);
-    if (current !== 2 && current !== 3 && current !== 4) {
-      window.setTimeout(() => next(), 520);
+    if (current !== 2 && current !== 3 && current !== 4 && current !== 5) {
+      window.setTimeout(() => {
+        if (current === questions.length - 1) {
+          setProcessing(true);
+          window.setTimeout(() => navigate({ to: "/resultado" }), 1800);
+        } else {
+          setCurrent((n) => n + 1);
+        }
+      }, 520);
     }
   };
 
