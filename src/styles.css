@@ -1170,16 +1170,19 @@
 }
 @media(max-width:600px){
   .activity-notification{
-    left:12px;
-    bottom:12px;
-    width:calc(100vw - 24px);
-    grid-template-columns:34px 1fr 15px;
-    gap:9px;
-    padding:11px 10px;
-    border-radius:10px;
+    left:auto;
+    right:10px;
+    top:70px;
+    bottom:auto;
+    width:235px;
+    max-width:calc(100vw - 20px);
+    grid-template-columns:26px minmax(0,1fr) 12px;
+    gap:6px;
+    padding:7px;
+    border-radius:9px;
   }
-  .activity-notification-icon{width:28px;height:28px;font-size:11px}
-  .activity-notification strong{font-size:6px}
-  .activity-notification p{font-size:7px}
-  .activity-notification small{font-size:6px}
+  .activity-notification-icon{width:26px;height:26px;font-size:10px}
+  .activity-notification strong{font-size:5px}
+  .activity-notification p{font-size:6.5px}
+  .activity-notification small{font-size:5px}
 }
