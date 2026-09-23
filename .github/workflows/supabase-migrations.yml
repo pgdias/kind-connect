@@ -26,10 +26,16 @@ jobs:
           SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
         run: |
           test -n "$SUPABASE_DB_URL" || (echo "Missing GitHub secret SUPABASE_DB_URL" && exit 1)
-          psql "$SUPABASE_DB_URL" -v ON_ERROR_STOP=1 -f supabase/migrations/20260923030000_campaign_funnel.sql
+          for migration in supabase/migrations/*.sql; do
+            echo "Applying $migration"
+            psql "$SUPABASE_DB_URL" -v ON_ERROR_STOP=1 -f "$migration"
+          done
 
-      - name: Verify campaign funnel view
+      - name: Verify database state
         env:
           SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
         run: |
           psql "$SUPABASE_DB_URL" -v ON_ERROR_STOP=1 -c "select count(*) from public.analytics_campaign_funnel;"
+          psql "$SUPABASE_DB_URL" -v ON_ERROR_STOP=1 -c "select count(*) from public.analytics_maintenance where operation_key = 'initial_test_data_reset_2026_09_23';"
+          psql "$SUPABASE_DB_URL" -v ON_ERROR_STOP=1 -c "select count(*) from pg_proc where pronamespace = 'public'::regnamespace and proname = 'reset_analytics_data';" | grep -q '^0
+
