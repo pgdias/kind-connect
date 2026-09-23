@@ -2,6 +2,7 @@ const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL as string | undefined;
 const SUPABASE_KEY = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY as string | undefined;
 
 const SESSION_STORAGE_KEY = "blindaQuizSessionId";
+const SESSION_CREATED_KEY = "blindaQuizSessionCreated";
 
 function getSessionId() {
   if (typeof window === "undefined") return "";
@@ -82,9 +83,11 @@ export async function startQuizSession() {
   const sessionId = getSessionId();
   if (!sessionId || typeof window === "undefined") return "";
 
+  if (window.localStorage.getItem(SESSION_CREATED_KEY) === "1") return sessionId;
+
   const utm = getUtmParams();
 
-  const ok = await request("quiz_sessions?on_conflict=session_id", {
+  const ok = await request("quiz_sessions", {
     method: "POST",
     headers: {
       Prefer: "resolution=merge-duplicates,return=minimal",
@@ -99,6 +102,7 @@ export async function startQuizSession() {
 
   if (!ok) return "";
 
+  window.localStorage.setItem(SESSION_CREATED_KEY, "1");
   return sessionId;
 }
 
