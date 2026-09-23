@@ -77,13 +77,14 @@ function QuizPage() {
 
   const answer = (value: string) => {
     const next = [...answers.filter((item) => item.questionId !== question.id), { questionId: question.id, value }];
-    setAnswers(next);
+    sessionStorage.setItem("blindaQuizAnswers", JSON.stringify(next));
 
     if (current === questions.length - 1) {
       finish(next);
-    } else {
-      setCurrent((number) => number + 1);
+      return;
     }
+
+    window.location.assign("/quiz?step=" + (current + 2));
   };
 
   const finish = (finalAnswers: Answer[]) => {
