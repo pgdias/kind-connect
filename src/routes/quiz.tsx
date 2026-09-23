@@ -126,7 +126,10 @@ function QuizPage() {
 
     if (isLastQuestion) {
       setProcessing(true);
-      await saveQuizSummary(next, []);
+      await Promise.all([
+        saveQuizSummary(next, []),
+        new Promise((resolve) => setTimeout(resolve, 4500)),
+      ]);
       window.location.assign("/resultado");
       return;
     }
