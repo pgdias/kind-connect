@@ -11,7 +11,7 @@ on:
 
 concurrency:
   group: supabase-migrations-main
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 jobs:
   migrate:
