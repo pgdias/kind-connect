@@ -6,6 +6,7 @@ const SUPABASE_KEY = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY as string | u
 
 type Overview = {
   total_visitors: number;
+  unique_visitors: number;
   visitors_today: number;
   visitors_7d: number;
   visitors_30d: number;
@@ -72,6 +73,7 @@ function AnalyticsPage() {
   const [errors, setErrors] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
+  const [resetting, setResetting] = useState(false);
 
   const load = async () => {
     setLoading(true);
@@ -98,6 +100,34 @@ function AnalyticsPage() {
 
   useEffect(() => { void load(); }, []);
 
+  const resetTestData = async () => {
+    const confirmed = window.confirm("Isso vai apagar todos os dados de Analytics e do quiz. Use somente antes de começar os testes reais. Continuar?");
+    if (!confirmed || !SUPABASE_URL || !SUPABASE_KEY) return;
+
+    setResetting(true);
+    try {
+      const response = await fetch(SUPABASE_URL + "/rest/v1/rpc/reset_analytics_data", {
+        method: "POST",
+        headers: {
+          apikey: SUPABASE_KEY,
+          Authorization: "Bearer " + SUPABASE_KEY,
+          "Content-Type": "application/json",
+        },
+        body: "{}",
+      });
+      if (!response.ok) {
+        const body = await response.text().catch(() => "");
+        throw new Error(body || "HTTP " + response.status);
+      }
+      await load();
+      window.alert("Dados de teste apagados. O Analytics está zerado.");
+    } catch (error) {
+      window.alert(error instanceof Error ? error.message : "Não foi possível zerar os dados.");
+    } finally {
+      setResetting(false);
+    }
+  };
+
   return (
     <main style={{ minHeight: "100vh", background: "#f5f7fa", color: "#172033", fontFamily: "Inter, system-ui, sans-serif", padding: "32px 20px" }}>
       <div style={{ maxWidth: 1100, margin: "0 auto" }}>
@@ -107,7 +137,10 @@ function AnalyticsPage() {
             <h1 style={{ margin: "6px 0 4px", fontSize: 32 }}>Visitantes</h1>
             <p style={{ margin: 0, color: "#64748b" }}>Acompanhamento dos acessos e do funil do quiz.{lastUpdated ? ` Atualizado às ${lastUpdated.toLocaleTimeString("pt-BR")}.` : ""}</p>
           </div>
-          <button onClick={() => void load()} disabled={loading} style={{ border: 0, borderRadius: 10, padding: "11px 16px", background: "#172033", color: "#fff", fontWeight: 700, cursor: loading ? "wait" : "pointer", opacity: loading ? 0.7 : 1 }}>{loading ? "Atualizando..." : "Atualizar"}</button>
+          <div style={{ display: "flex", gap: 10, flexWrap: "wrap", justifyContent: "flex-end" }}>
+            <button onClick={() => void resetTestData()} disabled={loading || resetting} style={{ border: "1px solid #fecaca", borderRadius: 10, padding: "11px 16px", background: "#fff", color: "#b91c1c", fontWeight: 700, cursor: resetting ? "wait" : "pointer", opacity: resetting ? 0.7 : 1 }}>{resetting ? "Zerando..." : "Zerar dados de teste"}</button>
+            <button onClick={() => void load()} disabled={loading || resetting} style={{ border: 0, borderRadius: 10, padding: "11px 16px", background: "#172033", color: "#fff", fontWeight: 700, cursor: loading ? "wait" : "pointer", opacity: loading ? 0.7 : 1 }}>{loading ? "Atualizando..." : "Atualizar"}</button>
+          </div>
         </div>
 
         {errors.length > 0 && (
@@ -129,7 +162,8 @@ function AnalyticsPage() {
                 ["Visitantes hoje", overview.visitors_today],
                 ["Últimos 7 dias", overview.visitors_7d],
                 ["Últimos 30 dias", overview.visitors_30d],
-                ["Total de visitantes", overview.total_visitors],
+                ["Sessões registradas", overview.total_visitors],
+                ["Visitantes únicos", overview.unique_visitors],
                 ["Quizzes concluídos", overview.completed_quizzes],
                 ["Abandonaram", overview.unfinished_quizzes],
               ].map(([label, value]) => (
