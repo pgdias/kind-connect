@@ -3,6 +3,7 @@ const SUPABASE_KEY = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY as string | u
 
 const SESSION_STORAGE_KEY = "blindaQuizSessionId";
 const SESSION_CREATED_KEY = "blindaQuizSessionCreated";
+let sessionCreationPromise: Promise<string> | null = null;
 
 function getSessionId() {
   if (typeof window === "undefined") return "";
@@ -84,26 +85,32 @@ export async function startQuizSession() {
   if (!sessionId || typeof window === "undefined") return "";
 
   if (window.localStorage.getItem(SESSION_CREATED_KEY) === "1") return sessionId;
+  if (sessionCreationPromise) return sessionCreationPromise;
 
-  const utm = getUtmParams();
+  sessionCreationPromise = (async () => {
+    const utm = getUtmParams();
 
-  const ok = await request("quiz_sessions", {
-    method: "POST",
-    headers: {
-      Prefer: "resolution=merge-duplicates,return=minimal",
-    },
-    body: JSON.stringify({
-      session_id: sessionId,
-      landing_path: window.location.pathname,
-      referrer: document.referrer || null,
-      ...utm,
-    }),
-  });
+    const ok = await request("quiz_sessions", {
+      method: "POST",
+      body: JSON.stringify({
+        session_id: sessionId,
+        landing_path: window.location.pathname,
+        referrer: document.referrer || null,
+        ...utm,
+      }),
+    });
 
-  if (!ok) return "";
+    if (!ok) return "";
 
-  window.localStorage.setItem(SESSION_CREATED_KEY, "1");
-  return sessionId;
+    window.localStorage.setItem(SESSION_CREATED_KEY, "1");
+    return sessionId;
+  })();
+
+  try {
+    return await sessionCreationPromise;
+  } finally {
+    sessionCreationPromise = null;
+  }
 }
 
 export async function saveQuizAnswer(
@@ -115,12 +122,9 @@ export async function saveQuizAnswer(
   if (!sessionId) return false;
 
   const answerSaved = await request(
-    "quiz_answers?on_conflict=session_id,question_id",
+    "quiz_answers",
     {
       method: "POST",
-      headers: {
-        Prefer: "resolution=merge-duplicates,return=minimal",
-      },
       body: JSON.stringify({
         session_id: sessionId,
         question_id: questionId,
