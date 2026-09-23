@@ -14,6 +14,14 @@ type Overview = {
 };
 
 type Daily = { day: string; visitors: number };
+type Funnel = {
+  visitors: number;
+  quiz_starts: number;
+  quiz_completions: number;
+  result_views: number;
+  checkout_clicks: number;
+  cta_clicks: number;
+};
 
 export const Route = createFileRoute("/analytics")({ component: AnalyticsPage });
 
@@ -33,17 +41,20 @@ function formatDay(value: string) {
 function AnalyticsPage() {
   const [overview, setOverview] = useState<Overview | null>(null);
   const [daily, setDaily] = useState<Daily[]>([]);
+  const [funnel, setFunnel] = useState<Funnel | null>(null);
   const [error, setError] = useState("");
 
   const load = async () => {
     try {
       setError("");
-      const [summary, days] = await Promise.all([
+      const [summary, days, funnelData] = await Promise.all([
         getData<Overview[]>( "analytics_visitors_overview?select=*" ),
         getData<Daily[]>( "analytics_visitors_daily?select=day,visitors&order=day.asc" ),
+        getData<Funnel[]>( "analytics_funnel_overview?select=*" ),
       ]);
       setOverview(summary[0] ?? null);
       setDaily(days);
+      setFunnel(funnelData[0] ?? null);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Erro ao carregar.");
     }
@@ -65,7 +76,7 @@ function AnalyticsPage() {
 
         {error && (
           <div style={{ background: "#fff1f2", border: "1px solid #fecdd3", color: "#9f1239", borderRadius: 12, padding: 16, marginBottom: 20 }}>
-            {error}<br /><small>Execute o SQL atualizado em supabase/schema.sql no Supabase.</small>
+            {error}<br /><small>Confira as variáveis do Supabase e se o SQL de analytics foi executado.</small>
           </div>
         )}
 
@@ -88,6 +99,26 @@ function AnalyticsPage() {
                 </div>
               ))}
             </div>
+
+            {funnel && (
+              <section style={{ background: "#fff", borderRadius: 16, padding: 24, marginBottom: 22, boxShadow: "0 4px 20px rgba(15,23,42,.06)" }}>
+                <h2 style={{ margin: "0 0 18px", fontSize: 20 }}>Funil</h2>
+                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(150px,1fr))", gap: 12 }}>
+                  {[
+                    ["Iniciaram o quiz", funnel.quiz_starts],
+                    ["Concluíram", funnel.quiz_completions],
+                    ["Viram o resultado", funnel.result_views],
+                    ["Cliques no checkout", funnel.checkout_clicks],
+                    ["Cliques nos CTAs", funnel.cta_clicks],
+                  ].map(([label, value]) => (
+                    <div key={String(label)} style={{ background: "#f8fafc", borderRadius: 12, padding: 16 }}>
+                      <div style={{ color: "#64748b", fontSize: 12, fontWeight: 700 }}>{label}</div>
+                      <div style={{ fontSize: 26, fontWeight: 800, marginTop: 7 }}>{Number(value).toLocaleString("pt-BR")}</div>
+                    </div>
+                  ))}
+                </div>
+              </section>
+            )}
 
             <section style={{ background: "#fff", borderRadius: 16, padding: 24, boxShadow: "0 4px 20px rgba(15,23,42,.06)" }}>
               <h2 style={{ margin: "0 0 20px", fontSize: 20 }}>Visitantes por dia</h2>
