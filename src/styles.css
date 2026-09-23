@@ -1011,3 +1011,99 @@
   }
   .offer-countdown strong{font-size:16px}
 }
+
+
+/* VSL 30-minute availability bar */
+.vsl-availability-bar{
+  position:sticky;
+  top:70px;
+  z-index:25;
+  background:linear-gradient(180deg,#15100f,#0e0b0c);
+  border-bottom:1px solid #3a2425;
+  box-shadow:0 7px 24px rgba(0,0,0,.28);
+}
+.vsl-availability-inner{
+  width:min(860px,100%);
+  min-height:52px;
+  margin:0 auto;
+  padding:8px 16px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:12px;
+  flex-wrap:wrap;
+  text-align:center;
+}
+.vsl-availability-label{
+  color:#c8cfcc;
+  font-size:8px;
+  font-weight:850;
+  letter-spacing:.13em;
+}
+.vsl-availability-inner strong{
+  min-width:72px;
+  color:#fff;
+  font-size:23px;
+  line-height:1;
+  font-weight:950;
+  font-variant-numeric:tabular-nums;
+  letter-spacing:.04em;
+}
+.vsl-availability-note{
+  padding:5px 8px;
+  border:1px solid rgba(224,24,35,.35);
+  border-radius:4px;
+  color:#ff6670;
+  background:rgba(224,24,35,.08);
+  font-size:7px;
+  font-weight:950;
+  letter-spacing:.11em;
+}
+.vsl-expired-card{
+  min-height:280px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  padding:45px 28px;
+  text-align:center;
+  border:1px solid #303532;
+  border-radius:15px;
+  background:linear-gradient(145deg,#121614,#080a09);
+  box-shadow:0 30px 80px rgba(0,0,0,.35);
+}
+.vsl-expired-card>span{
+  color:#e01823;
+  font-size:8px;
+  font-weight:950;
+  letter-spacing:.16em;
+}
+.vsl-expired-card h2{
+  max-width:620px;
+  margin:12px 0 8px;
+  color:#fff;
+  font-size:clamp(24px,4vw,34px);
+  line-height:1.08;
+  letter-spacing:-.04em;
+}
+.vsl-expired-card p{
+  max-width:500px;
+  margin:0;
+  color:#7e8883;
+  font-size:10px;
+  line-height:1.6;
+}
+@media(max-width:600px){
+  .vsl-availability-bar{top:64px}
+  .vsl-availability-inner{
+    min-height:48px;
+    gap:7px;
+    padding:7px 10px;
+  }
+  .vsl-availability-label{font-size:6px;letter-spacing:.08em}
+  .vsl-availability-inner strong{min-width:62px;font-size:19px}
+  .vsl-availability-note{font-size:6px;padding:4px 6px}
+  .vsl-expired-card{min-height:250px;padding:32px 18px;border-radius:11px}
+  .vsl-expired-card h2{font-size:25px}
+  .vsl-expired-card p{font-size:8.5px}
+}
