@@ -97,6 +97,14 @@ create policy "quiz events public insert" on public.quiz_events for insert to an
 
 revoke select on public.quiz_events from anon;
 
+-- Permissões explícitas para o papel público usado pelo frontend.
+grant insert on public.quiz_sessions to anon;
+grant update on public.quiz_sessions to anon;
+grant insert on public.quiz_answers to anon;
+grant update on public.quiz_answers to anon;
+grant insert on public.quiz_events to anon;
+grant insert on public.respostas_quiz to anon;
+
 -- Painel agregado do funil
 create or replace view public.analytics_funnel_overview as
 select
