@@ -16,10 +16,12 @@ create table if not exists public.quiz_sessions (
   utm_medium text,
   utm_campaign text,
   utm_content text,
-  utm_term text
+  utm_term text,
+  device_type text
 );
 
 alter table public.quiz_sessions add column if not exists visitor_id text;
+alter table public.quiz_sessions add column if not exists device_type text;
 
 create table if not exists public.quiz_answers (
   id uuid primary key default gen_random_uuid(),
@@ -260,3 +262,27 @@ order by day;
 
 grant select on public.analytics_visitors_overview to anon;
 grant select on public.analytics_visitors_daily to anon;
+
+
+-- Relatórios de aquisição e dispositivo.
+create or replace view public.analytics_traffic_sources as
+select
+  coalesce(nullif(utm_source, ''), 'Direto / não identificado') as source,
+  coalesce(nullif(utm_medium, ''), '—') as medium,
+  count(distinct visitor_id)::bigint as unique_visitors,
+  count(*)::bigint as sessions
+from public.quiz_sessions
+group by 1, 2
+order by unique_visitors desc, sessions desc;
+
+create or replace view public.analytics_devices as
+select
+  coalesce(nullif(device_type, ''), 'unknown') as device,
+  count(distinct visitor_id)::bigint as unique_visitors,
+  count(*)::bigint as sessions
+from public.quiz_sessions
+group by 1
+order by unique_visitors desc, sessions desc;
+
+grant select on public.analytics_traffic_sources to anon;
+grant select on public.analytics_devices to anon;
