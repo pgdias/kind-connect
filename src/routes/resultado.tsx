@@ -3,11 +3,14 @@ import { useEffect, useMemo, useState } from "react";
 
 type Answer = { questionId: number; value: string; detail?: string[] };
 
+const CHECKOUT_URL = "https://pay.cakto.com.br/38xq22v_1131074";
+
 export const Route = createFileRoute("/resultado")({ component: ResultPage });
 
 function ResultPage() {
   const [answers, setAnswers] = useState<Answer[]>([]);
   const [ready, setReady] = useState(false);
+  const [showOffer, setShowOffer] = useState(false);
 
   useEffect(() => {
     try {
@@ -16,6 +19,9 @@ function ResultPage() {
     } finally {
       setReady(true);
     }
+
+    const timer = window.setTimeout(() => setShowOffer(true), 60_000);
+    return () => window.clearTimeout(timer);
   }, []);
 
   const attentionPoints = useMemo(() => {
@@ -56,7 +62,7 @@ function ResultPage() {
   const count = attentionPoints.length;
 
   return (
-    <main className="result-page">
+    <main className="result-page vsl-sales-page">
       <header className="quiz-header result-header">
         <Link to="/" className="quiz-brand">
           <span className="quiz-brand-mark">✓</span>
@@ -66,121 +72,75 @@ function ResultPage() {
       </header>
 
       <section className="result-main">
-        <div className="result-container">
+        <div className="result-container vsl-sales-container">
           {hasAnswers ? (
             <>
-              <section className="result-hero result-hero-sales">
-                <div className="result-status"><span>●</span> AVALIAÇÃO CONCLUÍDA</div>
-                <h1>{count > 0 ? `Encontramos ${count} ponto${count === 1 ? "" : "s"} que vale a pena conferir.` : "Sua avaliação está pronta."}</h1>
-                <p className="result-lead">
-                  O seu resultado não significa que existe um problema ou que você perderá o benefício.
-                  Significa que existem informações que podem merecer uma conferência.
-                </p>
-                <div className="result-alert">
-                  <strong>O ponto mais importante:</strong>
-                  <span>você não precisa esperar uma convocação ou descobrir uma divergência para começar a conferir.</span>
-                </div>
+              <section className="live-result-banner">
+                <span className="live-result-dot" />
+                <strong>AVALIAÇÃO CONCLUÍDA</strong>
+                <span className="live-result-divider" />
+                <b>{count} {count === 1 ? "PONTO" : "PONTOS"} QUE VALE{count === 1 ? "" : "M"} A PENA CONFERIR</b>
               </section>
 
-              <section className="result-panel">
-                <div className="result-panel-head">
-                  <div>
-                    <span>O QUE APARECEU NA SUA AVALIAÇÃO</span>
-                    <small>Baseado exclusivamente nas suas respostas</small>
-                  </div>
-                  <b>{count}</b>
-                </div>
-
-                {count > 0 ? (
-                  <div className="attention-list">
-                    {attentionPoints.map((point, index) => (
-                      <div className="attention-item" key={point}>
-                        <span>{String(index + 1).padStart(2, "0")}</span>
-                        <p>{point}</p>
-                      </div>
-                    ))}
-                  </div>
-                ) : (
-                  <div className="clear-result">
-                    <span>✓</span>
-                    <div>
-                      <strong>Nenhum ponto de atenção foi identificado pelas suas respostas.</strong>
-                      <p>Mesmo assim, o resultado é informativo e não consulta o seu cadastro oficial.</p>
-                    </div>
-                  </div>
-                )}
-              </section>
-
-              <section className="sales-transition">
-                <p className="offer-label">E AGORA?</p>
-                <h2>Você descobriu <em>o que merece atenção.</em> Mas saber onde conferir é outra coisa.</h2>
+              <section className="vsl-headline">
+                <h1>
+                  Encontramos <em>{count} ponto{count === 1 ? "" : "s"}</em> que vale a pena conferir.
+                </h1>
                 <p>
-                  É aqui que entra o Blinda Bolsa Família: um material prático para ajudar você a organizar
-                  os principais pontos, entender o que observar e saber onde confirmar cada informação nos canais oficiais.
+                  <strong>ASSISTA ESSE VÍDEO ANTES QUE SEJA TARDE.</strong><br />
+                  Descubra situações que podem colocar seu Bolsa Família em risco — e que muita gente só percebe quando precisa resolver uma pendência.
                 </p>
               </section>
 
-              <section className="vsl-card vsl-card-premium">
-                <div className="vsl-screen vsl-screen-premium">
-                  <div className="vsl-topbar"><span>BLINDA BOLSA FAMÍLIA</span><span>APRESENTAÇÃO</span></div>
-                  <div className="vsl-center">
-                    <div className="vsl-play">▶</div>
-                    <span>ASSISTA ANTES DE CONTINUAR</span>
-                    <strong>O que você precisa conferir<br />antes de deixar para depois</strong>
-                    <small>Apresentação rápida • conteúdo informativo</small>
+              <section className="vsl-video-wrap">
+                <div className="vsl-video-placeholder">
+                  <div className="vsl-video-top">
+                    <span>BLINDA BOLSA FAMÍLIA</span>
+                    <span>APRESENTAÇÃO</span>
                   </div>
-                  <div className="vsl-bottom"><span>▶</span><div className="vsl-track"><i /></div><span>2:18</span></div>
-                </div>
-
-                <div className="vsl-copy vsl-copy-premium">
-                  <p className="vsl-kicker">NESTA APRESENTAÇÃO</p>
-                  <h3>Você vai entender o que realmente merece atenção.</h3>
-                  <ul>
-                    <li><span>✓</span><div><strong>O que conferir</strong><small>Os principais pontos que podem passar despercebidos.</small></div></li>
-                    <li><span>✓</span><div><strong>O que muda quando há divergência</strong><small>Como entender uma possível convocação ou necessidade de atualização.</small></div></li>
-                    <li><span>✓</span><div><strong>Onde confirmar</strong><small>Como procurar a informação correta nos canais oficiais.</small></div></li>
-                  </ul>
+                  <div className="vsl-video-center">
+                    <div className="vsl-big-play">▶</div>
+                    <strong>ASSISTA ANTES DE CONTINUAR</strong>
+                    <span>O que você precisa saber para não deixar uma possível pendência para depois.</span>
+                  </div>
+                  <div className="vsl-video-bottom">
+                    <span>▶</span>
+                    <div><i /></div>
+                    <span>VSL</span>
+                  </div>
                 </div>
               </section>
 
-              <section className="offer-section offer-section-premium">
-                <div className="offer-label">ACESSO IMEDIATO</div>
-                <h2>Tenha um checklist para não depender da memória.</h2>
-                <p className="offer-intro">
-                  O material organiza os pontos que você deve conferir e transforma aquela dúvida
-                  de “será que está tudo certo?” em uma sequência clara do que observar e onde confirmar.
+              {showOffer && (
+                <section className="delayed-offer">
+                  <div className="delayed-offer-kicker">VOCÊ JÁ SABE QUE VALE A PENA CONFERIR</div>
+                  <h2>Agora descubra o que fazer para se proteger de erros e pendências.</h2>
+                  <p>
+                    Tenha acesso ao material completo para entender o que conferir, o que observar
+                    e onde buscar a confirmação oficial da sua situação.
+                  </p>
+                  <div className="delayed-price">R$ 12,49 <small>pagamento único</small></div>
+                  <a className="delayed-buy-button" href={CHECKOUT_URL}>
+                    QUERO BLINDAR MEU BOLSA FAMÍLIA E DESCOBRIR OS SEGREDOS PARA NÃO PERDER O BENEFÍCIO <span>→</span>
+                  </a>
+                </section>
+              )}
+
+              {!showOffer && (
+                <div className="delayed-offer-wait">
+                  <span>ASSISTA AO VÍDEO</span>
+                  <p>O acesso ao material será liberado após 60 segundos.</p>
+                </div>
+              )}
+
+              <div className="result-notice">
+                <span>i</span>
+                <p>
+                  Esta página é independente e informativa. O teste não consulta o Cadastro Único nem determina
+                  bloqueio ou cancelamento. Para confirmar sua situação, use os canais oficiais do Governo Federal.
+                  Não informe CPF, senha, número do cartão ou dados bancários.
                 </p>
-
-                <div className="offer-benefits">
-                  <div><span>01</span><strong>Checklist de conferência</strong><p>Organize os principais dados que merecem atenção.</p></div>
-                  <div><span>02</span><strong>Guia de verificação</strong><p>Entenda o que observar em cada situação.</p></div>
-                  <div><span>03</span><strong>Canais oficiais</strong><p>Saiba onde buscar confirmação da sua situação.</p></div>
-                </div>
-
-                <div className="offer-box offer-box-premium">
-                  <div>
-                    <span className="offer-mini">ACESSO AO MATERIAL</span>
-                    <div className="offer-price"><small>R$</small> 12,49</div>
-                    <p>Pagamento único.</p>
-                  </div>
-                  <button className="offer-button" onClick={() => alert("Configure aqui o link do checkout antes de publicar.")}>
-                    QUERO CONFERIR <span>→</span>
-                  </button>
-                </div>
-
-                <div className="guarantee-box">
-                  <span>✓</span>
-                  <div><strong>Compra consciente</strong><p>O material é independente e informativo. Ele não substitui consulta, decisão ou orientação dos canais oficiais.</p></div>
-                </div>
-              </section>
-
-              <section className="final-cta">
-                <p>Não precisa descobrir tudo sozinho.</p>
-                <h2>Organize o que conferir. Depois, confirme nos canais oficiais.</h2>
-                <button className="offer-button" onClick={() => alert("Configure aqui o link do checkout antes de publicar.")}>
-                  QUERO ACESSAR O MATERIAL <span>→</span>
-                </button>
-              </section>
+              </div>
             </>
           ) : (
             <div className="result-hero">
@@ -191,15 +151,6 @@ function ResultPage() {
               <Link to="/quiz" className="result-primary">FAZER O TESTE <span>→</span></Link>
             </div>
           )}
-
-          <div className="result-notice">
-            <span>i</span>
-            <p>
-              Esta página é independente e informativa. O teste não consulta o Cadastro Único nem determina
-              bloqueio ou cancelamento. Para confirmar sua situação, use os canais oficiais do Governo Federal.
-              Não informe CPF, senha, número do cartão ou dados bancários.
-            </p>
-          </div>
         </div>
       </section>
     </main>
