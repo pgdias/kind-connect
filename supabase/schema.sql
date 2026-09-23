@@ -206,9 +206,9 @@ with counts as (
   select
     count(*)::bigint as total_visitors,
     count(distinct visitor_id)::bigint as unique_visitors,
-    count(*) filter (where started_at::date = current_date)::bigint as visitors_today,
-    count(*) filter (where started_at >= now() - interval '7 days')::bigint as visitors_7d,
-    count(*) filter (where started_at >= now() - interval '30 days')::bigint as visitors_30d,
+    count(distinct visitor_id) filter (where started_at::date = current_date)::bigint as visitors_today,
+    count(distinct visitor_id) filter (where started_at >= now() - interval '7 days')::bigint as visitors_7d,
+    count(distinct visitor_id) filter (where started_at >= now() - interval '30 days')::bigint as visitors_30d,
     (select count(distinct session_id) from public.quiz_events where event_name = 'quiz_started')::bigint as quiz_starts,
     (select count(distinct session_id) from public.quiz_events where event_name = 'quiz_completed')::bigint as completed_quizzes
   from public.quiz_sessions
