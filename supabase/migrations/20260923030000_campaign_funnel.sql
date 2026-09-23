@@ -66,4 +66,7 @@ order by unique_checkout_visitors desc, unique_quiz_completions desc, unique_vis
 
 grant select on public.analytics_campaign_funnel to anon;
 
+-- Refresh PostgREST so the new view is immediately visible through the REST API.
+notify pgrst, 'reload schema';
+
 -- Automation verification: migration is applied by GitHub Actions.
