@@ -67,8 +67,19 @@ export const Route = createFileRoute("/quiz")({ component: QuizPage });
 
 function QuizPage() {
   const navigate = useNavigate();
-  const [current, setCurrent] = useState(0);
-  const [answers, setAnswers] = useState<Answer[]>([]);
+  const [current, setCurrent] = useState(() => {
+    if (typeof window === "undefined") return 0;
+    const step = Number(new URLSearchParams(window.location.search).get("step") || "1");
+    return Math.min(Math.max(step - 1, 0), questions.length - 1);
+  });
+  const [answers, setAnswers] = useState<Answer[]>(() => {
+    if (typeof window === "undefined") return [];
+    try {
+      return JSON.parse(sessionStorage.getItem("blindaQuizAnswers") || "[]");
+    } catch {
+      return [];
+    }
+  });
   const [processing, setProcessing] = useState(false);
 
   const question = questions[current];
