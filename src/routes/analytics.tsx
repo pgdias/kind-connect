@@ -62,9 +62,6 @@ type QuizEventRow = {
 };
 
 function buildCampaignFunnel(sessions: QuizSessionRow[], events: QuizEventRow[]): CampaignFunnel[] {
-  const bySession = new Map<string, QuizSessionRow>();
-  sessions.forEach((session) => bySession.set(session.session_id, session));
-
   const eventSets = new Map<string, Set<string>>();
   events.forEach((event) => {
     const set = eventSets.get(event.session_id) ?? new Set<string>();
@@ -73,6 +70,14 @@ function buildCampaignFunnel(sessions: QuizSessionRow[], events: QuizEventRow[])
   });
 
   const groups = new Map<string, CampaignFunnel>();
+  const visitorSets = new Map<string, {
+    visitors: Set<string>;
+    starters: Set<string>;
+    completions: Set<string>;
+    results: Set<string>;
+    checkouts: Set<string>;
+    ctas: Set<string>;
+  }>();
 
   for (const session of sessions) {
     const eventsForSession = eventSets.get(session.session_id) ?? new Set<string>();
@@ -91,19 +96,52 @@ function buildCampaignFunnel(sessions: QuizSessionRow[], events: QuizEventRow[])
       unique_checkout_visitors: 0, checkout_clicks: 0,
       unique_cta_visitors: 0, cta_clicks: 0,
     };
+    const unique = visitorSets.get(key) ?? {
+      visitors: new Set<string>(), starters: new Set<string>(), completions: new Set<string>(),
+      results: new Set<string>(), checkouts: new Set<string>(), ctas: new Set<string>(),
+    };
 
     current.sessions += 1;
-    current.unique_visitors += session.visitor_id ? 1 : 0;
-    if (eventsForSession.has("quiz_started")) { current.quiz_starts += 1; if (session.visitor_id) current.unique_quiz_starters += 1; }
-    if (eventsForSession.has("quiz_completed")) { current.quiz_completions += 1; if (session.visitor_id) current.unique_quiz_completions += 1; }
-    if (eventsForSession.has("quiz_completed") && eventsForSession.has("result_viewed")) { current.result_views += 1; if (session.visitor_id) current.unique_result_viewers += 1; }
-    if (eventsForSession.has("quiz_completed") && eventsForSession.has("result_viewed") && eventsForSession.has("checkout_click")) { current.checkout_clicks += 1; if (session.visitor_id) current.unique_checkout_visitors += 1; }
-    if (eventsForSession.has("cta_click")) { current.cta_clicks += 1; if (session.visitor_id) current.unique_cta_visitors += 1; }
+    const visitorId = session.visitor_id || "";
+    if (visitorId) unique.visitors.add(visitorId);
 
+    if (eventsForSession.has("quiz_started")) {
+      current.quiz_starts += 1;
+      if (visitorId) unique.starters.add(visitorId);
+    }
+    if (eventsForSession.has("quiz_completed")) {
+      current.quiz_completions += 1;
+      if (visitorId) unique.completions.add(visitorId);
+    }
+    if (eventsForSession.has("quiz_completed") && eventsForSession.has("result_viewed")) {
+      current.result_views += 1;
+      if (visitorId) unique.results.add(visitorId);
+    }
+    if (eventsForSession.has("quiz_completed") && eventsForSession.has("result_viewed") && eventsForSession.has("checkout_click")) {
+      current.checkout_clicks += 1;
+      if (visitorId) unique.checkouts.add(visitorId);
+    }
+    if (eventsForSession.has("cta_click")) {
+      current.cta_clicks += 1;
+      if (visitorId) unique.ctas.add(visitorId);
+    }
+
+    visitorSets.set(key, unique);
     groups.set(key, current);
   }
 
-  return Array.from(groups.values()).sort((a, b) =>
+  return Array.from(groups.entries()).map(([key, group]) => {
+    const unique = visitorSets.get(key)!;
+    return {
+      ...group,
+      unique_visitors: unique.visitors.size,
+      unique_quiz_starters: unique.starters.size,
+      unique_quiz_completions: unique.completions.size,
+      unique_result_viewers: unique.results.size,
+      unique_checkout_visitors: unique.checkouts.size,
+      unique_cta_visitors: unique.ctas.size,
+    };
+  }).sort((a, b) =>
     b.unique_checkout_visitors - a.unique_checkout_visitors ||
     b.unique_quiz_completions - a.unique_quiz_completions ||
     b.unique_visitors - a.unique_visitors ||
