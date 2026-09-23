@@ -15,58 +15,82 @@ function CTA({children}:{children:ReactNode}){return <Link className="primary-bu
 function Header(){
  return <header className="site-header"><div className="container header-inner">
    <Link className="brand" to="/"><span className="brand-mark"><ShieldIcon size={23}/></span><span><strong>BLINDA</strong><small>BOLSA FAMÍLIA</small></span></Link>
-   <div className="header-status"><span className="status-dot"/> Teste informativo</div>
+   <div className="header-status"><span className="status-dot"/> Teste gratuito</div>
  </div></header>;
 }
 
 function Hero(){
- const indicators=[["Gratuito","sem custo para responder"],["Perguntas rápidas","simples e objetivas"],["Cerca de 2 minutos","para concluir"]];
- return <section className="hero"><div className="hero-orb orb-one"/><div className="hero-orb orb-two"/>
+ const indicators=[["Gratuito","sem CPF, senha ou dados bancários"],["Perguntas rápidas","situações comuns para conferir"],["Cerca de 2 minutos","para descobrir seus pontos de atenção"]];
+ return <section className="hero hero-aggressive">
+   <div className="hero-orb orb-one"/><div className="hero-orb orb-two"/>
    <div className="container hero-grid">
     <div className="hero-copy">
-      <div className="eyebrow"><span className="eyebrow-dot"/> TESTE GRATUITO</div>
-      <h1>Você sabe se existe alguma situação no seu cadastro que <em>merece atenção?</em></h1>
-      <p className="hero-description">Responda algumas perguntas rápidas e descubra quais pontos relacionados ao seu Bolsa Família podem merecer uma conferência.</p>
+      <div className="eyebrow"><span className="eyebrow-dot"/> TESTE GRATUITO • 2 MINUTOS</div>
+      <div className="warning-line"><span>⚠</span> NÃO DEIXE UMA POSSÍVEL PENDÊNCIA PARA DEPOIS</div>
+      <h1>Você pode estar cometendo um erro no seu Bolsa Família <em>sem saber.</em></h1>
+      <p className="hero-description">Uma informação desatualizada, uma mudança na família ou uma obrigação que ficou sem acompanhamento pode ser um ponto que merece atenção. <strong>O problema é descobrir isso tarde demais.</strong></p>
+      <div className="fear-box">
+        <div className="fear-icon">!</div>
+        <div><strong>Você tem certeza de que está tudo certo?</strong><span>Faça algumas perguntas e veja quais pontos da sua situação vale a pena conferir.</span></div>
+      </div>
       <div className="trust-row">{indicators.map(([a,b])=><div className="trust-item" key={a}><CheckIcon/><span><strong>{a}</strong><small>{b}</small></span></div>)}</div>
-      <CTA>COMEÇAR MEU TESTE</CTA>
-      <div className="micro-row"><span>◷</span> Leva cerca de 2 minutos para responder.</div>
-      <p className="privacy-note">Não é necessário informar CPF, senha ou dados bancários para realizar o teste.</p>
+      <CTA>VER SE TENHO ALGUM DESSES PONTOS</CTA>
+      <div className="micro-row"><span>◷</span> Leva cerca de 2 minutos. Você pode parar quando quiser.</div>
+      <p className="privacy-note">O teste não pede CPF, senha, número do cartão, dados bancários ou qualquer credencial de acesso.</p>
     </div>
     <div className="hero-visual" aria-hidden="true">
-      <div className="visual-halo"/>
-      <div className="visual-grid"/>
-      <div className="floating floating-top"><span className="float-icon">✓</span><span><strong>Teste simples</strong><small>perguntas objetivas</small></span></div>
+      <div className="visual-halo"/><div className="visual-grid"/>
+      <div className="risk-ring"><span>ATENÇÃO</span></div>
+      <div className="floating floating-top"><span className="float-icon warning-float">!</span><span><strong>Ponto para conferir</strong><small>não deixe passar</small></span></div>
       <div className="back-card"><div className="fake-title"/><div className="fake-line wide"/><div className="fake-line"/><div className="fake-line short"/></div>
       <div className="main-card">
-        <div className="card-top"><span className="card-badge">CONFERÊNCIA</span><span className="card-dots">•••</span></div>
-        <div className="card-body"><div className="shield-large"><ShieldIcon size={39}/></div><div><strong>Organize o que<br/>você precisa conferir</strong><p>Um resumo baseado nas suas respostas.</p></div></div>
+        <div className="card-top"><span className="card-badge">CHECK-UP INFORMATIVO</span><span className="card-dots">•••</span></div>
+        <div className="card-body"><div className="shield-large alert-shield"><ShieldIcon size={39}/></div><div><strong>Existe algo que<br/>você precisa conferir?</strong><p>Descubra pelos pontos avaliados no teste.</p></div></div>
         <div className="card-progress"><span/><span/><span/><span/><span/></div>
-        <div className="card-footer"><span>AVALIAÇÃO INFORMATIVA</span><b>✓</b></div>
+        <div className="card-footer"><span>RESULTADO BASEADO NAS RESPOSTAS</span><b>✓</b></div>
       </div>
-      <div className="floating floating-bottom"><span className="float-check">✓</span><strong>Sem CPF ou senha</strong></div>
+      <div className="floating floating-bottom"><span className="float-check">✓</span><strong>Sem dados sensíveis</strong></div>
     </div>
    </div>
  </section>;
 }
 
+function RiskSection(){
+ const risks=[
+  ["01","Cadastro desatualizado","O Cadastro Único deve ser atualizado a cada 24 meses e também quando há mudanças relevantes na família."],
+  ["02","Mudanças na família","Mudanças de endereço, renda, trabalho ou composição familiar são situações que podem exigir atualização."],
+  ["03","Saúde e educação","Existem compromissos de acompanhamento para famílias beneficiárias, conforme as regras do programa."],
+  ["04","Não saber o que conferir","Uma das maiores dificuldades é simplesmente não saber quais informações precisam ser verificadas."]
+ ];
+ return <section className="risk-section"><div className="container">
+   <div className="section-heading risk-heading"><span>OS PONTOS QUE MERECEM ATENÇÃO</span><h2>O que você não confere, você pode acabar descobrindo tarde.</h2><p>O teste foi criado para transformar essas dúvidas em uma lista simples de pontos para você conferir.</p></div>
+   <div className="risk-grid">{risks.map(([n,t,d])=><article className="risk-card" key={n}><span className="risk-number">{n}</span><div><h3>{t}</h3><p>{d}</p></div></article>)}</div>
+   <div className="risk-warning"><span>⚠</span><div><strong>Importante: atenção não significa cancelamento automático.</strong><p>As regras do Bolsa Família dependem da situação de cada família. O objetivo deste teste é ajudar você a identificar pontos que podem merecer conferência, não declarar que você perdeu ou vai perder o benefício.</p></div></div>
+ </div></section>;
+}
+
 function HowItWorks(){
- const steps=[["01","Responda","Conte como está sua situação respondendo perguntas rápidas."],["02","Veja sua avaliação","Ao final, você verá um resumo baseado nas suas respostas."],["03","Saiba o que conferir","Identifique quais pontos podem merecer uma conferência."]];
+ const steps=[["01","Responda","Conte como está sua situação respondendo perguntas rápidas."],["02","Descubra os pontos","O teste cruza suas respostas com situações que merecem atenção."],["03","Saiba o que conferir","Você recebe um resumo para entender onde vale olhar com mais cuidado."]];
  return <section className="how-section"><div className="container">
-   <div className="section-heading"><span>COMO FUNCIONA</span><h2>Simples, rápido e direto ao ponto.</h2><p>Você responde, confere o resultado e entende quais pontos vale a pena verificar.</p></div>
+   <div className="section-heading"><span>COMO FUNCIONA</span><h2>Você não precisa esperar aparecer um problema para começar a conferir.</h2><p>O objetivo é simples: identificar dúvidas agora e mostrar o que merece sua atenção.</p></div>
    <div className="steps-grid">{steps.map(([n,t,d],i)=><article className="step-card" key={n}><div className="step-head"><span>{n}</span>{i<2&&<i/>}</div><h3>{t}</h3><p>{d}</p></article>)}</div>
-   <div className="notice"><div className="notice-icon">i</div><div><strong>Importante</strong><p>A avaliação é informativa e baseada nas respostas fornecidas. Ela não representa uma decisão ou análise oficial do Governo Federal.</p></div></div>
  </div></section>;
 }
 
 function Curiosity(){
  return <section className="curiosity"><div className="container"><div className="curiosity-card">
-   <div className="curiosity-copy"><span>ANTES DE IR</span><h2>Será que existe algum ponto que você nunca conferiu?</h2><p>Faça o teste gratuito e organize melhor o que você precisa observar.</p></div>
-   <CTA>FAZER O TESTE GRATUITO</CTA>
+   <div className="curiosity-copy"><span>UMA ÚLTIMA PERGUNTA</span><h2>Se existisse um ponto no seu cadastro que você ainda não conferiu, você gostaria de descobrir agora?</h2><p>O teste é gratuito, rápido e informativo. Não espere uma surpresa para começar a olhar.</p></div>
+   <CTA>QUERO FAZER O TESTE</CTA>
  </div></div></section>;
 }
 
 function Footer(){
- return <footer><div className="container footer-inner"><div className="footer-brand"><div><strong>BLINDA BOLSA FAMÍLIA</strong><span>Produto independente de caráter informativo.</span></div></div><nav><a href="#privacidade">Privacidade</a><a href="#termos">Termos de uso</a></nav><p>Este produto não é um canal oficial do Governo Federal, Ministério do Desenvolvimento e Assistência Social, Caixa Econômica Federal ou Cadastro Único.</p></div></footer>;
+ return <footer><div className="container footer-inner">
+   <div className="footer-brand"><div><strong>BLINDA BOLSA FAMÍLIA</strong><span>Produto independente de caráter informativo.</span></div></div>
+   <nav><a href="#privacidade">Privacidade</a><a href="#termos">Termos de uso</a></nav>
+   <p>Este produto não é um canal oficial do Governo Federal, Ministério do Desenvolvimento e Assistência Social, Caixa Econômica Federal ou Cadastro Único. O teste não substitui consulta, atendimento ou decisão dos órgãos responsáveis.</p>
+   <p className="footer-source">Informações gerais do teste são baseadas em orientações públicas do Governo Federal e podem mudar conforme a legislação e as regras vigentes.</p>
+ </div></footer>;
 }
 
-function Index(){return <div className="page"><Header/><main><Hero/><HowItWorks/><Curiosity/></main><Footer/></div>}
+function Index(){return <div className="page"><Header/><main><Hero/><RiskSection/><HowItWorks/><Curiosity/></main><Footer/></div>}
