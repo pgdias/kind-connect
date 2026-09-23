@@ -15,9 +15,9 @@ const questions: Question[] = [
   {
     id: 2,
     tag: "SITUAÇÃO 02",
-    title: "Alguém da família começou ou deixou de trabalhar recentemente?",
-    subtitle: "E você sabe se a informação do cadastro acompanha essa mudança?",
-    options: ["Sim, e está tudo atualizado", "Sim, mas não sei se atualizei", "Não aconteceu", "Não tenho certeza"],
+    title: "Alguém da sua família começou a trabalhar, parou de trabalhar ou teve alguma mudança de renda?",
+    subtitle: "Você tem certeza de que essa mudança foi conferida no cadastro?",
+    options: ["Sim, e não conferi", "Sim, mas não tenho certeza", "Sim, está tudo atualizado", "Não aconteceu"],
   },
   {
     id: 3,
