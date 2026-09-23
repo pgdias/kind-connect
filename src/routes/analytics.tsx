@@ -18,6 +18,18 @@ type Daily = { day: string; visitors: number };
 type TrafficSource = { source: string; medium: string; unique_visitors: number; sessions: number };
 type Device = { device: string; unique_visitors: number; sessions: number };
 type Campaign = { source: string; medium: string; campaign: string; content: string; term: string; unique_visitors: number; sessions: number };
+type CampaignFunnel = Campaign & {
+  unique_quiz_starters: number;
+  quiz_starts: number;
+  unique_quiz_completions: number;
+  quiz_completions: number;
+  unique_result_viewers: number;
+  result_views: number;
+  unique_checkout_visitors: number;
+  checkout_clicks: number;
+  unique_cta_visitors: number;
+  cta_clicks: number;
+};
 type Funnel = {
   visitors: number;
   quiz_starts: number;
@@ -90,6 +102,7 @@ function AnalyticsPage() {
   const [trafficSources, setTrafficSources] = useState<TrafficSource[]>([]);
   const [devices, setDevices] = useState<Device[]>([]);
   const [campaigns, setCampaigns] = useState<Campaign[]>([]);
+  const [campaignFunnel, setCampaignFunnel] = useState<CampaignFunnel[]>([]);
   const [errors, setErrors] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
@@ -99,16 +112,17 @@ function AnalyticsPage() {
     setLoading(true);
     setErrors([]);
     try {
-      const [summary, days, funnelData, trafficSourcesData, devicesData, campaignsData] = await Promise.all([
+      const [summary, days, funnelData, trafficSourcesData, devicesData, campaignsData, campaignFunnelData] = await Promise.all([
         getData<Overview[]>("Visitantes", "analytics_visitors_overview?select=*"),
         getData<Daily[]>("Visitantes por dia", "analytics_visitors_daily?select=day,visitors&order=day.asc"),
         getData<Funnel[]>("Funil", "analytics_funnel_overview?select=*"),
         getData<TrafficSource[]>("Origem do tráfego", "analytics_traffic_sources?select=source,medium,unique_visitors,sessions"),
         getData<Device[]>("Dispositivos", "analytics_devices?select=device,unique_visitors,sessions"),
         getData<Campaign[]>("Campanhas UTM", "analytics_campaigns?select=source,medium,campaign,content,term,unique_visitors,sessions"),
+        getData<CampaignFunnel[]>("Funil por campanha", "analytics_campaign_funnel?select=*&order=unique_checkout_visitors.desc,unique_quiz_completions.desc,unique_visitors.desc"),
       ]);
 
-    const results = [summary, days, funnelData, trafficSourcesData, devicesData];
+    const results = [summary, days, funnelData, trafficSourcesData, devicesData, campaignsData, campaignFunnelData];
     const failures = results.filter((result) => result.error).map((result) => `${result.label}: ${result.error}`);
     setErrors(failures);
 
@@ -118,6 +132,7 @@ function AnalyticsPage() {
       if (trafficSourcesData.data) setTrafficSources(trafficSourcesData.data);
       if (devicesData.data) setDevices(devicesData.data);
       if (campaignsData.data) setCampaigns(campaignsData.data);
+      if (campaignFunnelData.data) setCampaignFunnel(campaignFunnelData.data);
       setLastUpdated(new Date());
     } finally {
       setLoading(false);
@@ -307,37 +322,50 @@ function AnalyticsPage() {
             </section>
 
             <section style={{ background: "#fff", borderRadius: 16, padding: 24, marginBottom: 22, boxShadow: "0 4px 20px rgba(15,23,42,.06)" }}>
-              <h2 style={{ margin: 0, fontSize: 20 }}>Campanhas / UTM</h2>
-              <p style={{ margin: "6px 0 18px", color: "#64748b", fontSize: 13 }}>Mostra quais links de campanha trouxeram visitantes e quantas sessões foram registradas.</p>
-              {campaigns.length === 0 ? <p style={{ color: "#64748b" }}>Ainda não há dados de campanhas.</p> : (
+              <h2 style={{ margin: 0, fontSize: 20 }}>Desempenho por campanha</h2>
+              <p style={{ margin: "6px 0 18px", color: "#64748b", fontSize: 13 }}>Mostra o caminho de cada origem/campanha desde a chegada até o checkout. Os percentuais usam visitantes únicos.</p>
+              {campaignFunnel.length === 0 ? <p style={{ color: "#64748b" }}>Ainda não há dados de campanha.</p> : (
                 <div style={{ overflowX: "auto" }}>
-                  <table style={{ width: "100%", borderCollapse: "collapse", minWidth: 720, fontSize: 13 }}>
-                    <thead>
-                      <tr style={{ textAlign: "left", color: "#64748b", borderBottom: "1px solid #e2e8f0" }}>
-                        <th style={{ padding: "10px 8px" }}>Origem</th>
-                        <th style={{ padding: "10px 8px" }}>Mídia</th>
-                        <th style={{ padding: "10px 8px" }}>Campanha</th>
-                        <th style={{ padding: "10px 8px" }}>Conteúdo</th>
-                        <th style={{ padding: "10px 8px" }}>Termo</th>
-                        <th style={{ padding: "10px 8px", textAlign: "right" }}>Únicos</th>
-                        <th style={{ padding: "10px 8px", textAlign: "right" }}>Sessões</th>
-                      </tr>
-                    </thead>
+                  <table style={{ width: "100%", borderCollapse: "collapse", minWidth: 980, fontSize: 13 }}>
+                    <thead><tr style={{ textAlign: "left", color: "#64748b", borderBottom: "1px solid #e2e8f0" }}>
+                      <th style={{ padding: "10px 8px" }}>Campanha</th><th style={{ padding: "10px 8px", textAlign: "right" }}>Visitantes</th><th style={{ padding: "10px 8px", textAlign: "right" }}>Iniciaram</th><th style={{ padding: "10px 8px", textAlign: "right" }}>Concluíram</th><th style={{ padding: "10px 8px", textAlign: "right" }}>Resultado</th><th style={{ padding: "10px 8px", textAlign: "right" }}>Checkout</th><th style={{ padding: "10px 8px", textAlign: "right" }}>Conv.</th>
+                    </tr></thead>
                     <tbody>
-                      {campaigns.map((item, index) => (
-                        <tr key={item.source + item.medium + item.campaign + item.content + item.term + index} style={{ borderBottom: "1px solid #eef2f7" }}>
-                          <td style={{ padding: "11px 8px", fontWeight: 700 }}>{item.source}</td>
-                          <td style={{ padding: "11px 8px" }}>{item.medium}</td>
-                          <td style={{ padding: "11px 8px" }}>{item.campaign}</td>
-                          <td style={{ padding: "11px 8px" }}>{item.content}</td>
-                          <td style={{ padding: "11px 8px" }}>{item.term}</td>
-                          <td style={{ padding: "11px 8px", textAlign: "right", fontWeight: 700 }}>{item.unique_visitors}</td>
-                          <td style={{ padding: "11px 8px", textAlign: "right", fontWeight: 700 }}>{item.sessions}</td>
-                        </tr>
-                      ))}
+                      {campaignFunnel.map((item, index) => {
+                        const checkoutRate = conversionRate(item.unique_checkout_visitors, item.unique_visitors);
+                        return (
+                          <tr key={item.source + item.medium + item.campaign + item.content + item.term + index} style={{ borderBottom: "1px solid #eef2f7" }}>
+                            <td style={{ padding: "11px 8px" }}><strong>{item.campaign}</strong><div style={{ color: "#64748b", fontSize: 11, marginTop: 2 }}>{item.source} · {item.medium}</div></td>
+                            <td style={{ padding: "11px 8px", textAlign: "right", fontWeight: 700 }}>{item.unique_visitors}</td>
+                            <td style={{ padding: "11px 8px", textAlign: "right" }}><strong>{item.unique_quiz_starters}</strong><div style={{ color: "#64748b", fontSize: 10 }}>{formatPercent(conversionRate(item.unique_quiz_starters, item.unique_visitors))}</div></td>
+                            <td style={{ padding: "11px 8px", textAlign: "right" }}><strong>{item.unique_quiz_completions}</strong><div style={{ color: "#64748b", fontSize: 10 }}>{formatPercent(conversionRate(item.unique_quiz_completions, item.unique_quiz_starters))}</div></td>
+                            <td style={{ padding: "11px 8px", textAlign: "right" }}><strong>{item.unique_result_viewers}</strong><div style={{ color: "#64748b", fontSize: 10 }}>{formatPercent(conversionRate(item.unique_result_viewers, item.unique_quiz_completions))}</div></td>
+                            <td style={{ padding: "11px 8px", textAlign: "right" }}><strong>{item.unique_checkout_visitors}</strong><div style={{ color: "#64748b", fontSize: 10 }}>{formatPercent(conversionRate(item.unique_checkout_visitors, item.unique_result_viewers))}</div></td>
+                            <td style={{ padding: "11px 8px", textAlign: "right", fontWeight: 800 }}>{formatPercent(checkoutRate)}</td>
+                          </tr>
+                        );
+                      })}
                     </tbody>
                   </table>
                 </div>
+              )}
+              <div style={{ marginTop: 14, color: "#64748b", fontSize: 12, lineHeight: 1.5 }}>“Conv.” é a conversão geral da campanha: visitantes únicos que chegaram ao checkout ÷ visitantes únicos da campanha. As demais porcentagens mostram a passagem entre etapas.</div>
+            </section>
+
+            <section style={{ background: "#fff", borderRadius: 16, padding: 24, marginBottom: 22, boxShadow: "0 4px 20px rgba(15,23,42,.06)" }}>
+              <h2 style={{ margin: 0, fontSize: 20 }}>Campanhas / UTM</h2>
+              <p style={{ margin: "6px 0 18px", color: "#64748b", fontSize: 13 }}>Mostra quais links de campanha trouxeram visitantes e quantas sessões foram registradas.</p>
+              {campaigns.length === 0 ? <p style={{ color: "#64748b" }}>Ainda não há dados de campanhas.</p> : (
+                <div style={{ overflowX: "auto" }}><table style={{ width: "100%", borderCollapse: "collapse", minWidth: 720, fontSize: 13 }}>
+                  <thead><tr style={{ textAlign: "left", color: "#64748b", borderBottom: "1px solid #e2e8f0" }}>
+                    <th style={{ padding: "10px 8px" }}>Origem</th><th style={{ padding: "10px 8px" }}>Mídia</th><th style={{ padding: "10px 8px" }}>Campanha</th><th style={{ padding: "10px 8px" }}>Conteúdo</th><th style={{ padding: "10px 8px" }}>Termo</th><th style={{ padding: "10px 8px", textAlign: "right" }}>Únicos</th><th style={{ padding: "10px 8px", textAlign: "right" }}>Sessões</th>
+                  </tr></thead>
+                  <tbody>{campaigns.map((item, index) => (
+                    <tr key={item.source + item.medium + item.campaign + item.content + item.term + index} style={{ borderBottom: "1px solid #eef2f7" }}>
+                      <td style={{ padding: "11px 8px", fontWeight: 700 }}>{item.source}</td><td style={{ padding: "11px 8px" }}>{item.medium}</td><td style={{ padding: "11px 8px" }}>{item.campaign}</td><td style={{ padding: "11px 8px" }}>{item.content}</td><td style={{ padding: "11px 8px" }}>{item.term}</td><td style={{ padding: "11px 8px", textAlign: "right", fontWeight: 700 }}>{item.unique_visitors}</td><td style={{ padding: "11px 8px", textAlign: "right", fontWeight: 700 }}>{item.sessions}</td>
+                    </tr>
+                  ))}</tbody>
+                </table></div>
               )}
             </section>
 
