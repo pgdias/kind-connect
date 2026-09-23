@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 
-type Answer = { questionId: number; value: string; detail?: string[] };
+type Answer = { questionId: number; value: string };
 
 const CHECKOUT_URL = "https://pay.cakto.com.br/38xq22v_1131074";
 
@@ -10,53 +10,56 @@ export const Route = createFileRoute("/resultado")({ component: ResultPage });
 function ResultPage() {
   const [answers, setAnswers] = useState<Answer[]>([]);
   const [ready, setReady] = useState(false);
-  const [showOffer, setShowOffer] = useState(false);
 
   useEffect(() => {
     try {
       const raw = sessionStorage.getItem("blindaQuizAnswers");
-      if (raw) setAnswers(JSON.parse(raw));
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        setAnswers(Array.isArray(parsed) ? parsed : []);
+      }
+    } catch {
+      setAnswers([]);
     } finally {
       setReady(true);
     }
-
-    const timer = window.setTimeout(() => setShowOffer(true), 60_000);
-    return () => window.clearTimeout(timer);
   }, []);
 
   const attentionPoints = useMemo(() => {
     const points: string[] = [];
     const get = (id: number) => answers.find((a) => a.questionId === id)?.value;
 
-    if (get(1) === "Não tenho certeza" || get(1) === "Não faço ideia") {
-      points.push("Você não tem certeza se saberia identificar uma possível divergência cadastral.");
+    if (["Não tenho certeza", "Mudou alguma coisa", "Nunca conferi"].includes(get(1) || "")) {
+      points.push("Vale conferir se o Cadastro Único ainda retrata a realidade atual da sua família.");
     }
-    if (get(2) === "Aconteceu e não sei se atualizei" || get(2) === "Aconteceu e ainda não atualizei" || get(2) === "Não tenho certeza") {
-      points.push("Existe uma mudança de renda ou trabalho que vale conferir no Cadastro Único.");
+    if (["Não conferi", "Não tenho certeza"].includes(get(2) || "")) {
+      points.push("Vale conferir se mudanças de trabalho ou renda foram refletidas corretamente no cadastro.");
     }
-    if (get(3) === "Aconteceu, mas não sei se foi informado" || get(3) === "Aconteceu e não foi informado" || get(3) === "Não tenho certeza") {
-      points.push("Vale conferir se a composição atual da família está refletida no cadastro.");
+    if (["Não sei se foi informado", "Nunca conferi"].includes(get(3) || "")) {
+      points.push("Vale conferir se a composição atual da família está corretamente registrada.");
     }
-    if (get(4) === "Mudei e não sei se atualizei" || get(4) === "Não tenho certeza") {
-      points.push("Vale conferir se endereço e outras informações importantes estão atualizados.");
+    if (["Não tenho certeza", "Mudei e não conferi"].includes(get(4) || "")) {
+      points.push("Vale conferir se endereço e telefone estão atualizados.");
     }
-    if (get(5) === "Sim, há mais de 2 anos" || get(5) === "Não lembro" || get(5) === "Não sei") {
-      points.push("Você não conseguiu confirmar quando o Cadastro Único foi atualizado pela última vez.");
+    if (["Não lembro", "Acho que faz mais de 2 anos", "Não sei"].includes(get(5) || "")) {
+      points.push("Vale conferir quando o Cadastro Único foi atualizado pela última vez.");
     }
-    if (get(6) === "Mais ou menos" || get(6) === "Não saberia") {
-      points.push("Você ainda não tem clareza sobre o que fazer diante de uma possível divergência.");
+    if (["Não saberia", "Nunca conferi", "Não tenho certeza"].includes(get(6) || "")) {
+      points.push("Vale entender como conferir possíveis divergências entre o cadastro e outras bases oficiais.");
     }
-    if (get(7) === "Talvez" || get(7) === "Não saberia" || get(7) === "Quase nunca verifico") {
-      points.push("Vale aprender a reconhecer e conferir avisos relacionados ao benefício.");
+    if (["Não saberia", "Não tenho certeza"].includes(get(7) || "")) {
+      points.push("Vale saber como agir caso você seja chamado para atualizar ou verificar o cadastro.");
     }
-    if (get(8) === "Acho que sim" || get(8) === "Não tenho certeza" || get(8) === "Não faço ideia") {
-      points.push("Você não tem certeza se conseguiria identificar um ponto que precisasse de atenção hoje.");
+    if (["Não faço ideia", "Tenho algumas dúvidas"].includes(get(8) || "")) {
+      points.push("Existe pelo menos um ponto da sua situação que você ainda não consegue confirmar.");
     }
 
     return points.slice(0, 6);
   }, [answers]);
 
-  if (!ready) return <main className="result-loading"><div className="processing-spinner" /></main>;
+  if (!ready) {
+    return <main className="result-loading"><div className="processing-spinner" /></main>;
+  }
 
   const hasAnswers = answers.length > 0;
   const count = attentionPoints.length;
@@ -111,13 +114,11 @@ function ResultPage() {
                 </div>
               </section>
 
-              {showOffer && (
-                <section className="delayed-offer">
-                  <a className="delayed-buy-button" href={CHECKOUT_URL}>
-                    QUERO BLINDAR MEU BOLSA FAMÍLIA E DESCOBRIR OS SEGREDOS PARA NÃO PERDER O BENEFÍCIO <span>→</span>
-                  </a>
-                </section>
-              )}
+              <section className="delayed-offer">
+                <a className="delayed-buy-button" href={CHECKOUT_URL}>
+                  QUERO BLINDAR MEU BOLSA FAMÍLIA E DESCOBRIR OS SEGREDOS PARA NÃO PERDER O BENEFÍCIO <span>→</span>
+                </a>
+              </section>
             </>
           ) : (
             <div className="result-hero">
