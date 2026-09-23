@@ -37,5 +37,5 @@ jobs:
         run: |
           psql "$SUPABASE_DB_URL" -v ON_ERROR_STOP=1 -c "select count(*) from public.analytics_campaign_funnel;"
           psql "$SUPABASE_DB_URL" -v ON_ERROR_STOP=1 -c "select count(*) from public.analytics_maintenance where operation_key = 'initial_test_data_reset_2026_09_23';"
-          psql "$SUPABASE_DB_URL" -v ON_ERROR_STOP=1 -c "select count(*) from pg_proc where pronamespace = 'public'::regnamespace and proname = 'reset_analytics_data';" | grep -q '^0
+          psql "$SUPABASE_DB_URL" -Atc "select count(*) from pg_proc where pronamespace = 'public'::regnamespace and proname = 'reset_analytics_data';" | grep -qx "0"
 
