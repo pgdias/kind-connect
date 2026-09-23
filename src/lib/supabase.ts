@@ -3,17 +3,18 @@ const SUPABASE_KEY = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY as string | u
 
 const SESSION_STORAGE_KEY = "blindaQuizSessionId";
 const VISITOR_STORAGE_KEY = "blindaVisitorId";
+const VISITOR_COOKIE_KEY = "blindaVisitorId";
 const SESSION_CREATED_KEY = "blindaQuizSessionCreated";
 const SESSION_LAST_ACTIVITY_KEY = "blindaQuizSessionLastActivity";
 const SESSION_VERSION_KEY = "blindaQuizSessionVersion";
-const SESSION_VERSION = "6";
+const SESSION_VERSION = "7";
 const SESSION_TIMEOUT_MS = 30 * 60 * 1000;
 let sessionCreationPromise: Promise<string> | null = null;
 
 function getVisitorId() {
   if (typeof window === "undefined") return "";
 
-  const cookieMatch = document.cookie.match(/(?:^|; )blindaVisitorId=([^;]+)/);
+  const cookieMatch = document.cookie.match(new RegExp("(?:^|; )" + VISITOR_COOKIE_KEY + "=([^;]+)"));
   const stored = window.localStorage.getItem(VISITOR_STORAGE_KEY);
   const existing = stored || cookieMatch?.[1];
 
