@@ -158,8 +158,10 @@ security definer
 set search_path = public
 as $
 begin
-  delete from public.respostas_quiz;
-  delete from public.quiz_sessions;
+  delete from public.respostas_quiz where true;
+  delete from public.quiz_events where true;
+  delete from public.quiz_answers where true;
+  delete from public.quiz_sessions where true;
   return true;
 end;
 $;
