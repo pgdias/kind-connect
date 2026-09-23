@@ -11,6 +11,7 @@ function ResultPage() {
   const [answers, setAnswers] = useState<Answer[]>([]);
   const [ready, setReady] = useState(false);
   const [secondsLeft, setSecondsLeft] = useState(60);
+  const [availabilitySeconds, setAvailabilitySeconds] = useState(1800);
 
   useEffect(() => {
     try {
@@ -25,6 +26,25 @@ function ResultPage() {
       setReady(true);
     }
   }, []);
+
+  useEffect(() => {
+    if (!ready) return;
+
+    const key = "blindaVslAvailabilityDeadline";
+    let deadline = 0;
+    try {
+      const saved = Number(sessionStorage.getItem(key) || "0");
+      deadline = Number.isFinite(saved) && saved > Date.now() ? saved : Date.now() + 30 * 60 * 1000;
+      sessionStorage.setItem(key, String(deadline));
+    } catch {
+      deadline = Date.now() + 30 * 60 * 1000;
+    }
+
+    const tick = () => setAvailabilitySeconds(Math.max(0, Math.ceil((deadline - Date.now()) / 1000)));
+    tick();
+    const availabilityTimer = window.setInterval(tick, 1000);
+    return () => window.clearInterval(availabilityTimer);
+  }, [ready]);
 
   useEffect(() => {
     if (!ready || secondsLeft <= 0) return;
@@ -75,6 +95,9 @@ function ResultPage() {
   const hasAnswers = answers.length > 0;
   const count = attentionPoints.length;
   const offerReady = secondsLeft === 0;
+  const videoAvailable = availabilitySeconds > 0;
+  const availabilityMinutes = Math.floor(availabilitySeconds / 60).toString().padStart(2, "0");
+  const availabilitySecondsPart = (availabilitySeconds % 60).toString().padStart(2, "0");
 
   return (
     <main className="result-page vsl-sales-page">
@@ -85,6 +108,14 @@ function ResultPage() {
         </Link>
         <span className="quiz-safe">AVALIAÇÃO INFORMATIVA</span>
       </header>
+
+      <section className="vsl-availability-bar" aria-live="polite">
+        <div className="vsl-availability-inner">
+          <span className="vsl-availability-label">ESTA APRESENTAÇÃO FICA DISPONÍVEL POR</span>
+          <strong>{availabilityMinutes}:{availabilitySecondsPart}</strong>
+          <span className="vsl-availability-note">ASSISTA AGORA</span>
+        </div>
+      </section>
 
       <section className="result-main">
         <div className="result-container vsl-sales-container">
@@ -107,8 +138,9 @@ function ResultPage() {
                 </p>
               </section>
 
-              <section className="vsl-video-wrap">
-                <div className="vsl-video-placeholder">
+              {videoAvailable ? (
+                <section className="vsl-video-wrap">
+                  <div className="vsl-video-placeholder">
                   <div className="vsl-video-top">
                     <span>BLINDA BOLSA FAMÍLIA</span>
                     <span>APRESENTAÇÃO</span>
@@ -123,8 +155,15 @@ function ResultPage() {
                     <div><i /></div>
                     <span>VSL</span>
                   </div>
-                </div>
-              </section>
+                  </div>
+                </section>
+              ) : (
+                <section className="vsl-expired-card">
+                  <span>APRESENTAÇÃO ENCERRADA</span>
+                  <h2>Esta apresentação não está mais disponível nesta sessão.</h2>
+                  <p>Se você ainda quiser consultar o conteúdo, atualize a página para iniciar uma nova sessão.</p>
+                </section>
+              )}
 
               {offerReady && (
                 <section className="delayed-offer">
