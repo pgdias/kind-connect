@@ -252,7 +252,7 @@ function AnalyticsPage() {
         getCampaignFunnelWithFallback(),
       ]);
 
-    const results = [summary, days, funnelData, trafficSourcesData, devicesData, campaignsData, campaignFunnelData];
+    const results = [summary, days, funnelData, trafficSourcesData, devicesData, campaignsData];
     const failures = results.filter((result) => result.error).map((result) => `${result.label}: ${result.error}`);
     setErrors(failures);
 
