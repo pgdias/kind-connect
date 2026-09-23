@@ -41,26 +41,27 @@ function Hero() {
       <div className="container landing-v3-grid">
         <div className="landing-v3-copy">
           <div className="landing-kicker"><span /> AVALIAÇÃO GRATUITA • LEVA CERCA DE 2 MINUTOS</div>
-          <div className="landing-alert">NÃO DEIXE PARA DEPOIS</div>
+          <div className="landing-alert">ATENÇÃO: TEM COISA QUE PASSA DESPERCEBIDA</div>
 
-          <h1>Será que existe alguma situação no seu <em>Bolsa Família</em> que você deveria conferir?</h1>
+          <h1>Você pode estar fazendo coisas no dia a dia sem saber que <em>deveria conferir.</em></h1>
 
           <p className="landing-lead">
-            Algumas coisas acontecem no dia a dia, parecem normais e acabam passando sem que você pare para conferir.<strong> O teste foi criado para colocar essas situações no seu radar.</strong>
+            Tem situações que parecem completamente normais: uma mudança em casa, uma informação que ficou antiga, uma alteração na renda, alguém que entrou ou saiu da família...
+            <strong> O problema é quando você nem imagina que aquilo merece atenção.</strong>
           </p>
 
           <div className="landing-curiosity">
             <div className="landing-curiosity-icon">?</div>
             <div>
-              <strong>Veja se alguma dessas situações aparece no seu dia a dia.</strong>
-              <span>Responda algumas perguntas rápidas e descubra quais pontos das suas respostas chamam atenção.</span>
+              <strong>Será que existe alguma no seu caso?</strong>
+              <span>Responda perguntas rápidas e descubra quais situações das suas respostas merecem ser conferidas.</span>
             </div>
           </div>
 
-          <CTA>VER MEUS PONTOS DE ATENÇÃO</CTA>
+          <CTA>DESCOBRIR O QUE POSSO ESTAR DEIXANDO PASSAR</CTA>
 
           <div className="landing-reassurance">
-            <span>✓</span> Sem CPF • Sem senha • Sem dados bancários • Cerca de 2 minutos
+            <span>✓</span> Gratuito • Sem CPF • Sem senha • Cerca de 2 minutos
           </div>
         </div>
 
@@ -80,7 +81,7 @@ function Hero() {
           </div>
 
           <div className="landing-float landing-float-top">
-            <b>?</b><span><strong>Algo para conferir</strong><small>pode passar despercebido</small></span>
+            <b>?</b><span><strong>Algo que passou batido?</strong><small>descubra no teste</small></span>
           </div>
 
           <div className="landing-float landing-float-bottom">
@@ -94,19 +95,19 @@ function Hero() {
 
 function Situations() {
   const situations = [
-    ["01", "Mudou alguma coisa?", "Trabalho, renda, endereço ou quem mora com você."],
-    ["02", "Ficou alguma informação para trás?", "Telefone, escola, situação familiar ou outro dado importante."],
-    ["03", "Você sabe o que deveria conferir?", "Às vezes o problema é simplesmente não saber onde olhar."],
-    ["04", "Recebeu algum aviso?", "Você saberia reconhecer quando uma situação precisa de atenção?"],
+    ["01", "Você mudou alguma coisa e nem percebeu?", "Trabalho, renda, endereço, telefone ou quem mora com você."],
+    ["02", "Tem alguma informação desatualizada?", "Às vezes a vida muda e aquela informação antiga simplesmente fica para trás."],
+    ["03", "Você saberia o que precisa conferir?", "Muita gente só pensa nisso quando aparece uma situação que exige atenção."],
+    ["04", "Já recebeu algum aviso e ficou na dúvida?", "Descubra se suas respostas apontam algum ponto que merece ser conferido."],
   ];
 
   return (
     <section className="landing-situations">
       <div className="container">
         <div className="landing-section-heading">
-          <span>SITUAÇÕES DO DIA A DIA</span>
-          <h2>Pode ser mais simples do que parece.</h2>
-          <p>Uma mudança na família, uma informação que ficou para trás ou algo que você simplesmente nunca parou para conferir.</p>
+          <span>O QUE PODE ESTAR PASSANDO BATIDO</span>
+          <h2>O que parece normal também pode merecer uma conferida.</h2>
+          <p>Não é sobre ficar procurando problema. É sobre descobrir se existe alguma situação no seu dia a dia que você nunca parou para verificar.</p>
         </div>
 
         <div className="landing-situation-grid">
@@ -120,8 +121,8 @@ function Situations() {
         </div>
 
         <div className="landing-proof-line">
-          <span>O teste não consulta o cadastro oficial.</span>
-          <strong>Ele organiza perguntas para mostrar o que vale a pena conferir.</strong>
+          <span>Você responde algumas perguntas sobre sua realidade.</span>
+          <strong>No final, fica mais claro quais pontos das suas respostas vale a pena conferir.</strong>
         </div>
       </div>
     </section>
@@ -130,17 +131,17 @@ function Situations() {
 
 function HowItWorks() {
   const steps = [
-    ["01", "Responda", "Perguntas rápidas sobre situações da sua vida e da sua família."],
-    ["02", "Veja seus pontos", "Suas respostas são organizadas em pontos que merecem atenção."],
-    ["03", "Continue", "Depois, você recebe seu resultado e decide o que fazer com essa informação."],
+    ["01", "Responda", "Perguntas rápidas sobre situações que podem acontecer na sua rotina."],
+    ["02", "Descubra seus pontos", "Suas respostas são analisadas para mostrar o que chamou atenção."],
+    ["03", "Veja seu resultado", "Você entende quais situações apareceram no seu teste e decide o próximo passo."],
   ];
 
   return (
     <section className="landing-how">
       <div className="container">
         <div className="landing-section-heading">
-          <span>SEM COMPLICAÇÃO</span>
-          <h2>Em poucos minutos, você descobre onde vale olhar.</h2>
+          <span>É RÁPIDO</span>
+          <h2>Você não precisa passar horas procurando respostas.</h2>
         </div>
 
         <div className="landing-steps">
@@ -162,10 +163,10 @@ function FinalCTA() {
     <section className="landing-final">
       <div className="container">
         <div className="landing-final-card">
-          <span>ANTES DE DEIXAR PARA DEPOIS</span>
-          <h2>E se houver um ponto que você nunca pensou em conferir?</h2>
-          <p>Faça o teste agora e descubra quais situações aparecem nas suas respostas.</p>
-          <CTA>FAZER O TESTE GRATUITO</CTA>
+          <span>UMA PERGUNTA RÁPIDA</span>
+          <h2>E se você estiver deixando passar justamente uma situação que nunca pensou em conferir?</h2>
+          <p>Faça a avaliação gratuita e descubra quais pontos das suas respostas merecem sua atenção.</p>
+          <CTA>QUERO FAZER MINHA AVALIAÇÃO</CTA>
         </div>
       </div>
     </section>
