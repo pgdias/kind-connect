@@ -1,4 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { useEffect } from "react";
+import { startQuizSession } from "../lib/supabase";
 
 export const Route = createFileRoute("/")({ component: Index });
 
@@ -133,6 +135,10 @@ function Footer() {
 }
 
 function Index() {
+  useEffect(() => {
+    void startQuizSession();
+  }, []);
+
   return (
     <div className="page">
       <Header />
