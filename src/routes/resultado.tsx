@@ -113,9 +113,6 @@ function ResultPage() {
 
               {showOffer && (
                 <section className="delayed-offer">
-                  <div className="delayed-offer-kicker">VOCÊ JÁ SABE QUE VALE A PENA CONFERIR</div>
-                  <h2>Descubra os erros que podem estar passando despercebidos na sua rotina.</h2>
-                  <div className="delayed-price">R$ 12,49 <small>pagamento único</small></div>
                   <a className="delayed-buy-button" href={CHECKOUT_URL}>
                     QUERO BLINDAR MEU BOLSA FAMÍLIA E DESCOBRIR OS SEGREDOS PARA NÃO PERDER O BENEFÍCIO <span>→</span>
                   </a>
