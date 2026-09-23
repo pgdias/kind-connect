@@ -21,14 +21,15 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup Supabase CLI
-        uses: supabase/setup-cli@v1
-        with:
-          version: latest
-
-      - name: Apply database migrations
+      - name: Apply database migration directly
         env:
           SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
         run: |
           test -n "$SUPABASE_DB_URL" || (echo "Missing GitHub secret SUPABASE_DB_URL" && exit 1)
-          supabase db push --db-url "$SUPABASE_DB_URL"
+          psql "$SUPABASE_DB_URL" -v ON_ERROR_STOP=1 -f supabase/migrations/20260923030000_campaign_funnel.sql
+
+      - name: Verify campaign funnel view
+        env:
+          SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+        run: |
+          psql "$SUPABASE_DB_URL" -v ON_ERROR_STOP=1 -c "select count(*) from public.analytics_campaign_funnel;"
