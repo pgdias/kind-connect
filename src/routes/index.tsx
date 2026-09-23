@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect } from "react";
-import { startQuizSession } from "../lib/supabase";
+import { startQuizSession, trackEvent } from "../lib/supabase";
 
 export const Route = createFileRoute("/")({ component: Index });
 
@@ -19,7 +19,7 @@ function Arrow() {
 
 function CTA() {
   return (
-    <Link className="primary-button landing-cta landing-main-cta" to="/quiz">
+    <Link className="primary-button landing-cta landing-main-cta" to="/quiz" onClick={() => void trackEvent("cta_click", { location: "landing" })}>
       DESCOBRIR O QUE POSSO ESTAR DEIXANDO PASSAR
       <Arrow />
     </Link>
