@@ -115,22 +115,11 @@ function ResultPage() {
                 <section className="delayed-offer">
                   <div className="delayed-offer-kicker">VOCÊ JÁ SABE QUE VALE A PENA CONFERIR</div>
                   <h2>Descubra os erros que podem estar passando despercebidos na sua rotina.</h2>
-                  <p>
-                    Tenha acesso ao material completo para entender o que conferir, o que observar
-                    e onde buscar a confirmação oficial da sua situação.
-                  </p>
                   <div className="delayed-price">R$ 12,49 <small>pagamento único</small></div>
                   <a className="delayed-buy-button" href={CHECKOUT_URL}>
                     QUERO BLINDAR MEU BOLSA FAMÍLIA E DESCOBRIR OS SEGREDOS PARA NÃO PERDER O BENEFÍCIO <span>→</span>
                   </a>
                 </section>
-              )}
-
-              {!showOffer && (
-                <div className="delayed-offer-wait">
-                  <span>ASSISTA AO VÍDEO</span>
-                  <p>O acesso ao material será liberado após 60 segundos.</p>
-                </div>
               )}
 
               <div className="result-notice">
