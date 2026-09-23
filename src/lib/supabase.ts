@@ -2,10 +2,22 @@ const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL as string | undefined;
 const SUPABASE_KEY = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY as string | undefined;
 
 const SESSION_STORAGE_KEY = "blindaQuizSessionId";
+const VISITOR_STORAGE_KEY = "blindaVisitorId";
 const SESSION_CREATED_KEY = "blindaQuizSessionCreated";
 const SESSION_VERSION_KEY = "blindaQuizSessionVersion";
 const SESSION_VERSION = "4";
 let sessionCreationPromise: Promise<string> | null = null;
+
+function getVisitorId() {
+  if (typeof window === "undefined") return "";
+  const existing = window.localStorage.getItem(VISITOR_STORAGE_KEY);
+  if (existing) return existing;
+  const id = typeof crypto !== "undefined" && "randomUUID" in crypto
+    ? crypto.randomUUID()
+    : `visitor-${Date.now()}-${Math.random().toString(36).slice(2)}`;
+  window.localStorage.setItem(VISITOR_STORAGE_KEY, id);
+  return id;
+}
 
 function getSessionId() {
   if (typeof window === "undefined") return "";
@@ -119,7 +131,8 @@ export async function recordQuizCompletion() {
 
 export async function startQuizSession() {
   const sessionId = getSessionId();
-  if (!sessionId || typeof window === "undefined") return "";
+  const visitorId = getVisitorId();
+  if (!sessionId || !visitorId || typeof window === "undefined") return "";
 
   if (sessionCreationPromise) return sessionCreationPromise;
 
@@ -136,6 +149,7 @@ export async function startQuizSession() {
       method: "POST",
       body: JSON.stringify({
         session_id: sessionId,
+        visitor_id: visitorId,
         landing_path: window.location.pathname,
         referrer: document.referrer || null,
         ...utm,
