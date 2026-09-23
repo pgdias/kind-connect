@@ -165,16 +165,10 @@ $;
 revoke all on function public.reset_analytics_data() from public;
 grant execute on function public.reset_analytics_data() to anon;
 
--- Painel agregado do funil.
--- Cada etapa conta sessões únicas.
--- Resultado e checkout só contam sessões que realmente concluíram o quiz,
--- evitando que registros antigos de testes que chegaram ao resultado sem
--- registrar a conclusão distorçam o funil.
+-- Analytics: funil por sessão, com métricas de visitantes únicos separadas.
 create or replace view public.analytics_funnel_overview as
 with completed_sessions as (
-  select distinct session_id
-  from public.quiz_events
-  where event_name = 'quiz_completed'
+  select distinct session_id from public.quiz_events where event_name = 'quiz_completed'
 ),
 result_sessions as (
   select distinct e.session_id
@@ -187,6 +181,36 @@ checkout_sessions as (
   from public.quiz_events e
   inner join result_sessions r on r.session_id = e.session_id
   where e.event_name = 'checkout_click'
+),
+started_visitors as (
+  select distinct qs.visitor_id
+  from public.quiz_sessions qs
+  inner join public.quiz_events e on e.session_id = qs.session_id
+  where e.event_name = 'quiz_started' and qs.visitor_id is not null
+),
+completed_visitors as (
+  select distinct qs.visitor_id
+  from public.quiz_sessions qs
+  inner join completed_sessions c on c.session_id = qs.session_id
+  where qs.visitor_id is not null
+),
+result_visitors as (
+  select distinct qs.visitor_id
+  from public.quiz_sessions qs
+  inner join result_sessions r on r.session_id = qs.session_id
+  where qs.visitor_id is not null
+),
+checkout_visitors as (
+  select distinct qs.visitor_id
+  from public.quiz_sessions qs
+  inner join checkout_sessions c on c.session_id = qs.session_id
+  where qs.visitor_id is not null
+),
+cta_visitors as (
+  select distinct qs.visitor_id
+  from public.quiz_sessions qs
+  inner join public.quiz_events e on e.session_id = qs.session_id
+  where e.event_name = 'cta_click' and qs.visitor_id is not null
 )
 select
   (select count(*) from public.quiz_sessions)::bigint as visitors,
@@ -194,13 +218,15 @@ select
   (select count(*) from completed_sessions)::bigint as quiz_completions,
   (select count(*) from result_sessions)::bigint as result_views,
   (select count(*) from checkout_sessions)::bigint as checkout_clicks,
-  (select count(distinct session_id) from public.quiz_events where event_name = 'cta_click')::bigint as cta_clicks;
+  (select count(distinct session_id) from public.quiz_events where event_name = 'cta_click')::bigint as cta_clicks,
+  (select count(*) from started_visitors)::bigint as unique_quiz_starters,
+  (select count(*) from completed_visitors)::bigint as unique_quiz_completions,
+  (select count(*) from result_visitors)::bigint as unique_result_viewers,
+  (select count(*) from checkout_visitors)::bigint as unique_checkout_visitors,
+  (select count(*) from cta_visitors)::bigint as unique_cta_visitors;
 
 grant select on public.analytics_funnel_overview to anon;
 
--- Painel agregado de visitantes.
--- "Abandonaram" significa quem iniciou o quiz e não o concluiu.
--- Visitantes que nunca iniciaram não entram como abandono.
 create or replace view public.analytics_visitors_overview as
 with counts as (
   select
