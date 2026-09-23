@@ -128,6 +128,7 @@ function QuizPage() {
       await Promise.all([
         saveQuizAnswer(question.id, value, true),
         trackEvent("quiz_answered", { question_id: question.id }),
+        trackEvent("quiz_completed"),
         saveQuizSummary(next, []),
         new Promise((resolve) => setTimeout(resolve, 4500)),
       ]);
