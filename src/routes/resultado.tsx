@@ -28,6 +28,47 @@ const ACTIVITY_BUYERS = [
   ["Letícia Moreira", "Guarulhos (SP)"],
 ] as const;
 
+function playNotificationSound() {
+  try {
+    const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+    if (!AudioContextClass) return;
+
+    const context = new AudioContextClass();
+    const start = () => {
+      const now = context.currentTime;
+      const gain = context.createGain();
+      const oscillator = context.createOscillator();
+
+      oscillator.type = "sine";
+      oscillator.frequency.setValueAtTime(880, now);
+      oscillator.frequency.exponentialRampToValueAtTime(1174, now + 0.09);
+
+      gain.gain.setValueAtTime(0.0001, now);
+      gain.gain.exponentialRampToValueAtTime(0.045, now + 0.012);
+      gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.16);
+
+      oscillator.connect(gain);
+      gain.connect(context.destination);
+      oscillator.start(now);
+      oscillator.stop(now + 0.17);
+
+      window.setTimeout(() => {
+        void context.close();
+      }, 300);
+    };
+
+    if (context.state === "suspended") {
+      void context.resume().then(start).catch(() => {
+        void context.close();
+      });
+    } else {
+      start();
+    }
+  } catch {
+    // Audio is optional; notification still works if autoplay is blocked.
+  }
+}
+
 function ActivityNotifications({ active }: { active: boolean }) {
   const [index, setIndex] = useState(0);
   const [visible, setVisible] = useState(false);
@@ -43,12 +84,14 @@ function ActivityNotifications({ active }: { active: boolean }) {
     let rotation: number | undefined;
     const firstNotification = window.setTimeout(() => {
       setVisible(true);
+      playNotificationSound();
 
       rotation = window.setInterval(() => {
         setVisible(false);
         window.setTimeout(() => {
           setIndex((current) => (current + 1) % ACTIVITY_BUYERS.length);
           setVisible(true);
+          playNotificationSound();
         }, 120);
       }, 25000);
     }, 18000);
