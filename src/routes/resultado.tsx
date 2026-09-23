@@ -88,7 +88,7 @@ function ResultPage() {
                 </h1>
                 <p>
                   <strong>ASSISTA ESSE VÍDEO ANTES QUE SEJA TARDE.</strong><br />
-                  Descubra situações que podem colocar seu Bolsa Família em risco — e que muita gente só percebe quando precisa resolver uma pendência.
+                  Descubra erros e situações do dia a dia que podem gerar divergências — e que muita gente faz sem imaginar que precisa conferir.
                 </p>
               </section>
 
@@ -114,7 +114,7 @@ function ResultPage() {
               {showOffer && (
                 <section className="delayed-offer">
                   <div className="delayed-offer-kicker">VOCÊ JÁ SABE QUE VALE A PENA CONFERIR</div>
-                  <h2>Agora descubra o que fazer para se proteger de erros e pendências.</h2>
+                  <h2>Descubra os erros que podem estar passando despercebidos na sua rotina.</h2>
                   <p>
                     Tenha acesso ao material completo para entender o que conferir, o que observar
                     e onde buscar a confirmação oficial da sua situação.
