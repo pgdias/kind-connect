@@ -31,7 +31,10 @@ function getUtmParams() {
 }
 
 async function request(path: string, init: RequestInit = {}) {
-  if (!SUPABASE_URL || !SUPABASE_KEY) return false;
+  if (!SUPABASE_URL || !SUPABASE_KEY) {
+    console.error("[Blinda Bolsa] Supabase env vars ausentes.");
+    return false;
+  }
 
   try {
     const response = await fetch(`${SUPABASE_URL}/rest/v1/${path}`, {
@@ -45,17 +48,27 @@ async function request(path: string, init: RequestInit = {}) {
       },
     });
 
-    return response.ok;
-  } catch {
+    if (!response.ok) {
+      const body = await response.text().catch(() => "");
+      console.error(`[Blinda Bolsa] Supabase ${response.status} em ${path}`, body);
+      return false;
+    }
+
+    return true;
+  } catch (error) {
+    console.error(`[Blinda Bolsa] Falha de rede em ${path}`, error);
     return false;
   }
 }
 
-export async function trackEvent(eventName: string, metadata: Record<string, unknown> = {}) {
+export async function trackEvent(
+  eventName: string,
+  metadata: Record<string, unknown> = {},
+) {
   const sessionId = await startQuizSession();
-  if (!sessionId) return;
+  if (!sessionId) return false;
 
-  await request("quiz_events", {
+  return request("quiz_events", {
     method: "POST",
     body: JSON.stringify({
       session_id: sessionId,
@@ -67,13 +80,15 @@ export async function trackEvent(eventName: string, metadata: Record<string, unk
 
 export async function startQuizSession() {
   const sessionId = getSessionId();
-  if (!sessionId) return "";
+  if (!sessionId || typeof window === "undefined") return "";
 
   const utm = getUtmParams();
 
-  await request("quiz_sessions?on_conflict=session_id", {
+  const ok = await request("quiz_sessions?on_conflict=session_id", {
     method: "POST",
-    headers: { Prefer: "resolution=merge-duplicates,return=minimal" },
+    headers: {
+      Prefer: "resolution=merge-duplicates,return=minimal",
+    },
     body: JSON.stringify({
       session_id: sessionId,
       landing_path: window.location.pathname,
@@ -81,6 +96,8 @@ export async function startQuizSession() {
       ...utm,
     }),
   });
+
+  if (!ok) return "";
 
   return sessionId;
 }
@@ -91,25 +108,35 @@ export async function saveQuizAnswer(
   completed = false,
 ) {
   const sessionId = await startQuizSession();
-  if (!sessionId) return;
+  if (!sessionId) return false;
 
-  await request("quiz_answers?on_conflict=session_id,question_id", {
-    method: "POST",
-    headers: { Prefer: "resolution=merge-duplicates,return=minimal" },
-    body: JSON.stringify({
-      session_id: sessionId,
-      question_id: questionId,
-      answer,
-    }),
-  });
+  const answerSaved = await request(
+    "quiz_answers?on_conflict=session_id,question_id",
+    {
+      method: "POST",
+      headers: {
+        Prefer: "resolution=merge-duplicates,return=minimal",
+      },
+      body: JSON.stringify({
+        session_id: sessionId,
+        question_id: questionId,
+        answer,
+      }),
+    },
+  );
 
-  await request(`quiz_sessions?session_id=eq.${encodeURIComponent(sessionId)}`, {
-    method: "PATCH",
-    body: JSON.stringify({
-      current_step: questionId,
-      ...(completed ? { completed_at: new Date().toISOString() } : {}),
-    }),
-  });
+  const sessionUpdated = await request(
+    `quiz_sessions?session_id=eq.${encodeURIComponent(sessionId)}`,
+    {
+      method: "PATCH",
+      body: JSON.stringify({
+        current_step: questionId,
+        ...(completed ? { completed_at: new Date().toISOString() } : {}),
+      }),
+    },
+  );
+
+  return answerSaved && sessionUpdated;
 }
 
 type QuizAnswer = {
@@ -130,7 +157,7 @@ export async function saveQuizSummary(
     respostas_completas: answers,
   });
 
-  await request("respostas_quiz", {
+  return request("respostas_quiz", {
     method: "POST",
     body: JSON.stringify({
       resposta_1: values[1] ?? null,
