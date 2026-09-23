@@ -935,7 +935,7 @@
 .delayed-buy-button:hover{transform:translateY(-2px);filter:brightness(1.07);box-shadow:0 21px 48px rgba(224,24,35,.25)}
 .delayed-buy-button span{font-size:20px;font-weight:400}
 .result-loading{min-height:100vh;display:grid;place-items:center;background:#070909}
-.result-loading .processing-spinner{width:42px;height:42px;border:3px solid #292e2b;border-top-color:#e01823;border-radius:50%;animation:result-spin .8s linear infinite}
+.result-loading .processing-spinner{width:42px;height:42px;border:3px solid #dce9e1;border-top-color:#2d9a61;border-radius:50%;animation:result-spin .8s linear infinite}
 @keyframes result-spin{to{transform:rotate(360deg)}}
 .result-hero{width:min(620px,100%);margin:80px auto;padding:45px 35px;text-align:center;border:1px solid #303532;border-radius:16px;background:#101311}
 .result-check{width:48px;height:48px;display:grid;place-items:center;margin:0 auto 18px;border-radius:50%;background:#173d2a;color:#6bd19a;font-size:22px}
