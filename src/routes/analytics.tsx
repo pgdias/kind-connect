@@ -66,6 +66,15 @@ function formatDay(value: string) {
   return new Intl.DateTimeFormat("pt-BR", { day: "2-digit", month: "2-digit" }).format(new Date(value + "T12:00:00"));
 }
 
+function conversionRate(value: number, base: number) {
+  if (!base) return 0;
+  return Math.min((value / base) * 100, 100);
+}
+
+function formatPercent(value: number) {
+  return value.toLocaleString("pt-BR", { maximumFractionDigits: 1 }) + "%";
+}
+
 function AnalyticsPage() {
   const [overview, setOverview] = useState<Overview | null>(null);
   const [daily, setDaily] = useState<Daily[]>([]);
@@ -174,22 +183,72 @@ function AnalyticsPage() {
               ))}
             </div>
 
-            {funnel && (
+            {funnel && overview && (
               <section style={{ background: "#fff", borderRadius: 16, padding: 24, marginBottom: 22, boxShadow: "0 4px 20px rgba(15,23,42,.06)" }}>
-                <h2 style={{ margin: "0 0 18px", fontSize: 20 }}>Funil</h2>
-                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(150px,1fr))", gap: 12 }}>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 16, flexWrap: "wrap", marginBottom: 18 }}>
+                  <div>
+                    <h2 style={{ margin: 0, fontSize: 20 }}>Funil de conversão</h2>
+                    <p style={{ margin: "6px 0 0", color: "#64748b", fontSize: 13 }}>Veja quantos avançam em cada etapa e onde o funil perde visitantes.</p>
+                  </div>
+                  <div style={{ background: "#f8fafc", borderRadius: 10, padding: "8px 12px", fontSize: 12, color: "#64748b" }}>
+                    Conversão geral: <strong style={{ color: "#172033" }}>{formatPercent(conversionRate(funnel.checkout_clicks, overview.unique_visitors))}</strong> até o checkout
+                  </div>
+                </div>
+
+                <div style={{ display: "grid", gap: 10 }}>
                   {[
-                    ["Iniciaram o quiz", funnel.quiz_starts],
-                    ["Concluíram", funnel.quiz_completions],
-                    ["Viram o resultado", funnel.result_views],
-                    ["Cliques no checkout", funnel.checkout_clicks],
-                    ["Cliques nos CTAs", funnel.cta_clicks],
-                  ].map(([label, value]) => (
-                    <div key={String(label)} style={{ background: "#f8fafc", borderRadius: 12, padding: 16 }}>
-                      <div style={{ color: "#64748b", fontSize: 12, fontWeight: 700 }}>{label}</div>
-                      <div style={{ fontSize: 26, fontWeight: 800, marginTop: 7 }}>{Number(value).toLocaleString("pt-BR")}</div>
+                    {
+                      label: "Visitantes únicos",
+                      value: overview.unique_visitors,
+                      base: overview.unique_visitors,
+                      rate: 100,
+                    },
+                    {
+                      label: "Iniciaram o quiz",
+                      value: funnel.quiz_starts,
+                      base: overview.unique_visitors,
+                      rate: conversionRate(funnel.quiz_starts, overview.unique_visitors),
+                    },
+                    {
+                      label: "Concluíram",
+                      value: funnel.quiz_completions,
+                      base: funnel.quiz_starts,
+                      rate: conversionRate(funnel.quiz_completions, funnel.quiz_starts),
+                    },
+                    {
+                      label: "Viram o resultado",
+                      value: funnel.result_views,
+                      base: funnel.quiz_completions,
+                      rate: conversionRate(funnel.result_views, funnel.quiz_completions),
+                    },
+                    {
+                      label: "Cliques no checkout",
+                      value: funnel.checkout_clicks,
+                      base: funnel.result_views,
+                      rate: conversionRate(funnel.checkout_clicks, funnel.result_views),
+                    },
+                    {
+                      label: "Cliques nos CTAs",
+                      value: funnel.cta_clicks,
+                      base: overview.unique_visitors,
+                      rate: conversionRate(funnel.cta_clicks, overview.unique_visitors),
+                    },
+                  ].map((step) => (
+                    <div key={step.label} style={{ display: "grid", gridTemplateColumns: "minmax(170px,1fr) 70px minmax(180px,2fr) 80px", alignItems: "center", gap: 14, background: "#f8fafc", borderRadius: 12, padding: "13px 16px" }}>
+                      <div style={{ fontSize: 13, fontWeight: 700 }}>{step.label}</div>
+                      <div style={{ fontSize: 20, fontWeight: 800, textAlign: "right" }}>{step.value.toLocaleString("pt-BR")}</div>
+                      <div>
+                        <div style={{ height: 9, background: "#e9eef5", borderRadius: 99, overflow: "hidden" }}>
+                          <div style={{ width: `${step.rate}%`, height: "100%", background: "#172033", borderRadius: 99 }} />
+                        </div>
+                      </div>
+                      <div style={{ textAlign: "right", fontSize: 13, fontWeight: 800 }}>{formatPercent(step.rate)}</div>
                     </div>
                   ))}
+                </div>
+
+                <div style={{ marginTop: 14, color: "#64748b", fontSize: 12, lineHeight: 1.5 }}>
+                  A porcentagem de cada etapa é calculada em relação à etapa imediatamente anterior. A conversão geral considera visitantes únicos até o checkout. “Cliques nos CTAs” é mostrado separadamente porque pode acontecer fora da sequência principal do quiz.
                 </div>
               </section>
             )}
