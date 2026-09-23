@@ -5,6 +5,56 @@ type Answer = { questionId: number; value: string };
 
 const CHECKOUT_URL = "https://pay.cakto.com.br/38xq22v_1131074";
 
+const ACTIVITY_CITIES = [
+  "São Paulo",
+  "Rio de Janeiro",
+  "Fortaleza",
+  "Salvador",
+  "Manaus",
+  "Brasília",
+  "Belém",
+  "Recife",
+  "Belo Horizonte",
+  "São Luís",
+];
+
+function ActivityNotifications({ active }: { active: boolean }) {
+  const [index, setIndex] = useState(0);
+  const [visible, setVisible] = useState(true);
+
+  useEffect(() => {
+    if (!active) {
+      setVisible(false);
+      return;
+    }
+
+    setVisible(true);
+    const rotation = window.setInterval(() => {
+      setVisible(false);
+      window.setTimeout(() => setIndex((current) => (current + 1) % ACTIVITY_CITIES.length), 180);
+      window.setTimeout(() => setVisible(true), 260);
+    }, 5200);
+
+    return () => window.clearInterval(rotation);
+  }, [active]);
+
+  if (!active || !visible) return null;
+
+  return (
+    <div className="activity-notification" role="status" aria-live="polite">
+      <div className="activity-notification-icon">✓</div>
+      <div>
+        <strong>ATIVIDADE RECENTE</strong>
+        <p>
+          Pessoas de <b>{ACTIVITY_CITIES[index]}</b> estão conferindo o Blinda Bolsa Família.
+        </p>
+        <small>Agora mesmo</small>
+      </div>
+      <span className="activity-notification-close">×</span>
+    </div>
+  );
+}
+
 export const Route = createFileRoute("/resultado")({ component: ResultPage });
 
 function ResultPage() {
