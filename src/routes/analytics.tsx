@@ -46,6 +46,98 @@ type Funnel = {
 
 type LoadResult<T> = { label: string; data?: T; error?: string };
 
+type QuizSessionRow = {
+  session_id: string;
+  visitor_id: string | null;
+  utm_source: string | null;
+  utm_medium: string | null;
+  utm_campaign: string | null;
+  utm_content: string | null;
+  utm_term: string | null;
+};
+
+type QuizEventRow = {
+  session_id: string;
+  event_name: string;
+};
+
+function buildCampaignFunnel(sessions: QuizSessionRow[], events: QuizEventRow[]): CampaignFunnel[] {
+  const bySession = new Map<string, QuizSessionRow>();
+  sessions.forEach((session) => bySession.set(session.session_id, session));
+
+  const eventSets = new Map<string, Set<string>>();
+  events.forEach((event) => {
+    const set = eventSets.get(event.session_id) ?? new Set<string>();
+    set.add(event.event_name);
+    eventSets.set(event.session_id, set);
+  });
+
+  const groups = new Map<string, CampaignFunnel>();
+
+  for (const session of sessions) {
+    const eventsForSession = eventSets.get(session.session_id) ?? new Set<string>();
+    const source = session.utm_source?.trim() || "Direto / não identificado";
+    const medium = session.utm_medium?.trim() || "—";
+    const campaign = session.utm_campaign?.trim() || "—";
+    const content = session.utm_content?.trim() || "—";
+    const term = session.utm_term?.trim() || "—";
+    const key = [source, medium, campaign, content, term].join("\u001f");
+    const current = groups.get(key) ?? {
+      source, medium, campaign, content, term,
+      unique_visitors: 0, sessions: 0,
+      unique_quiz_starters: 0, quiz_starts: 0,
+      unique_quiz_completions: 0, quiz_completions: 0,
+      unique_result_viewers: 0, result_views: 0,
+      unique_checkout_visitors: 0, checkout_clicks: 0,
+      unique_cta_visitors: 0, cta_clicks: 0,
+    };
+
+    current.sessions += 1;
+    current.unique_visitors += session.visitor_id ? 1 : 0;
+    if (eventsForSession.has("quiz_started")) { current.quiz_starts += 1; if (session.visitor_id) current.unique_quiz_starters += 1; }
+    if (eventsForSession.has("quiz_completed")) { current.quiz_completions += 1; if (session.visitor_id) current.unique_quiz_completions += 1; }
+    if (eventsForSession.has("quiz_completed") && eventsForSession.has("result_viewed")) { current.result_views += 1; if (session.visitor_id) current.unique_result_viewers += 1; }
+    if (eventsForSession.has("quiz_completed") && eventsForSession.has("result_viewed") && eventsForSession.has("checkout_click")) { current.checkout_clicks += 1; if (session.visitor_id) current.unique_checkout_visitors += 1; }
+    if (eventsForSession.has("cta_click")) { current.cta_clicks += 1; if (session.visitor_id) current.unique_cta_visitors += 1; }
+
+    groups.set(key, current);
+  }
+
+  return Array.from(groups.values()).sort((a, b) =>
+    b.unique_checkout_visitors - a.unique_checkout_visitors ||
+    b.unique_quiz_completions - a.unique_quiz_completions ||
+    b.unique_visitors - a.unique_visitors ||
+    b.sessions - a.sessions
+  );
+}
+
+async function getCampaignFunnelWithFallback(): Promise<LoadResult<CampaignFunnel[]>> {
+  const primary = await getData<CampaignFunnel[]>(
+    "Funil por campanha",
+    "analytics_campaign_funnel?select=*&order=unique_checkout_visitors.desc,unique_quiz_completions.desc,unique_visitors.desc"
+  );
+  if (!primary.error || !primary.error.includes("analytics_campaign_funnel")) return primary;
+
+  const [sessions, events] = await Promise.all([
+    getData<QuizSessionRow[]>(
+      "Dados de campanha",
+      "quiz_sessions?select=session_id,visitor_id,utm_source,utm_medium,utm_campaign,utm_content,utm_term&order=started_at.asc"
+    ),
+    getData<QuizEventRow[]>(
+      "Eventos de campanha",
+      "quiz_events?select=session_id,event_name&order=created_at.asc"
+    ),
+  ]);
+
+  if (sessions.error || events.error) {
+    return { label: "Funil por campanha", error: primary.error };
+  }
+
+  return { label: "Funil por campanha", data: buildCampaignFunnel(sessions.data ?? [], events.data ?? []) };
+}
+
+
+
 export const Route = createFileRoute("/analytics")({ component: AnalyticsPage });
 
 async function getData<T>(label: string, path: string): Promise<LoadResult<T>> {
@@ -119,7 +211,7 @@ function AnalyticsPage() {
         getData<TrafficSource[]>("Origem do tráfego", "analytics_traffic_sources?select=source,medium,unique_visitors,sessions"),
         getData<Device[]>("Dispositivos", "analytics_devices?select=device,unique_visitors,sessions"),
         getData<Campaign[]>("Campanhas UTM", "analytics_campaigns?select=source,medium,campaign,content,term,unique_visitors,sessions"),
-        getData<CampaignFunnel[]>("Funil por campanha", "analytics_campaign_funnel?select=*&order=unique_checkout_visitors.desc,unique_quiz_completions.desc,unique_visitors.desc"),
+        getCampaignFunnelWithFallback(),
       ]);
 
     const results = [summary, days, funnelData, trafficSourcesData, devicesData, campaignsData, campaignFunnelData];
