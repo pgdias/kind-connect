@@ -35,7 +35,7 @@ function ActivityNotifications({ active }: { active: boolean }) {
         setIndex((current) => (current + 1) % ACTIVITY_CITIES.length);
         setVisible(true);
       }, 120);
-    }, 2500);
+    }, 10000);
 
     return () => window.clearInterval(rotation);
   }, [active]);
