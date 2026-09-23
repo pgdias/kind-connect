@@ -8,9 +8,9 @@ const questions: Question[] = [
   {
     id: 1,
     tag: "SITUAÇÃO 01",
-    title: "Nos últimos meses, alguma coisa mudou na vida da sua família?",
-    subtitle: "Pode ser algo que parece pequeno no dia a dia.",
-    options: ["Sim, mudou alguma coisa", "Não mudou nada", "Não tenho certeza"],
+    title: "Você tem certeza de que, desde a última atualização, nada mudou na sua família?",
+    subtitle: "Renda, trabalho, endereço ou quem mora com você podem ter mudado sem você perceber que precisava conferir.",
+    options: ["Não, mudou alguma coisa", "Não tenho certeza", "Sim, tenho certeza"],
   },
   {
     id: 2,
