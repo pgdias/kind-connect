@@ -18,7 +18,7 @@ function Arrow() {
 function CTA() {
   return (
     <Link className="primary-button landing-cta landing-main-cta" to="/quiz">
-      FAZER A AVALIAÇÃO GRATUITA
+      DESCOBRIR O QUE POSSO ESTAR DEIXANDO PASSAR
       <Arrow />
     </Link>
   );
@@ -37,7 +37,7 @@ function Header() {
         </Link>
         <div className="header-status">
           <span className="status-dot" />
-          GRATUITO
+          AVALIAÇÃO GRATUITA
         </div>
       </div>
     </header>
@@ -53,20 +53,21 @@ function Hero() {
 
       <div className="container landing-compact-grid">
         <div className="landing-compact-copy">
-          <div className="landing-kicker"><span /> AVALIAÇÃO GRATUITA</div>
+          <div className="landing-kicker"><span /> ATENÇÃO: TEM COISA QUE PASSA BATIDO</div>
 
           <h1>
-            Você pode estar deixando passar coisas que <em>deveria conferir.</em>
+            Você pode estar fazendo coisas normalmente sem saber que <em>deveria conferir.</em>
           </h1>
 
           <p className="landing-lead">
-            Responda algumas perguntas sobre sua situação e descubra se existe algum ponto que merece atenção.
+            Mudanças, informações antigas e situações do dia a dia podem passar despercebidas.
+            <strong> A questão é: será que alguma delas aparece no seu caso?</strong>
           </p>
 
           <CTA />
 
           <div className="landing-reassurance">
-            ✓ Sem CPF &nbsp; • &nbsp; Sem senha &nbsp; • &nbsp; Cerca de 2 minutos
+            ✓ Gratuito &nbsp; • &nbsp; Sem CPF &nbsp; • &nbsp; Sem senha &nbsp; • &nbsp; Cerca de 2 minutos
           </div>
         </div>
 
@@ -89,17 +90,17 @@ function Hero() {
 
 function QuickPoints() {
   const points = [
-    ["01", "Mudanças na sua vida", "Renda, trabalho, endereço ou composição da família."],
-    ["02", "Informação que ficou antiga", "Alguma coisa pode ter mudado e você simplesmente não conferiu."],
-    ["03", "Situações que passam batido", "O teste ajuda a identificar pontos das suas respostas que merecem atenção."],
+    ["01", "Você mudou alguma coisa?", "Renda, trabalho, endereço ou quem mora com você."],
+    ["02", "Tem alguma informação antiga?", "Uma informação pode continuar registrada mesmo depois de a sua realidade mudar."],
+    ["03", "Existe algo que você nunca conferiu?", "Descubra se alguma situação das suas respostas merece atenção."],
   ];
 
   return (
     <section className="landing-quick-points">
       <div className="container">
         <div className="landing-quick-heading">
-          <span>O QUE VOCÊ VAI CONFERIR</span>
-          <h2>Descubra o que pode estar passando despercebido.</h2>
+          <span>ANTES DE DEIXAR PARA DEPOIS</span>
+          <h2>Tem situações que parecem normais até você perceber que precisava conferir.</h2>
         </div>
 
         <div className="landing-quick-grid">
