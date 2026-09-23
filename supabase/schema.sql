@@ -110,7 +110,7 @@ create or replace view public.analytics_funnel_overview as
 select
   (select count(*) from public.quiz_sessions)::bigint as visitors,
   (select count(*) from public.quiz_events where event_name = 'quiz_started')::bigint as quiz_starts,
-  (select count(*) from public.quiz_sessions where completed_at is not null)::bigint as quiz_completions,
+  (select count(distinct session_id) from public.quiz_events where event_name = 'quiz_completed')::bigint as quiz_completions,
   (select count(*) from public.quiz_events where event_name = 'result_viewed')::bigint as result_views,
   (select count(*) from public.quiz_events where event_name = 'checkout_click')::bigint as checkout_clicks,
   (select count(*) from public.quiz_events where event_name = 'cta_click')::bigint as cta_clicks;
@@ -125,8 +125,8 @@ select
   count(*) filter (where started_at::date = current_date)::bigint as visitors_today,
   count(*) filter (where started_at >= now() - interval '7 days')::bigint as visitors_7d,
   count(*) filter (where started_at >= now() - interval '30 days')::bigint as visitors_30d,
-  count(*) filter (where completed_at is not null)::bigint as completed_quizzes,
-  count(*) filter (where completed_at is null)::bigint as unfinished_quizzes
+  (select count(distinct session_id) from public.quiz_events where event_name = 'quiz_completed')::bigint as completed_quizzes,
+  (count(*) - (select count(distinct session_id) from public.quiz_events where event_name = 'quiz_completed'))::bigint as unfinished_quizzes
 from public.quiz_sessions;
 
 create or replace view public.analytics_visitors_daily as
