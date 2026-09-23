@@ -78,6 +78,38 @@ revoke select on public.quiz_answers from anon;
 revoke select on public.respostas_quiz from anon;
 
 
+create table if not exists public.quiz_events (
+  id uuid primary key default gen_random_uuid(),
+  session_id text not null references public.quiz_sessions(session_id) on delete cascade,
+  event_name text not null,
+  metadata jsonb not null default '{}'::jsonb,
+  created_at timestamptz not null default now()
+);
+
+create index if not exists quiz_events_session_id_idx on public.quiz_events(session_id);
+create index if not exists quiz_events_event_name_idx on public.quiz_events(event_name);
+create index if not exists quiz_events_created_at_idx on public.quiz_events(created_at);
+
+alter table public.quiz_events enable row level security;
+
+drop policy if exists "quiz events public insert" on public.quiz_events;
+create policy "quiz events public insert" on public.quiz_events for insert to anon with check (true);
+
+revoke select on public.quiz_events from anon;
+
+-- Painel agregado do funil
+create or replace view public.analytics_funnel_overview as
+select
+  (select count(*) from public.quiz_sessions)::bigint as visitors,
+  (select count(*) from public.quiz_events where event_name = 'quiz_started')::bigint as quiz_starts,
+  (select count(*) from public.quiz_sessions where completed_at is not null)::bigint as quiz_completions,
+  (select count(*) from public.quiz_events where event_name = 'result_viewed')::bigint as result_views,
+  (select count(*) from public.quiz_events where event_name = 'checkout_click')::bigint as checkout_clicks,
+  (select count(*) from public.quiz_events where event_name = 'cta_click')::bigint as cta_clicks;
+
+grant select on public.analytics_funnel_overview to anon;
+
+
 -- Painel agregado de visitantes (não expõe dados individuais)
 create or replace view public.analytics_visitors_overview as
 select
