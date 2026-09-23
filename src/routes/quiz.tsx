@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { saveQuizAnswer, startQuizSession } from "../lib/supabase";
+import { saveQuizAnswer, saveQuizSummary, startQuizSession } from "../lib/supabase";
 
 type Answer = { questionId: number; value: string };
 type Question = { id: number; tag: string; title: string; subtitle?: string; options: string[] };
@@ -110,7 +110,7 @@ function QuizPage() {
     window.scrollTo({ top: 0, behavior: "instant" as ScrollBehavior });
   };
 
-  const answer = (value: string) => {
+  const answer = async (value: string) => {
     if (processing) return;
 
     const next = [
@@ -120,10 +120,13 @@ function QuizPage() {
 
     setAnswers(next);
     sessionStorage.setItem("blindaQuizAnswers", JSON.stringify(next));
-    void saveQuizAnswer(question.id, value, current === questions.length - 1);
 
-    if (current === questions.length - 1) {
+    const isLastQuestion = current === questions.length - 1;
+    void saveQuizAnswer(question.id, value, isLastQuestion);
+
+    if (isLastQuestion) {
       setProcessing(true);
+      await saveQuizSummary(next, []);
       window.location.assign("/resultado");
       return;
     }
@@ -180,7 +183,7 @@ function QuizPage() {
                   type="button"
                   key={option}
                   className={selected === option ? "selected" : ""}
-                  onClick={() => answer(option)}
+                  onClick={() => void answer(option)}
                   aria-pressed={selected === option}
                 >
                   <span className="quiz-v3-radio">{selected === option ? "✓" : ""}</span>
