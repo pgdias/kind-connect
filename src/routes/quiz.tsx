@@ -125,13 +125,21 @@ function QuizPage() {
     const isLastQuestion = current === questions.length - 1;
     if (isLastQuestion) {
       setProcessing(true);
-      await Promise.all([
-        saveQuizAnswer(question.id, value, true),
-        trackEvent("quiz_answered", { question_id: question.id }),
-        trackEvent("quiz_completed"),
-        saveQuizSummary(next, []),
-        new Promise((resolve) => setTimeout(resolve, 4500)),
-      ]);
+
+      await saveQuizAnswer(question.id, value, true);
+      await trackEvent("quiz_answered", { question_id: question.id });
+
+      // Completion is the critical conversion event. Send it only after
+      // the session and final answer are already persisted, then retry once
+      // if the first request fails transiently.
+      let completed = await trackEvent("quiz_completed");
+      if (!completed) {
+        await new Promise((resolve) => setTimeout(resolve, 500));
+        completed = await trackEvent("quiz_completed");
+      }
+
+      await saveQuizSummary(next, []);
+      await new Promise((resolve) => setTimeout(resolve, 4500));
     } else {
       void saveQuizAnswer(question.id, value, false);
       void trackEvent("quiz_answered", { question_id: question.id });
