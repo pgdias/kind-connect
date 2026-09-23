@@ -102,7 +102,7 @@ function ResultPage() {
                   Encontramos <em>{count} ponto{count === 1 ? "" : "s"}</em> que vale a pena conferir.
                 </h1>
                 <p>
-                  <strong>ASSISTA ESSE VÍDEO ANTES QUE SEJA TARDE.</strong><br />
+                  <strong className="vsl-urgent-line">ASSISTA ESSE VÍDEO ANTES QUE SEJA TARDE.</strong><br />
                   Descubra erros e situações do dia a dia que podem gerar divergências — e que muita gente faz sem imaginar que precisa conferir.
                 </p>
               </section>
@@ -126,20 +126,18 @@ function ResultPage() {
                 </div>
               </section>
 
-              <section className="delayed-offer">
-                <a
-                  className={offerReady ? "delayed-buy-button" : "delayed-buy-button delayed-buy-button-locked"}
-                  href={offerReady ? CHECKOUT_URL : undefined}
-                  aria-disabled={!offerReady}
-                  onClick={(event) => {
-                    if (!offerReady) event.preventDefault();
-                  }}
-                >
-                  {offerReady
-                    ? <>QUERO BLINDAR MEU BOLSA FAMÍLIA E DESCOBRIR OS SEGREDOS PARA NÃO PERDER O BENEFÍCIO <span>→</span></>
-                    : <>AGUARDE {secondsLeft} SEGUNDOS PARA LIBERAR O ACESSO <span>⏳</span></>}
-                </a>
-              </section>
+              {offerReady ? (
+                <section className="delayed-offer">
+                  <a className="delayed-buy-button" href={CHECKOUT_URL}>
+                    QUERO BLINDAR MEU BOLSA FAMÍLIA E DESCOBRIR OS SEGREDOS PARA NÃO PERDER O BENEFÍCIO <span>→</span>
+                  </a>
+                </section>
+              ) : (
+                <div className="offer-countdown">
+                  <span>O acesso à oferta será liberado em</span>
+                  <strong>{secondsLeft}s</strong>
+                </div>
+              )}
             </>
           ) : (
             <div className="result-hero">
