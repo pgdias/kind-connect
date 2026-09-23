@@ -46,10 +46,15 @@ function authorized(request) {
 
 async function fetchResource(resource) {
   const supabaseUrl = process.env.SUPABASE_URL || "";
-  const secretKey = process.env.SUPABASE_SECRET_KEY || "";
+  const secretKey =
+    process.env.SUPABASE_SECRET_KEY ||
+    process.env.SUPABASE_SERVICE_ROLE_KEY ||
+    "";
 
   if (!supabaseUrl || !secretKey) {
-    throw new Error("A função de analytics não está configurada no Netlify.");
+    throw new Error(
+      "A função de analytics não está configurada no Netlify. Configure SUPABASE_URL e SUPABASE_SECRET_KEY (ou SUPABASE_SERVICE_ROLE_KEY).",
+    );
   }
 
   const path = RESOURCES[resource];
