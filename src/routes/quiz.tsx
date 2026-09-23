@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
+import { saveQuizAnswer, startQuizSession } from "../lib/supabase";
 
 type Answer = { questionId: number; value: string };
 type Question = { id: number; tag: string; title: string; subtitle?: string; options: string[] };
@@ -87,6 +88,10 @@ function QuizPage() {
   const [processing, setProcessing] = useState(false);
 
   useEffect(() => {
+    void startQuizSession();
+  }, []);
+
+  useEffect(() => {
     const onPopState = () => setCurrent(readStep() - 1);
     window.addEventListener("popstate", onPopState);
     return () => window.removeEventListener("popstate", onPopState);
@@ -115,6 +120,7 @@ function QuizPage() {
 
     setAnswers(next);
     sessionStorage.setItem("blindaQuizAnswers", JSON.stringify(next));
+    void saveQuizAnswer(question.id, value, current === questions.length - 1);
 
     if (current === questions.length - 1) {
       setProcessing(true);
