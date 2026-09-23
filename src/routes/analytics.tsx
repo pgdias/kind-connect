@@ -69,22 +69,31 @@ function AnalyticsPage() {
   const [daily, setDaily] = useState<Daily[]>([]);
   const [funnel, setFunnel] = useState<Funnel | null>(null);
   const [errors, setErrors] = useState<string[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
 
   const load = async () => {
+    setLoading(true);
     setErrors([]);
-    const [summary, days, funnelData] = await Promise.all([
-      getData<Overview[]>("Visitantes", "analytics_visitors_overview?select=*"),
-      getData<Daily[]>("Visitantes por dia", "analytics_visitors_daily?select=day,visitors&order=day.asc"),
-      getData<Funnel[]>("Funil", "analytics_funnel_overview?select=*"),
-    ]);
+    const cacheBuster = `_t=${Date.now()}`;
+    try {
+      const [summary, days, funnelData] = await Promise.all([
+        getData<Overview[]>("Visitantes", `analytics_visitors_overview?select=*&${cacheBuster}`),
+        getData<Daily[]>("Visitantes por dia", `analytics_visitors_daily?select=day,visitors&order=day.asc&${cacheBuster}`),
+        getData<Funnel[]>("Funil", `analytics_funnel_overview?select=*&${cacheBuster}`),
+      ]);
 
     const results = [summary, days, funnelData];
     const failures = results.filter((result) => result.error).map((result) => `${result.label}: ${result.error}`);
     setErrors(failures);
 
-    if (summary.data) setOverview(summary.data[0] ?? null);
-    if (days.data) setDaily(days.data);
-    if (funnelData.data) setFunnel(funnelData.data[0] ?? null);
+      if (summary.data) setOverview(summary.data[0] ?? null);
+      if (days.data) setDaily(days.data);
+      if (funnelData.data) setFunnel(funnelData.data[0] ?? null);
+      setLastUpdated(new Date());
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => { void load(); }, []);
@@ -96,9 +105,9 @@ function AnalyticsPage() {
           <div>
             <div style={{ fontSize: 12, fontWeight: 800, letterSpacing: 1.5, color: "#64748b" }}>BLINDA BOLSA</div>
             <h1 style={{ margin: "6px 0 4px", fontSize: 32 }}>Visitantes</h1>
-            <p style={{ margin: 0, color: "#64748b" }}>Acompanhamento dos acessos e do funil do quiz.</p>
+            <p style={{ margin: 0, color: "#64748b" }}>Acompanhamento dos acessos e do funil do quiz.{lastUpdated ? ` Atualizado às ${lastUpdated.toLocaleTimeString("pt-BR")}.` : ""}</p>
           </div>
-          <button onClick={() => void load()} style={{ border: 0, borderRadius: 10, padding: "11px 16px", background: "#172033", color: "#fff", fontWeight: 700, cursor: "pointer" }}>Atualizar</button>
+          <button onClick={() => void load()} disabled={loading} style={{ border: 0, borderRadius: 10, padding: "11px 16px", background: "#172033", color: "#fff", fontWeight: 700, cursor: loading ? "wait" : "pointer", opacity: loading ? 0.7 : 1 }}>{loading ? "Atualizando..." : "Atualizar"}</button>
         </div>
 
         {errors.length > 0 && (
