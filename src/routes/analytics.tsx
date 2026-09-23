@@ -97,7 +97,7 @@ function AnalyticsPage() {
     setLoading(true);
     setErrors([]);
     try {
-      const [summary, days, funnelData] = await Promise.all([
+      const [summary, days, funnelData, trafficSourcesData, devicesData] = await Promise.all([
         getData<Overview[]>("Visitantes", "analytics_visitors_overview?select=*"),
         getData<Daily[]>("Visitantes por dia", "analytics_visitors_daily?select=day,visitors&order=day.asc"),
         getData<Funnel[]>("Funil", "analytics_funnel_overview?select=*"),
