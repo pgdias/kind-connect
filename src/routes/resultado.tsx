@@ -28,16 +28,25 @@ function ActivityNotifications({ active }: { active: boolean }) {
       return;
     }
 
-    setVisible(true);
-    const rotation = window.setInterval(() => {
-      setVisible(false);
-      window.setTimeout(() => {
-        setIndex((current) => (current + 1) % ACTIVITY_CITIES.length);
-        setVisible(true);
-      }, 120);
-    }, 10000);
+    setVisible(false);
 
-    return () => window.clearInterval(rotation);
+    let rotation: number | undefined;
+    const firstNotification = window.setTimeout(() => {
+      setVisible(true);
+
+      rotation = window.setInterval(() => {
+        setVisible(false);
+        window.setTimeout(() => {
+          setIndex((current) => (current + 1) % ACTIVITY_CITIES.length);
+          setVisible(true);
+        }, 120);
+      }, 25000);
+    }, 18000);
+
+    return () => {
+      window.clearTimeout(firstNotification);
+      if (rotation) window.clearInterval(rotation);
+    };
   }, [active]);
 
   if (!active || !visible) return null;
