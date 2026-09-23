@@ -66,6 +66,7 @@ async function fetchResource(resource) {
     headers: {
       apikey: secretKey,
       Accept: "application/json",
+      "User-Agent": "BlindaBolsa-Analytics/1.0",
     },
     cache: "no-store",
   });
@@ -139,6 +140,36 @@ export default async function handler(request) {
 
   const url = new URL(request.url);
   const resource = url.searchParams.get("resource");
+
+  if (url.searchParams.get("diagnostic") === "1") {
+    const supabaseUrl = process.env.SUPABASE_URL || "";
+    const configuredKey =
+      process.env.SUPABASE_SECRET_KEY
+        ? "SUPABASE_SECRET_KEY"
+        : process.env.SUPABASE_SERVICE_ROLE_KEY
+          ? "SUPABASE_SERVICE_ROLE_KEY"
+          : "none";
+    const key = process.env.SUPABASE_SECRET_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY || "";
+    return response({
+      authenticated: true,
+      supabaseHost: (() => {
+        try {
+          return new URL(supabaseUrl).host;
+        } catch {
+          return "invalid-url";
+        }
+      })(),
+      keySource: configuredKey,
+      keyPrefix: key.startsWith("sb_secret_")
+        ? "sb_secret_"
+        : key.startsWith("eyJ")
+          ? "legacy-jwt"
+          : key
+            ? "unknown"
+            : "missing",
+      keyLength: key.length,
+    });
+  }
 
   if (!resource) {
     return response({ authenticated: true });
