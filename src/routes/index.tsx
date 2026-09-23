@@ -40,25 +40,24 @@ function Hero() {
       <div className="landing-glow landing-glow-two" />
       <div className="container landing-v3-grid">
         <div className="landing-v3-copy">
-          <div className="landing-kicker"><span /> TESTE GRATUITO • 2 MINUTOS</div>
-          <div className="landing-alert">⚠ EXISTEM SITUAÇÕES QUE VOCÊ PODE ESTAR DEIXANDO PASSAR</div>
+          <div className="landing-kicker"><span /> AVALIAÇÃO GRATUITA • LEVA CERCA DE 2 MINUTOS</div>
+          <div className="landing-alert">NÃO DEIXE PARA DEPOIS</div>
 
-          <h1>Você sabe se está tudo certo com o seu <em>Bolsa Família?</em></h1>
+          <h1>Será que existe alguma situação no seu <em>Bolsa Família</em> que você deveria conferir?</h1>
 
           <p className="landing-lead">
-            Tem coisa que muda na vida da família, você resolve no dia a dia e nem lembra de conferir se o cadastro continua igual.
-            <strong> É justamente esse tipo de situação que queremos colocar no seu radar.</strong>
+            Algumas coisas acontecem no dia a dia, parecem normais e acabam passando sem que você pare para conferir.<strong> O teste foi criado para colocar essas situações no seu radar.</strong>
           </p>
 
           <div className="landing-curiosity">
             <div className="landing-curiosity-icon">?</div>
             <div>
-              <strong>Faça o teste antes de simplesmente presumir que está tudo certo.</strong>
-              <span>São perguntas rápidas sobre situações comuns. No final, você vê quais pontos das suas respostas merecem ser conferidos.</span>
+              <strong>Veja se alguma dessas situações aparece no seu dia a dia.</strong>
+              <span>Responda algumas perguntas rápidas e descubra quais pontos das suas respostas chamam atenção.</span>
             </div>
           </div>
 
-          <CTA>QUERO FAZER O TESTE GRATUITO</CTA>
+          <CTA>VER MEUS PONTOS DE ATENÇÃO</CTA>
 
           <div className="landing-reassurance">
             <span>✓</span> Sem CPF • Sem senha • Sem dados bancários • Cerca de 2 minutos
@@ -105,9 +104,9 @@ function Situations() {
     <section className="landing-situations">
       <div className="container">
         <div className="landing-section-heading">
-          <span>É AQUI QUE MUITA GENTE SE PERDE</span>
-          <h2>Não estamos falando de uma coisa só.</h2>
-          <p>Existem várias situações do cotidiano que podem ser relevantes para o cadastro e para o acompanhamento do benefício.</p>
+          <span>SITUAÇÕES DO DIA A DIA</span>
+          <h2>Pode ser mais simples do que parece.</h2>
+          <p>Uma mudança na família, uma informação que ficou para trás ou algo que você simplesmente nunca parou para conferir.</p>
         </div>
 
         <div className="landing-situation-grid">
@@ -133,7 +132,7 @@ function HowItWorks() {
   const steps = [
     ["01", "Responda", "Perguntas rápidas sobre situações da sua vida e da sua família."],
     ["02", "Veja seus pontos", "Suas respostas são organizadas em pontos que merecem atenção."],
-    ["03", "Continue", "Se fizer sentido para você, avance para entender melhor esses pontos."],
+    ["03", "Continue", "Depois, você recebe seu resultado e decide o que fazer com essa informação."],
   ];
 
   return (
@@ -141,7 +140,7 @@ function HowItWorks() {
       <div className="container">
         <div className="landing-section-heading">
           <span>SEM COMPLICAÇÃO</span>
-          <h2>Você responde. A avaliação organiza.</h2>
+          <h2>Em poucos minutos, você descobre onde vale olhar.</h2>
         </div>
 
         <div className="landing-steps">
@@ -164,9 +163,9 @@ function FinalCTA() {
       <div className="container">
         <div className="landing-final-card">
           <span>ANTES DE DEIXAR PARA DEPOIS</span>
-          <h2>Talvez exista alguma coisa na sua situação que você ainda não parou para conferir.</h2>
-          <p>Descubra quais pontos das suas respostas merecem atenção.</p>
-          <CTA>COMEÇAR A AVALIAÇÃO GRATUITA</CTA>
+          <h2>E se houver um ponto que você nunca pensou em conferir?</h2>
+          <p>Faça o teste agora e descubra quais situações aparecem nas suas respostas.</p>
+          <CTA>FAZER O TESTE GRATUITO</CTA>
         </div>
       </div>
     </section>
