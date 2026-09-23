@@ -65,3 +65,5 @@ group by 1, 2, 3, 4, 5
 order by unique_checkout_visitors desc, unique_quiz_completions desc, unique_visitors desc, sessions desc;
 
 grant select on public.analytics_campaign_funnel to anon;
+
+-- Automation verification: migration is applied by GitHub Actions.
