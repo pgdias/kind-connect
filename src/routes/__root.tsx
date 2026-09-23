@@ -6,7 +6,7 @@ import { reportLovableError } from "../lib/lovable-error-reporting";
 
 function NotFoundComponent(){return <div className="placeholder"><div><span>404</span><h1>Página não encontrada</h1><p>A página que você procura não existe.</p><Link className="secondary-button" to="/">Voltar para o início</Link></div></div>}
 function ErrorComponent({error,reset}:{error:Error;reset:()=>void}){console.error(error);const router=useRouter();useEffect(()=>{reportLovableError(error,{boundary:"tanstack_root_error_component"});},[error]);return <div className="placeholder"><div><h1>Não foi possível carregar a página</h1><p>Algo deu errado. Tente novamente.</p><button className="secondary-button" onClick={()=>{router.invalidate();reset();}}>Tentar novamente</button></div></div>}
-export const Route=createRootRouteWithContext<{queryClient:QueryClient}>({
+export const Route=createRootRouteWithContext<{queryClient:QueryClient}>()({
   head:()=>({meta:[
     {charSet:"utf-8"},{name:"viewport",content:"width=device-width, initial-scale=1"},
     {title:"Blinda Bolsa Família"},{name:"description",content:"Teste informativo para identificar pontos relacionados ao Bolsa Família que podem merecer conferência."},
