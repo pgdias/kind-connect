@@ -34,7 +34,8 @@ async function getData<T>(label: string, path: string): Promise<LoadResult<T>> {
 
   try {
     const response = await fetch(`${SUPABASE_URL}/rest/v1/${path}`, {
-      headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` },
+      cache: "no-store",
+      headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}`, "Cache-Control": "no-cache" },
     });
 
     const body = await response.text();
@@ -75,12 +76,11 @@ function AnalyticsPage() {
   const load = async () => {
     setLoading(true);
     setErrors([]);
-    const cacheBuster = `_t=${Date.now()}`;
     try {
       const [summary, days, funnelData] = await Promise.all([
-        getData<Overview[]>("Visitantes", `analytics_visitors_overview?select=*&${cacheBuster}`),
-        getData<Daily[]>("Visitantes por dia", `analytics_visitors_daily?select=day,visitors&order=day.asc&${cacheBuster}`),
-        getData<Funnel[]>("Funil", `analytics_funnel_overview?select=*&${cacheBuster}`),
+        getData<Overview[]>("Visitantes", "analytics_visitors_overview?select=*"),
+        getData<Daily[]>("Visitantes por dia", "analytics_visitors_daily?select=day,visitors&order=day.asc"),
+        getData<Funnel[]>("Funil", "analytics_funnel_overview?select=*"),
       ]);
 
     const results = [summary, days, funnelData];
