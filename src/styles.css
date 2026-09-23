@@ -1112,15 +1112,15 @@
 /* ===== RESULT ACTIVITY NOTIFICATION ===== */
 .activity-notification{
   position:fixed;
-  left:22px;
-  bottom:22px;
+  right:20px;
+  top:82px;
   z-index:60;
-  width:min(350px,calc(100vw - 44px));
+  width:min(270px,calc(100vw - 40px));
   display:grid;
-  grid-template-columns:30px 1fr 14px;
+  grid-template-columns:28px 1fr 12px;
   align-items:center;
-  gap:8px;
-  padding:9px 9px 9px 8px;
+  gap:7px;
+  padding:8px 8px 8px 7px;
   border:1px solid #303532;
   border-radius:12px;
   background:rgba(15,18,17,.96);
@@ -1129,34 +1129,34 @@
   animation:activity-notification-in .35s ease both;
 }
 .activity-notification-icon{
-  width:30px;
-  height:30px;
+  width:28px;
+  height:28px;
   display:grid;
   place-items:center;
   border-radius:10px;
   background:#163d2b;
   color:#70d5a0;
-  font-size:15px;
+  font-size:11px;
   font-weight:950;
   box-shadow:0 0 0 1px rgba(112,213,160,.08);
 }
 .activity-notification strong{
   display:block;
   color:#86efac;
-  font-size:7px;
+  font-size:6px;
   font-weight:950;
   letter-spacing:.13em;
 }
 .activity-notification p{
   margin:3px 0 2px;
   color:#f1f4f2;
-  font-size:8px;
-  line-height:1.42;
+  font-size:7px;
+  line-height:1.35;
 }
 .activity-notification p b{color:#fff}
 .activity-notification small{
   color:#66716c;
-  font-size:7px;
+  font-size:6px;
 }
 .activity-notification-close{
   align-self:start;
