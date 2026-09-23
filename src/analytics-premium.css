@@ -1,0 +1,88 @@
+/* Blinda Bolsa — premium analytics interface */
+.analytics-premium{
+  --bg:#07110d;--panel:#0d1b15;--panel2:#11251c;--line:#21392d;
+  --text:#f3f8f5;--muted:#8fa59a;--green:#39c77b;--gold:#c7a75a;
+}
+main:has(> div > div > div) {
+  background:
+    radial-gradient(circle at 8% 0%,rgba(57,199,123,.10),transparent 28%),
+    radial-gradient(circle at 92% 8%,rgba(199,167,90,.07),transparent 25%),
+    linear-gradient(180deg,#07110d 0%,#09150f 100%) !important;
+  color:var(--text) !important;
+  padding:42px 22px !important;
+}
+main:has(> div > div > div)>div{max-width:1180px!important}
+main:has(> div > div > div)>div>div:first-child{
+  padding:22px 24px!important;margin-bottom:22px!important;
+  background:linear-gradient(135deg,rgba(18,38,28,.94),rgba(10,24,17,.94))!important;
+  border:1px solid var(--line)!important;border-radius:22px!important;
+  box-shadow:0 22px 60px rgba(0,0,0,.22)!important;
+}
+main:has(> div > div > div) h1{
+  color:#f5faf7!important;letter-spacing:-.045em!important;font-weight:850!important;
+}
+main:has(> div > div > div) p{color:var(--muted)!important}
+main:has(> div > div > div) button{
+  background:linear-gradient(135deg,#35c477,#198b52)!important;
+  border:1px solid rgba(255,255,255,.10)!important;border-radius:12px!important;
+  box-shadow:0 12px 28px rgba(30,171,99,.18)!important;
+}
+main:has(> div > div > div) button:hover{transform:translateY(-1px)}
+main:has(> div > div > div)>div>div:nth-child(2)>div{
+  background:linear-gradient(135deg,#102219,#0c1b14)!important;
+  border:1px solid var(--line)!important;border-radius:18px!important;
+  box-shadow:0 15px 40px rgba(0,0,0,.18)!important;color:var(--text)!important;
+}
+main:has(> div > div > div)>div>div:nth-child(3)>div{
+  background:linear-gradient(145deg,#0f2018,#0b1812)!important;
+  border:1px solid var(--line)!important;border-radius:18px!important;
+  box-shadow:0 18px 45px rgba(0,0,0,.20)!important;
+}
+main:has(> div > div > div)>div>div:nth-child(3)>div>div:first-child{
+  color:#9db2a7!important;
+}
+main:has(> div > div > div)>div>div:nth-child(3)>div>div:nth-child(2){
+  color:#f7fbf8!important;font-size:34px!important;
+}
+main:has(> div > div > div)>div>div:nth-child(3)>div:nth-child(5){
+  border-color:#294438!important;
+}
+main:has(> div > div > div)>div>div:nth-child(4),
+main:has(> div > div > div)>div>section{
+  background:linear-gradient(145deg,#0d1c15,#0a1711)!important;
+  border:1px solid var(--line)!important;border-radius:22px!important;
+  box-shadow:0 20px 55px rgba(0,0,0,.20)!important;
+}
+main:has(> div > div > div) h2{color:#f2f8f4!important;letter-spacing:-.025em!important}
+main:has(> div > div > div) section div[style*="background: rgb(248, 250, 252)"]{
+  background:#10231a!important;border-color:#203a2d!important;
+}
+main:has(> div > div > div) section div[style*="background: rgb(233, 238, 245)"]{
+  background:#1c3027!important;
+}
+main:has(> div > div > div) section div[style*="background: rgb(23, 32, 51)"]{
+  background:linear-gradient(90deg,#2eae70,#53d18e)!important;
+}
+main:has(> div > div > div) section table{
+  color:#e9f2ed!important;
+}
+main:has(> div > div > div) section th{
+  color:#81988d!important;border-bottom-color:#20392d!important;
+}
+main:has(> div > div > div) section td{
+  border-bottom-color:#1b3026!important;
+}
+main:has(> div > div > div) section tr:hover td{
+  background:rgba(57,199,123,.035)!important;
+}
+main:has(> div > div > div) strong{color:#f1f7f3!important}
+main:has(> div > div > div) small{color:#82988d!important}
+main:has(> div > div > div)>div>div:nth-last-child(1){
+  border:1px solid var(--line)!important;
+}
+@media(max-width:700px){
+  main:has(> div > div > div){padding:18px 12px!important}
+  main:has(> div > div > div)>div>div:first-child{padding:18px!important;border-radius:18px!important}
+  main:has(> div > div > div) h1{font-size:27px!important}
+  main:has(> div > div > div) section{padding:18px!important}
+}
