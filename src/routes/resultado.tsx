@@ -5,18 +5,28 @@ type Answer = { questionId: number; value: string };
 
 const CHECKOUT_URL = "https://pay.cakto.com.br/38xq22v_1131074";
 
-const ACTIVITY_CITIES = [
-  "São Paulo",
-  "Rio de Janeiro",
-  "Fortaleza",
-  "Salvador",
-  "Manaus",
-  "Brasília",
-  "Belém",
-  "Recife",
-  "Belo Horizonte",
-  "São Luís",
-];
+const ACTIVITY_BUYERS = [
+  ["Maria Silva", "Fortaleza (CE)"],
+  ["Ana Souza", "Salvador (BA)"],
+  ["João Santos", "Recife (PE)"],
+  ["Francisca Oliveira", "São Luís (MA)"],
+  ["Antônia Lima", "Maceió (AL)"],
+  ["Josefa Pereira", "Teresina (PI)"],
+  ["Raimunda Costa", "Belém (PA)"],
+  ["Luís Almeida", "Manaus (AM)"],
+  ["Carla Rodrigues", "Natal (RN)"],
+  ["Paulo Ferreira", "João Pessoa (PB)"],
+  ["Adriana Gomes", "Aracaju (SE)"],
+  ["Juliana Martins", "Sobral (CE)"],
+  ["Bruna Barbosa", "Feira de Santana (BA)"],
+  ["Patrícia Ribeiro", "Jaboatão dos Guararapes (PE)"],
+  ["Marcos Araújo", "Caucaia (CE)"],
+  ["Fernanda Carvalho", "Duque de Caxias (RJ)"],
+  ["Simone Rocha", "São Gonçalo (RJ)"],
+  ["Cláudia Nascimento", "Belford Roxo (RJ)"],
+  ["Vanessa Dias", "Nova Iguaçu (RJ)"],
+  ["Letícia Moreira", "Guarulhos (SP)"],
+] as const;
 
 function ActivityNotifications({ active }: { active: boolean }) {
   const [index, setIndex] = useState(0);
@@ -37,7 +47,7 @@ function ActivityNotifications({ active }: { active: boolean }) {
       rotation = window.setInterval(() => {
         setVisible(false);
         window.setTimeout(() => {
-          setIndex((current) => (current + 1) % ACTIVITY_CITIES.length);
+          setIndex((current) => (current + 1) % ACTIVITY_BUYERS.length);
           setVisible(true);
         }, 120);
       }, 25000);
@@ -57,7 +67,7 @@ function ActivityNotifications({ active }: { active: boolean }) {
       <div>
         <strong>COMPRA REALIZADA</strong>
         <p>
-          Uma pessoa de <b>{ACTIVITY_CITIES[index]}</b> acabou de adquirir o <b>Blinda Bolsa Família</b>.
+          <b>{ACTIVITY_BUYERS[index][0]}</b>, de <b>{ACTIVITY_BUYERS[index][1]}</b>, acabou de adquirir o <b>Blinda Bolsa Família</b>.
         </p>
         <small>Agora mesmo</small>
       </div>
