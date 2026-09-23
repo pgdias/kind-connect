@@ -8,58 +8,58 @@ const questions: Question[] = [
   {
     id: 1,
     tag: "SITUAÇÃO 01",
-    title: "Você tem certeza de que, desde a última atualização, nada mudou na sua família?",
-    subtitle: "Renda, trabalho, endereço ou quem mora com você podem ter mudado sem você perceber que precisava conferir.",
-    options: ["Não, mudou alguma coisa", "Não tenho certeza", "Sim, tenho certeza"],
+    title: "Você tem certeza de que o seu cadastro ainda retrata exatamente a realidade da sua família?",
+    subtitle: "Pense no que mudou desde a última atualização: renda, trabalho, endereço ou quem mora com você.",
+    options: ["Não tenho certeza", "Mudou alguma coisa", "Sim, está exatamente igual", "Nunca conferi"],
   },
   {
     id: 2,
     tag: "SITUAÇÃO 02",
-    title: "Alguém da sua família começou a trabalhar, parou de trabalhar ou teve alguma mudança de renda?",
-    subtitle: "Você tem certeza de que essa mudança foi conferida no cadastro?",
-    options: ["Sim, e não conferi", "Sim, mas não tenho certeza", "Sim, está tudo atualizado", "Não aconteceu"],
+    title: "Alguém da família começou ou parou de trabalhar — ou a renda mudou — e você conferiu isso no cadastro?",
+    subtitle: "Se a resposta não for um "sim" com certeza, vale prestar atenção neste ponto.",
+    options: ["Não conferi", "Não tenho certeza", "Sim, conferi", "Não aconteceu"],
   },
   {
     id: 3,
     tag: "SITUAÇÃO 03",
-    title: "Entrou ou saiu alguém da família desde a última atualização?",
-    subtitle: "Uma mudança na composição familiar é uma das coisas que vale conferir.",
-    options: ["Sim, e foi informado", "Sim, mas não sei se foi informado", "Não aconteceu", "Não tenho certeza"],
+    title: "Entrou ou saiu alguém da família e você sabe se essa mudança foi informada corretamente?",
+    subtitle: "Composição familiar também faz parte das informações registradas no Cadastro Único.",
+    options: ["Não sei se foi informado", "Sim, foi informado", "Não aconteceu", "Nunca conferi"],
   },
   {
     id: 4,
     tag: "SITUAÇÃO 04",
-    title: "Você mudou de endereço ou telefone e sabe se o cadastro continua com os dados corretos?",
-    subtitle: "É fácil resolver a mudança e esquecer de conferir o cadastro depois.",
-    options: ["Está tudo certo", "Mudei e atualizei", "Mudei, mas não sei se atualizei", "Não aconteceu", "Não tenho certeza"],
+    title: "Seu endereço ou telefone mudou e você tem certeza de que o cadastro continua com os dados certos?",
+    subtitle: "Uma mudança pode acontecer no dia a dia e o cadastro continuar com a informação anterior.",
+    options: ["Não tenho certeza", "Mudei e não conferi", "Sim, está atualizado", "Não mudou"],
   },
   {
     id: 5,
     tag: "SITUAÇÃO 05",
-    title: "Você lembra quando foi a última vez que atualizou o Cadastro Único?",
-    subtitle: "A atualização deve ocorrer a cada 24 meses e também quando há mudanças relevantes.",
-    options: ["Sim, há menos de 2 anos", "Sim, há mais de 2 anos", "Não lembro", "Não sei"],
+    title: "Você sabe quando foi a última vez que o seu Cadastro Único foi atualizado?",
+    subtitle: "A atualização deve ocorrer a cada 24 meses e também quando há mudanças relevantes na família.",
+    options: ["Não lembro", "Acho que faz mais de 2 anos", "Sei a data e está dentro do prazo", "Não sei"],
   },
   {
     id: 6,
     tag: "SITUAÇÃO 06",
-    title: "Se existisse uma diferença entre o que está no cadastro e outra base oficial, você saberia que isso poderia precisar de atenção?",
-    subtitle: "Existem processos oficiais que cruzam informações para identificar possíveis divergências.",
-    options: ["Sim", "Mais ou menos", "Não saberia", "Nunca pensei nisso"],
+    title: "Você saberia se existe alguma diferença entre o que foi declarado no cadastro e uma informação em outra base oficial?",
+    subtitle: "O Governo realiza cruzamentos de informações para identificar possíveis divergências cadastrais.",
+    options: ["Não saberia", "Nunca conferi", "Sim, saberia", "Não tenho certeza"],
   },
   {
     id: 7,
     tag: "SITUAÇÃO 07",
-    title: "Se sua família recebesse um aviso para regularizar alguma informação, você saberia o que fazer?",
-    subtitle: "Famílias podem ser convocadas para atualizar ou verificar informações.",
-    options: ["Saberia", "Talvez", "Não saberia", "Nunca recebi um aviso assim"],
+    title: "Se você recebesse uma convocação para atualizar ou verificar o cadastro, saberia exatamente o que fazer?",
+    subtitle: "Famílias podem ser chamadas quando é necessário atualizar dados ou tratar possíveis inconsistências.",
+    options: ["Não saberia", "Não tenho certeza", "Sim, saberia", "Nunca passei por isso"],
   },
   {
     id: 8,
     tag: "ÚLTIMA PERGUNTA",
-    title: "Se hoje existisse um ponto da sua situação que merecesse ser conferido, você saberia qual é?",
-    subtitle: "Esta avaliação vai organizar suas respostas para mostrar onde vale olhar com mais cuidado.",
-    options: ["Tenho certeza que sim", "Provavelmente", "Não tenho certeza", "Não faço ideia"],
+    title: "Agora seja sincero: você consegue apontar algum ponto do seu cadastro que merece ser conferido?",
+    subtitle: "Suas respostas vão mostrar quais situações merecem mais atenção na sua avaliação.",
+    options: ["Não faço ideia", "Tenho algumas dúvidas", "Sim, sei qual é", "Acho que está tudo certo"],
   },
 ];
 
@@ -131,9 +131,9 @@ function QuizPage() {
           <div className="quiz-v3-progress"><span style={{ width: `${progress}%` }} /></div>
 
           <div className="quiz-v3-intro">
-            <span>RESPONDA COM O QUE VOCÊ SABE AGORA</span>
-            <h1>Vamos descobrir o que vale a pena conferir.</h1>
-            <p>Não existe resposta “certa”. O objetivo é identificar situações que podem ter passado despercebidas.</p>
+            <span>ATENÇÃO: RESPONDA SEM CHUTAR</span>
+            <h1>Você pode descobrir pontos que nunca parou para conferir.</h1>
+            <p>Responda com o que você realmente sabe. Quando você não tiver certeza, marque isso.</p>
           </div>
 
           <div className="quiz-v3-card">
@@ -174,8 +174,8 @@ function ProcessingScreen() {
       <div className="quiz-v3-processing-card">
         <div className="quiz-v3-spinner" />
         <span>ANALISANDO SUAS RESPOSTAS</span>
-        <h1>Organizando os pontos que merecem sua atenção.</h1>
-        <p>Estamos preparando sua avaliação com base no que você respondeu.</p>
+        <h1>Separando os pontos que você marcou para conferir.</h1>
+        <p>Estamos organizando sua avaliação com base nas respostas que você acabou de dar.</p>
         <div><b>✓</b> Respostas registradas</div>
         <div><b>✓</b> Pontos de atenção identificados</div>
         <div><b>•</b> Preparando seu resultado</div>
