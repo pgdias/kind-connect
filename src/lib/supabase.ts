@@ -71,7 +71,11 @@ export async function startQuizSession() {
   return sessionId;
 }
 
-export async function saveQuizAnswer(questionId: number, answer: string, completed = false) {
+export async function saveQuizAnswer(
+  questionId: number,
+  answer: string,
+  completed = false,
+) {
   const sessionId = await startQuizSession();
   if (!sessionId) return;
 
@@ -90,6 +94,37 @@ export async function saveQuizAnswer(questionId: number, answer: string, complet
     body: JSON.stringify({
       current_step: questionId,
       ...(completed ? { completed_at: new Date().toISOString() } : {}),
+    }),
+  });
+}
+
+type QuizAnswer = {
+  questionId: number;
+  value: string;
+};
+
+export async function saveQuizSummary(
+  answers: QuizAnswer[],
+  attentionPoints: string[],
+) {
+  const values = Object.fromEntries(
+    answers.map((answer) => [answer.questionId, answer.value]),
+  ) as Record<number, string>;
+
+  const result = JSON.stringify({
+    pontos_atencao: attentionPoints,
+    respostas_completas: answers,
+  });
+
+  await request("respostas_quiz", {
+    method: "POST",
+    body: JSON.stringify({
+      resposta_1: values[1] ?? null,
+      resposta_2: values[2] ?? null,
+      resposta_3: values[3] ?? null,
+      resposta_4: values[4] ?? null,
+      resposta_5: values[5] ?? null,
+      resultado: result,
     }),
   });
 }
