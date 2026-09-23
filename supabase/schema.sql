@@ -38,42 +38,40 @@ create table if not exists public.respostas_quiz (
   resposta_3 text,
   resposta_4 text,
   resposta_5 text,
+  resposta_6 text,
+  resposta_7 text,
+  resposta_8 text,
   resultado text,
   created_at timestamptz not null default now()
 );
 
-create index if not exists quiz_answers_session_id_idx
-  on public.quiz_answers(session_id);
+alter table public.respostas_quiz add column if not exists resposta_6 text;
+alter table public.respostas_quiz add column if not exists resposta_7 text;
+alter table public.respostas_quiz add column if not exists resposta_8 text;
+alter table public.respostas_quiz add column if not exists created_at timestamptz not null default now();
 
-create index if not exists quiz_answers_question_id_idx
-  on public.quiz_answers(question_id);
-
-create index if not exists respostas_quiz_created_at_idx
-  on public.respostas_quiz(created_at);
+create index if not exists quiz_answers_session_id_idx on public.quiz_answers(session_id);
+create index if not exists quiz_answers_question_id_idx on public.quiz_answers(question_id);
+create index if not exists respostas_quiz_created_at_idx on public.respostas_quiz(created_at);
 
 alter table public.quiz_sessions enable row level security;
 alter table public.quiz_answers enable row level security;
 alter table public.respostas_quiz enable row level security;
 
 drop policy if exists "quiz sessions public insert" on public.quiz_sessions;
-create policy "quiz sessions public insert"
-  on public.quiz_sessions for insert to anon with check (true);
+create policy "quiz sessions public insert" on public.quiz_sessions for insert to anon with check (true);
 
 drop policy if exists "quiz sessions public update" on public.quiz_sessions;
-create policy "quiz sessions public update"
-  on public.quiz_sessions for update to anon using (true) with check (true);
+create policy "quiz sessions public update" on public.quiz_sessions for update to anon using (true) with check (true);
 
 drop policy if exists "quiz answers public insert" on public.quiz_answers;
-create policy "quiz answers public insert"
-  on public.quiz_answers for insert to anon with check (true);
+create policy "quiz answers public insert" on public.quiz_answers for insert to anon with check (true);
 
 drop policy if exists "quiz answers public update" on public.quiz_answers;
-create policy "quiz answers public update"
-  on public.quiz_answers for update to anon using (true) with check (true);
+create policy "quiz answers public update" on public.quiz_answers for update to anon using (true) with check (true);
 
 drop policy if exists "respostas quiz public insert" on public.respostas_quiz;
-create policy "respostas quiz public insert"
-  on public.respostas_quiz for insert to anon with check (true);
+create policy "respostas quiz public insert" on public.respostas_quiz for insert to anon with check (true);
 
 revoke select on public.quiz_sessions from anon;
 revoke select on public.quiz_answers from anon;

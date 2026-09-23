@@ -124,6 +124,9 @@ export async function saveQuizSummary(
       resposta_3: values[3] ?? null,
       resposta_4: values[4] ?? null,
       resposta_5: values[5] ?? null,
+      resposta_6: values[6] ?? null,
+      resposta_7: values[7] ?? null,
+      resposta_8: values[8] ?? null,
       resultado: result,
     }),
   });
