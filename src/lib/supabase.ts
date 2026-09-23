@@ -52,7 +52,7 @@ async function request(path: string, init: RequestInit = {}) {
 }
 
 export async function trackEvent(eventName: string, metadata: Record<string, unknown> = {}) {
-  const sessionId = getSessionId();
+  const sessionId = await startQuizSession();
   if (!sessionId) return;
 
   await request("quiz_events", {
