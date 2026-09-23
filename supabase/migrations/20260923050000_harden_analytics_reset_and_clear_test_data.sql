@@ -25,7 +25,6 @@ end;
 $$;
 
 -- The reset RPC must not remain callable by public/anonymous clients.
-revoke all on function public.reset_analytics_data() from public;
 drop function if exists public.reset_analytics_data();
 
 -- Keep the maintenance marker private to database-side automation.
