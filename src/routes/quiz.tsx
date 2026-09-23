@@ -1,5 +1,5 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 type Answer = { questionId: number; value: string };
 type Question = { id: number; tag: string; title: string; subtitle?: string; options: string[] };
@@ -80,7 +80,7 @@ function QuizPage() {
       return [];
     }
   });
-  const [processing, setProcessing] = useState(false);
+  const [processing, setProcessing] = useState(false);\n  const [transitioning, setTransitioning] = useState(false);\n\n  useEffect(() => {\n    setTransitioning(false);\n  }, [current]);
 
   const question = questions[current];
   const selected = answers.find((answer) => answer.questionId === question.id)?.value;
@@ -106,13 +106,17 @@ function QuizPage() {
 
   const back = () => {
     if (current === 0) return navigate({ to: "/" });
-    window.location.assign("/quiz?step=" + current);
+    setTransitioning(true);
+    window.history.pushState({}, "", "/quiz?step=" + current);
+    requestAnimationFrame(() => {
+      setCurrent((number) => number - 1);
+    });
   };
 
   if (processing) return <ProcessingScreen />;
 
   return (
-    <main className="quiz-v3">
+    <main className={"quiz-v3" + (transitioning ? " quiz-v3-transitioning" : "")}>
       <header className="quiz-v3-header">
         <Link to="/" className="quiz-v3-brand">
           <span>✓</span>
