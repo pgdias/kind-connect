@@ -15,6 +15,8 @@ type Overview = {
 };
 
 type Daily = { day: string; visitors: number };
+type TrafficSource = { source: string; medium: string; unique_visitors: number; sessions: number };
+type Device = { device: string; unique_visitors: number; sessions: number };
 type Funnel = {
   visitors: number;
   quiz_starts: number;
@@ -84,6 +86,8 @@ function AnalyticsPage() {
   const [overview, setOverview] = useState<Overview | null>(null);
   const [daily, setDaily] = useState<Daily[]>([]);
   const [funnel, setFunnel] = useState<Funnel | null>(null);
+  const [trafficSources, setTrafficSources] = useState<TrafficSource[]>([]);
+  const [devices, setDevices] = useState<Device[]>([]);
   const [errors, setErrors] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
@@ -97,15 +101,19 @@ function AnalyticsPage() {
         getData<Overview[]>("Visitantes", "analytics_visitors_overview?select=*"),
         getData<Daily[]>("Visitantes por dia", "analytics_visitors_daily?select=day,visitors&order=day.asc"),
         getData<Funnel[]>("Funil", "analytics_funnel_overview?select=*"),
+        getData<TrafficSource[]>("Origem do tráfego", "analytics_traffic_sources?select=source,medium,unique_visitors,sessions"),
+        getData<Device[]>("Dispositivos", "analytics_devices?select=device,unique_visitors,sessions"),
       ]);
 
-    const results = [summary, days, funnelData];
+    const results = [summary, days, funnelData, trafficSourcesData, devicesData];
     const failures = results.filter((result) => result.error).map((result) => `${result.label}: ${result.error}`);
     setErrors(failures);
 
       if (summary.data) setOverview(summary.data[0] ?? null);
       if (days.data) setDaily(days.data);
       if (funnelData.data) setFunnel(funnelData.data[0] ?? null);
+      if (trafficSourcesData.data) setTrafficSources(trafficSourcesData.data);
+      if (devicesData.data) setDevices(devicesData.data);
       setLastUpdated(new Date());
     } finally {
       setLoading(false);
@@ -257,6 +265,42 @@ function AnalyticsPage() {
                 </div>
               </section>
             )}
+
+            <section style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(300px,1fr))", gap: 14, marginBottom: 22 }}>
+              <div style={{ background: "#fff", borderRadius: 16, padding: 24, boxShadow: "0 4px 20px rgba(15,23,42,.06)" }}>
+                <h2 style={{ margin: 0, fontSize: 20 }}>Origem do tráfego</h2>
+                <p style={{ margin: "6px 0 18px", color: "#64748b", fontSize: 13 }}>Visitantes únicos e sessões por origem e mídia. Links sem UTM aparecem como direto / não identificado.</p>
+                {trafficSources.length === 0 ? <p style={{ color: "#64748b" }}>Ainda não há dados de origem.</p> : (
+                  <div style={{ display: "grid", gap: 8 }}>
+                    {trafficSources.map((item) => (
+                      <div key={item.source + item.medium} style={{ display: "grid", gridTemplateColumns: "minmax(120px,1fr) 90px 70px", gap: 10, alignItems: "center", padding: "10px 0", borderBottom: "1px solid #eef2f7" }}>
+                        <div>
+                          <strong style={{ fontSize: 13 }}>{item.source}</strong>
+                          <div style={{ color: "#64748b", fontSize: 11, marginTop: 2 }}>{item.medium}</div>
+                        </div>
+                        <div style={{ textAlign: "right", fontSize: 13 }}><strong>{item.unique_visitors}</strong><div style={{ color: "#64748b", fontSize: 10 }}>únicos</div></div>
+                        <div style={{ textAlign: "right", fontSize: 13 }}><strong>{item.sessions}</strong><div style={{ color: "#64748b", fontSize: 10 }}>sessões</div></div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+              <div style={{ background: "#fff", borderRadius: 16, padding: 24, boxShadow: "0 4px 20px rgba(15,23,42,.06)" }}>
+                <h2 style={{ margin: 0, fontSize: 20 }}>Dispositivos</h2>
+                <p style={{ margin: "6px 0 18px", color: "#64748b", fontSize: 13 }}>Distribuição das sessões e visitantes únicos por tipo de dispositivo.</p>
+                {devices.length === 0 ? <p style={{ color: "#64748b" }}>Ainda não há dados de dispositivo.</p> : (
+                  <div style={{ display: "grid", gap: 8 }}>
+                    {devices.map((item) => (
+                      <div key={item.device} style={{ display: "grid", gridTemplateColumns: "1fr 90px 70px", gap: 10, alignItems: "center", padding: "10px 0", borderBottom: "1px solid #eef2f7" }}>
+                        <strong style={{ fontSize: 13 }}>{item.device === "mobile" ? "Celular" : item.device === "tablet" ? "Tablet" : item.device === "desktop" ? "Computador" : "Não identificado"}</strong>
+                        <div style={{ textAlign: "right", fontSize: 13 }}><strong>{item.unique_visitors}</strong><div style={{ color: "#64748b", fontSize: 10 }}>únicos</div></div>
+                        <div style={{ textAlign: "right", fontSize: 13 }}><strong>{item.sessions}</strong><div style={{ color: "#64748b", fontSize: 10 }}>sessões</div></div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </section>
 
             <section style={{ background: "#fff", borderRadius: 16, padding: 24, boxShadow: "0 4px 20px rgba(15,23,42,.06)" }}>
               <h2 style={{ margin: "0 0 20px", fontSize: 20 }}>Visitantes por dia</h2>
