@@ -6,6 +6,7 @@ create extension if not exists pgcrypto;
 create table if not exists public.quiz_sessions (
   id uuid primary key default gen_random_uuid(),
   session_id text not null unique,
+  visitor_id text,
   started_at timestamptz not null default now(),
   completed_at timestamptz,
   current_step integer not null default 1,
@@ -50,6 +51,7 @@ alter table public.respostas_quiz add column if not exists resposta_7 text;
 alter table public.respostas_quiz add column if not exists resposta_8 text;
 alter table public.respostas_quiz add column if not exists created_at timestamptz not null default now();
 
+create index if not exists quiz_sessions_visitor_id_idx on public.quiz_sessions(visitor_id);
 create index if not exists quiz_answers_session_id_idx on public.quiz_answers(session_id);
 create index if not exists quiz_answers_question_id_idx on public.quiz_answers(question_id);
 create index if not exists respostas_quiz_created_at_idx on public.respostas_quiz(created_at);
@@ -143,6 +145,24 @@ $$;
 revoke all on function public.record_quiz_completion(text) from public;
 grant execute on function public.record_quiz_completion(text) to anon;
 
+-- Limpa todos os dados acumulados durante os testes.
+-- Use somente quando estiver pronto para começar a coleta real.
+create or replace function public.reset_analytics_data()
+returns boolean
+language plpgsql
+security definer
+set search_path = public
+as $
+begin
+  delete from public.respostas_quiz;
+  delete from public.quiz_sessions;
+  return true;
+end;
+$;
+
+revoke all on function public.reset_analytics_data() from public;
+grant execute on function public.reset_analytics_data() to anon;
+
 -- Painel agregado do funil.
 -- Cada etapa conta sessões únicas.
 -- Resultado e checkout só contam sessões que realmente concluíram o quiz,
@@ -183,6 +203,7 @@ create or replace view public.analytics_visitors_overview as
 with counts as (
   select
     count(*)::bigint as total_visitors,
+    count(distinct visitor_id)::bigint as unique_visitors,
     count(*) filter (where started_at::date = current_date)::bigint as visitors_today,
     count(*) filter (where started_at >= now() - interval '7 days')::bigint as visitors_7d,
     count(*) filter (where started_at >= now() - interval '30 days')::bigint as visitors_30d,
@@ -192,6 +213,7 @@ with counts as (
 )
 select
   total_visitors,
+  unique_visitors,
   visitors_today,
   visitors_7d,
   visitors_30d,
@@ -202,7 +224,7 @@ from counts;
 create or replace view public.analytics_visitors_daily as
 select
   started_at::date as day,
-  count(*)::bigint as visitors
+  count(distinct visitor_id)::bigint as visitors
 from public.quiz_sessions
 where started_at >= current_date - interval '29 days'
 group by started_at::date
