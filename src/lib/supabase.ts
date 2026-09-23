@@ -63,6 +63,14 @@ function getSessionId() {
   return id;
 }
 
+function getDeviceType() {
+  if (typeof window === "undefined") return "unknown";
+  const ua = navigator.userAgent.toLowerCase();
+  if (/tablet|ipad|playbook|silk/.test(ua) || (navigator.maxTouchPoints > 1 && /android/.test(ua) && !/mobile/.test(ua))) return "tablet";
+  if (/mobile|iphone|ipod|android/.test(ua)) return "mobile";
+  return "desktop";
+}
+
 function getUtmParams() {
   if (typeof window === "undefined") return {};
   const params = new URLSearchParams(window.location.search);
@@ -177,6 +185,7 @@ export async function startQuizSession() {
         landing_path: window.location.pathname,
         referrer: document.referrer || null,
         ...utm,
+        device_type: getDeviceType(),
       }),
     });
 
