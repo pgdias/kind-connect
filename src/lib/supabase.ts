@@ -3,10 +3,18 @@ const SUPABASE_KEY = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY as string | u
 
 const SESSION_STORAGE_KEY = "blindaQuizSessionId";
 const SESSION_CREATED_KEY = "blindaQuizSessionCreated";
+const SESSION_VERSION_KEY = "blindaQuizSessionVersion";
+const SESSION_VERSION = "3";
 let sessionCreationPromise: Promise<string> | null = null;
 
 function getSessionId() {
   if (typeof window === "undefined") return "";
+
+  if (window.localStorage.getItem(SESSION_VERSION_KEY) !== SESSION_VERSION) {
+    window.localStorage.removeItem(SESSION_STORAGE_KEY);
+    window.localStorage.removeItem(SESSION_CREATED_KEY);
+    window.localStorage.setItem(SESSION_VERSION_KEY, SESSION_VERSION);
+  }
 
   const existing = window.localStorage.getItem(SESSION_STORAGE_KEY);
   if (existing) return existing;
