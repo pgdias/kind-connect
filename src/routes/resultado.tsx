@@ -126,17 +126,12 @@ function ResultPage() {
                 </div>
               </section>
 
-              {offerReady ? (
+              {offerReady && (
                 <section className="delayed-offer">
                   <a className="delayed-buy-button" href={CHECKOUT_URL}>
                     QUERO BLINDAR MEU BOLSA FAMÍLIA E DESCOBRIR OS SEGREDOS PARA NÃO PERDER O BENEFÍCIO <span>→</span>
                   </a>
                 </section>
-              ) : (
-                <div className="offer-countdown">
-                  <span>O acesso à oferta será liberado em</span>
-                  <strong>{secondsLeft}s</strong>
-                </div>
               )}
             </>
           ) : (
