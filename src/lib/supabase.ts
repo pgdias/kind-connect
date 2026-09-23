@@ -12,12 +12,23 @@ let sessionCreationPromise: Promise<string> | null = null;
 
 function getVisitorId() {
   if (typeof window === "undefined") return "";
-  const existing = window.localStorage.getItem(VISITOR_STORAGE_KEY);
-  if (existing) return existing;
+
+  const cookieMatch = document.cookie.match(/(?:^|; )blindaVisitorId=([^;]+)/);
+  const stored = window.localStorage.getItem(VISITOR_STORAGE_KEY);
+  const existing = stored || cookieMatch?.[1];
+
+  if (existing) {
+    window.localStorage.setItem(VISITOR_STORAGE_KEY, existing);
+    document.cookie = `blindaVisitorId=${encodeURIComponent(existing)}; Max-Age=31536000; Path=/; SameSite=Lax`;
+    return existing;
+  }
+
   const id = typeof crypto !== "undefined" && "randomUUID" in crypto
     ? crypto.randomUUID()
     : `visitor-${Date.now()}-${Math.random().toString(36).slice(2)}`;
+
   window.localStorage.setItem(VISITOR_STORAGE_KEY, id);
+  document.cookie = `blindaVisitorId=${encodeURIComponent(id)}; Max-Age=31536000; Path=/; SameSite=Lax`;
   return id;
 }
 
@@ -151,6 +162,7 @@ export async function startQuizSession() {
     const alreadyCreated = window.localStorage.getItem(SESSION_CREATED_KEY) === "1";
 
     if (alreadyCreated) {
+      window.localStorage.setItem(SESSION_LAST_ACTIVITY_KEY, String(Date.now()));
       return sessionId;
     }
 
