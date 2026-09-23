@@ -4,8 +4,10 @@ const SUPABASE_KEY = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY as string | u
 const SESSION_STORAGE_KEY = "blindaQuizSessionId";
 const VISITOR_STORAGE_KEY = "blindaVisitorId";
 const SESSION_CREATED_KEY = "blindaQuizSessionCreated";
+const SESSION_LAST_ACTIVITY_KEY = "blindaQuizSessionLastActivity";
 const SESSION_VERSION_KEY = "blindaQuizSessionVersion";
-const SESSION_VERSION = "4";
+const SESSION_VERSION = "5";
+const SESSION_TIMEOUT_MS = 30 * 60 * 1000;
 let sessionCreationPromise: Promise<string> | null = null;
 
 function getVisitorId() {
@@ -25,11 +27,20 @@ function getSessionId() {
   if (window.localStorage.getItem(SESSION_VERSION_KEY) !== SESSION_VERSION) {
     window.localStorage.removeItem(SESSION_STORAGE_KEY);
     window.localStorage.removeItem(SESSION_CREATED_KEY);
+    window.localStorage.removeItem(SESSION_LAST_ACTIVITY_KEY);
     window.localStorage.setItem(SESSION_VERSION_KEY, SESSION_VERSION);
   }
 
   const existing = window.localStorage.getItem(SESSION_STORAGE_KEY);
-  if (existing) return existing;
+  const lastActivity = Number(window.localStorage.getItem(SESSION_LAST_ACTIVITY_KEY) || 0);
+  const sessionIsActive = existing && lastActivity && Date.now() - lastActivity < SESSION_TIMEOUT_MS;
+
+  if (sessionIsActive) return existing;
+
+  if (existing) {
+    window.localStorage.removeItem(SESSION_STORAGE_KEY);
+    window.localStorage.removeItem(SESSION_CREATED_KEY);
+  }
 
   const id =
     typeof crypto !== "undefined" && "randomUUID" in crypto
@@ -159,6 +170,7 @@ export async function startQuizSession() {
     if (!ok) return "";
 
     window.localStorage.setItem(SESSION_CREATED_KEY, "1");
+    window.localStorage.setItem(SESSION_LAST_ACTIVITY_KEY, String(Date.now()));
     return sessionId;
   })();
 
