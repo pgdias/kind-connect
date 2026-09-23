@@ -47,7 +47,7 @@ function QuizPage() {
       window.setTimeout(() => {
         if (current === questions.length - 1) {
           setProcessing(true);
-          window.setTimeout(() => navigate({ to: "/resultado" }), 1800);
+          window.setTimeout(() => { sessionStorage.setItem("blindaQuizAnswers", JSON.stringify(answers)); navigate({ to: "/resultado" }); }, 1800);
         } else {
           setCurrent((n) => n + 1);
         }
