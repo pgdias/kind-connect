@@ -16,7 +16,7 @@ const questions: Question[] = [
     id: 2,
     tag: "SITUAÇÃO 02",
     title: "Alguém da família começou ou parou de trabalhar — ou a renda mudou — e você conferiu isso no cadastro?",
-    subtitle: "Se a resposta não for um "sim" com certeza, vale prestar atenção neste ponto.",
+    subtitle: 'Se a resposta não for um "sim" com certeza, vale prestar atenção neste ponto.',
     options: ["Não conferi", "Não tenho certeza", "Sim, conferi", "Não aconteceu"],
   },
   {
@@ -106,7 +106,7 @@ function QuizPage() {
 
   const back = () => {
     if (current === 0) return navigate({ to: "/" });
-    setCurrent((number) => number - 1);
+    window.location.assign("/quiz?step=" + current);
   };
 
   if (processing) return <ProcessingScreen />;
