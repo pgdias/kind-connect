@@ -123,15 +123,20 @@ function QuizPage() {
     sessionStorage.setItem("blindaQuizAnswers", JSON.stringify(next));
 
     const isLastQuestion = current === questions.length - 1;
-    void saveQuizAnswer(question.id, value, isLastQuestion);
-    void trackEvent("quiz_answered", { question_id: question.id });
-
     if (isLastQuestion) {
       setProcessing(true);
       await Promise.all([
+        saveQuizAnswer(question.id, value, true),
+        trackEvent("quiz_answered", { question_id: question.id }),
         saveQuizSummary(next, []),
         new Promise((resolve) => setTimeout(resolve, 4500)),
       ]);
+    } else {
+      void saveQuizAnswer(question.id, value, false);
+      void trackEvent("quiz_answered", { question_id: question.id });
+    }
+
+    if (isLastQuestion) {
       window.location.assign("/resultado");
       return;
     }
