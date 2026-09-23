@@ -64,7 +64,6 @@ left join cta ct on ct.session_id = cs.session_id
 group by 1, 2, 3, 4, 5
 order by unique_checkout_visitors desc, unique_quiz_completions desc, unique_visitors desc, sessions desc;
 
-
 grant select on public.analytics_campaign_funnel to anon;
 
 create or replace function public.get_analytics_campaign_funnel()
@@ -73,10 +72,10 @@ language sql
 security definer
 set search_path = public
 stable
-as $
+as $$
   select *
   from public.analytics_campaign_funnel;
-$;
+$$;
 
 revoke all on function public.get_analytics_campaign_funnel() from public;
 grant execute on function public.get_analytics_campaign_funnel() to anon;
