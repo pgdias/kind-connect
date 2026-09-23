@@ -134,7 +134,7 @@ function ResultPage() {
                 </h1>
                 <p>
                   <strong className="vsl-urgent-line">ASSISTA ESSE VÍDEO ANTES QUE SEJA TARDE.</strong><br />
-                  Descubra erros e situações do dia a dia que podem gerar divergências — e que muita gente faz sem imaginar que precisa conferir.
+
                 </p>
               </section>
 
