@@ -1,0 +1,235 @@
+/* Blinda Bolsa — professional visual layer */
+:root{
+  --bp-ink:#10261c;
+  --bp-ink-2:#183b2b;
+  --bp-green:#18734a;
+  --bp-green-2:#22915d;
+  --bp-green-soft:#edf7f1;
+  --bp-gold:#b8943f;
+  --bp-line:#dce8e0;
+  --bp-muted:#687970;
+  --bp-bg:#f7faf8;
+}
+body{
+  background:var(--bp-bg);
+  color:var(--bp-ink);
+}
+.site-header,.landing-header{
+  height:72px;
+  background:rgba(255,255,255,.88);
+  border-bottom:1px solid rgba(220,232,224,.85);
+  box-shadow:0 4px 24px rgba(16,38,28,.035);
+}
+.brand-mark{
+  width:40px;height:40px;border-radius:12px;
+  background:linear-gradient(145deg,#1e7b50,#0d4029);
+  box-shadow:0 8px 22px rgba(24,115,74,.18);
+}
+.header-status{
+  background:#f0f8f3;border-color:#d8eade;color:#28724d;
+}
+.status-dot{background:#28a368;box-shadow:0 0 0 4px #def2e6}
+
+/* Landing */
+.landing-compact-hero{
+  background:
+    radial-gradient(circle at 84% 12%,rgba(35,145,93,.13),transparent 28%),
+    radial-gradient(circle at 5% 88%,rgba(184,148,63,.08),transparent 25%),
+    linear-gradient(135deg,#fff 0%,#f5faf7 100%);
+  border-bottom:1px solid #e4eee8;
+}
+.landing-compact-grid{
+  padding:76px 0 72px;
+}
+.landing-kicker{
+  color:#28784e;
+  font-weight:900;
+}
+.landing-kicker span{
+  background:#26a267;
+  box-shadow:0 0 0 5px rgba(38,162,103,.10);
+}
+.landing-v3 h1{
+  color:#102f21;
+  font-weight:850;
+  letter-spacing:-.062em;
+}
+.landing-v3 h1 em{
+  color:#1b7b4e;
+}
+.landing-lead{
+  color:#617169;
+}
+.landing-lead strong{color:#214a35}
+.landing-v3 .landing-cta{
+  background:linear-gradient(135deg,#1b774c,#145c3a);
+  border:1px solid rgba(255,255,255,.12);
+  border-radius:11px;
+  box-shadow:0 16px 34px rgba(20,92,58,.20);
+}
+.landing-v3 .landing-cta:hover{
+  background:linear-gradient(135deg,#218457,#176841);
+  transform:translateY(-2px);
+}
+.landing-reassurance{
+  color:#78857e;
+}
+.landing-compact-visual{
+  filter:drop-shadow(0 25px 55px rgba(17,55,38,.10));
+}
+.landing-phone-compact{
+  border:1px solid #d5e4da;
+  background:linear-gradient(155deg,#fff,#f7faf8);
+  box-shadow:0 32px 75px rgba(18,60,40,.15);
+}
+.landing-compact-badge{
+  background:#fff;
+  border:1px solid #d8e6dd;
+  color:#26744d;
+  box-shadow:0 12px 30px rgba(18,60,40,.10);
+}
+.landing-quick-points{
+  background:#fff;
+  border-top:1px solid #e4eee8;
+}
+.landing-quick-heading span{
+  color:#2b7c51;
+}
+.landing-quick-heading h2{
+  color:#102f21;
+}
+.landing-quick-grid article{
+  background:#f8fbf9;
+  border:1px solid #e0ebe4;
+  border-radius:16px;
+  transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease;
+}
+.landing-quick-grid article:hover{
+  transform:translateY(-3px);
+  border-color:#c9ded1;
+  box-shadow:0 16px 35px rgba(18,60,40,.07);
+}
+.landing-quick-grid article>b{
+  color:#1b7b4e;
+}
+.landing-quick-grid h3{color:#173c2b}
+.landing-quick-grid p{color:#718078}
+
+/* Quiz */
+.quiz-v3{
+  background:
+    radial-gradient(circle at 90% 0%,rgba(34,145,93,.09),transparent 25%),
+    #f6faf7;
+}
+.quiz-v3-header{
+  background:rgba(255,255,255,.92);
+  border-bottom:1px solid #dfeae3;
+  box-shadow:0 4px 22px rgba(16,38,28,.04);
+  backdrop-filter:blur(14px);
+}
+.quiz-v3-brand>span{
+  background:linear-gradient(145deg,#1e7b50,#10432d);
+  box-shadow:0 8px 20px rgba(24,115,74,.15);
+}
+.quiz-v3-header>div{
+  color:#28724d;
+  background:#eef8f2;
+  border-color:#d8eade;
+}
+.quiz-v3-progress{
+  background:#dfeae3;
+  box-shadow:inset 0 1px 2px rgba(16,38,28,.04);
+}
+.quiz-v3-progress span{
+  background:linear-gradient(90deg,#18734a,#38a86f);
+  box-shadow:0 0 12px rgba(38,162,103,.18);
+}
+.quiz-v3-card{
+  border-color:#d9e7df;
+  border-radius:22px;
+  box-shadow:0 28px 70px rgba(17,57,38,.09);
+}
+.quiz-v3-card:before{
+  height:4px;
+  background:linear-gradient(90deg,#18734a,#45ae78,#b8943f);
+}
+.quiz-v3-options button{
+  min-height:62px;
+  background:#fbfdfc;
+  border-color:#dce8e1;
+  border-radius:13px;
+}
+.quiz-v3-options button:hover{
+  border-color:#a7cbb6;
+  background:#f1f8f4;
+  box-shadow:0 10px 24px rgba(22,79,51,.08);
+}
+.quiz-v3-options button.selected{
+  border-color:#4c9e70;
+  background:#edf8f1;
+}
+.quiz-v3-options button.selected .quiz-v3-radio{
+  background:#1f8758;
+  border-color:#1f8758;
+}
+.quiz-v3-options button>b{color:#8b9991}
+.quiz-v3-options button:hover>b,.quiz-v3-options button.selected>b{color:#18734a}
+
+/* Result */
+.vsl-sales-page{
+  background:#07100c;
+}
+.vsl-sales-page .result-header{
+  background:rgba(7,16,12,.94);
+  border-bottom-color:#21372c;
+}
+.vsl-sales-page .quiz-brand-mark{
+  background:linear-gradient(145deg,#1e7b50,#0d4029);
+}
+.live-result-banner{
+  background:#0e1a14;
+  border-color:#274536;
+}
+.live-result-dot{background:#36b878;box-shadow:0 0 0 4px rgba(54,184,120,.12)}
+.vsl-headline h1 em{color:#43bd7d}
+.vsl-video-placeholder{
+  border-color:#2b4437;
+  background:radial-gradient(circle at 50% 48%,rgba(50,113,79,.25),transparent 30%),linear-gradient(145deg,#112019,#07100c 72%);
+  box-shadow:0 30px 80px rgba(0,0,0,.48);
+}
+.vsl-big-play{
+  background:linear-gradient(145deg,#1d9a60,#147345);
+  box-shadow:0 0 0 10px rgba(29,154,96,.10),0 18px 45px rgba(29,154,96,.24);
+}
+.vsl-video-bottom>div i{background:#2baa6c}
+.delayed-buy-button{
+  background:linear-gradient(135deg,#1e9a5f,#147342);
+  box-shadow:0 17px 40px rgba(22,146,86,.24);
+}
+.vsl-availability-bar{
+  background:linear-gradient(180deg,#132019,#0c1510);
+  border-bottom-color:#294437;
+}
+.vsl-availability-note{
+  border-color:rgba(54,184,120,.35);
+  color:#6dd39d;
+  background:rgba(54,184,120,.08);
+}
+.activity-notification-icon{
+  background:#163d2b;
+  color:#70d5a0;
+}
+
+/* Shared polish */
+button,a{ -webkit-tap-highlight-color:transparent }
+:focus-visible{
+  outline:3px solid rgba(38,162,103,.28);
+  outline-offset:3px;
+}
+@media(max-width:600px){
+  .site-header,.landing-header{height:66px}
+  .landing-compact-grid{padding-top:42px;padding-bottom:40px}
+  .landing-v3 h1{font-weight:850}
+  .landing-v3 .landing-cta{border-radius:12px}
+  .quiz-v3-card{box-shadow:0 18px 45px rgba(17,57,38,.08)}
+}
