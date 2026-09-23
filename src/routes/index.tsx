@@ -88,7 +88,7 @@ function Footer(){
  return <footer><div className="container footer-inner">
    <div className="footer-brand"><div><strong>BLINDA BOLSA FAMÍLIA</strong><span>Produto independente de caráter informativo.</span></div></div>
    <nav><a href="#privacidade">Privacidade</a><a href="#termos">Termos de uso</a></nav>
-   <p>Este produto não é um canal oficial do Governo Federal, Ministério do Desenvolvimento e Assistência Social, Caixa Econômica Federal ou Cadastro Único. O teste não substitui consulta, atendimento ou decisão dos órgãos responsáveis.</p>
+   <p>{"\n"}</p>
    <p className="footer-source">Informações gerais do teste são baseadas em orientações públicas do Governo Federal e podem mudar conforme a legislação e as regras vigentes.</p>
  </div></footer>;
 }

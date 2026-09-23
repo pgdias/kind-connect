@@ -47,10 +47,10 @@ export interface FileRoutesById {
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/quiz'
+  fullPaths: '/' | '/quiz' | '/resultado'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/quiz'
-  id: '__root__' | '/' | '/quiz'
+  to: '/' | '/quiz' | '/resultado'
+  id: '__root__' | '/' | '/quiz' | '/resultado'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
