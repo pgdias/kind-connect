@@ -144,14 +144,34 @@ revoke all on function public.record_quiz_completion(text) from public;
 grant execute on function public.record_quiz_completion(text) to anon;
 
 -- Painel agregado do funil.
--- Cada etapa conta sessões únicas, evitando duplicidade de eventos.
+-- Cada etapa conta sessões únicas.
+-- Resultado e checkout só contam sessões que realmente concluíram o quiz,
+-- evitando que registros antigos de testes que chegaram ao resultado sem
+-- registrar a conclusão distorçam o funil.
 create or replace view public.analytics_funnel_overview as
+with completed_sessions as (
+  select distinct session_id
+  from public.quiz_events
+  where event_name = 'quiz_completed'
+),
+result_sessions as (
+  select distinct e.session_id
+  from public.quiz_events e
+  inner join completed_sessions c on c.session_id = e.session_id
+  where e.event_name = 'result_viewed'
+),
+checkout_sessions as (
+  select distinct e.session_id
+  from public.quiz_events e
+  inner join result_sessions r on r.session_id = e.session_id
+  where e.event_name = 'checkout_click'
+)
 select
   (select count(*) from public.quiz_sessions)::bigint as visitors,
   (select count(distinct session_id) from public.quiz_events where event_name = 'quiz_started')::bigint as quiz_starts,
-  (select count(distinct session_id) from public.quiz_events where event_name = 'quiz_completed')::bigint as quiz_completions,
-  (select count(distinct session_id) from public.quiz_events where event_name = 'result_viewed')::bigint as result_views,
-  (select count(distinct session_id) from public.quiz_events where event_name = 'checkout_click')::bigint as checkout_clicks,
+  (select count(*) from completed_sessions)::bigint as quiz_completions,
+  (select count(*) from result_sessions)::bigint as result_views,
+  (select count(*) from checkout_sessions)::bigint as checkout_clicks,
   (select count(distinct session_id) from public.quiz_events where event_name = 'cta_click')::bigint as cta_clicks;
 
 grant select on public.analytics_funnel_overview to anon;
