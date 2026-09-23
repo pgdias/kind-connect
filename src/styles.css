@@ -360,3 +360,85 @@
   .landing-float-bottom{left:-3px}
   .landing-final-card h2{font-size:25px}
 }
+
+
+/* ===== COMPACT PROFESSIONAL LANDING — VSL UNTOUCHED ===== */
+.landing-compact-hero{min-height:0;background:linear-gradient(135deg,#fbfcfa 0%,#f5f8f5 100%)}
+.landing-compact-grid{min-height:0;display:grid;grid-template-columns:minmax(0,1.08fr) minmax(330px,.72fr);align-items:center;gap:48px;padding:58px 0 62px;position:relative;z-index:2}
+.landing-compact-copy{max-width:650px}
+.landing-compact-copy .landing-kicker{display:flex;align-items:center}
+.landing-compact-copy h1{max-width:650px;font-size:clamp(43px,5vw,62px);margin:16px 0 16px}
+.landing-compact-copy .landing-lead{max-width:560px;margin:0 0 22px;font-size:15px;line-height:1.55}
+.landing-main-cta{min-width:310px;min-height:57px;padding:17px 21px 17px 24px;font-size:12px}
+.landing-compact-copy .landing-reassurance{margin-top:10px}
+.landing-compact-visual{height:390px;position:relative;display:grid;place-items:center}
+.landing-phone-compact{width:285px!important;padding:21px 18px 16px!important;transform:rotate(1deg)!important}
+.landing-phone-compact .phone-top{margin:7px 0 18px}
+.landing-phone-compact .phone-question{font-size:16px;margin-bottom:13px}
+.landing-phone-compact .phone-option{padding:9px 8px;font-size:8px;margin-top:5px}
+.landing-phone-compact .phone-progress{margin:15px 0 7px}
+.landing-compact-badge{position:absolute;right:4px;bottom:39px;background:#fff;border:1px solid #dce7df;border-radius:999px;padding:9px 12px;color:#286f4a;font-size:7px;font-weight:900;letter-spacing:.08em;box-shadow:0 12px 28px rgba(20,60,40,.1)}
+.landing-quick-points{background:#fff;border-top:1px solid #e3eae5;padding:54px 0 58px}
+.landing-quick-heading{text-align:center;max-width:650px;margin:0 auto 27px}
+.landing-quick-heading span{color:#2d7650;font-size:8px;font-weight:950;letter-spacing:.16em}
+.landing-quick-heading h2{color:#123727;font-size:clamp(28px,3.5vw,39px);line-height:1.08;letter-spacing:-.04em;margin:9px 0 0}
+.landing-quick-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:25px}
+.landing-quick-grid article{display:flex;gap:13px;padding:20px;border:1px solid #e0e8e2;border-radius:13px;background:#f9fbf9}
+.landing-quick-grid article>b{width:30px;height:30px;display:grid;place-items:center;flex:0 0 auto;border-radius:8px;background:#eaf3ed;color:#28784e;font-size:8px}
+.landing-quick-grid h3{margin:1px 0 5px;color:#173a2a;font-size:14px;letter-spacing:-.02em}
+.landing-quick-grid p{margin:0;color:#718078;font-size:9px;line-height:1.55}
+.landing-quick-points>.container>.landing-cta{display:flex;width:max-content;margin:0 auto}
+.landing-footer-compact{padding:22px 0;background:#0c2016}
+.landing-footer-compact .container{display:flex;justify-content:center;align-items:center;gap:12px}
+.landing-footer-compact strong{color:#e8eee9;font-size:8px;letter-spacing:.12em}
+.landing-footer-compact span{color:#738279;font-size:8px}
+
+@media(max-width:950px){
+  .landing-compact-grid{grid-template-columns:1fr;gap:22px;padding:48px 0 45px;text-align:center}
+  .landing-compact-copy{max-width:700px;margin:auto}
+  .landing-compact-copy .landing-kicker{justify-content:center}
+  .landing-compact-copy .landing-lead{margin-left:auto;margin-right:auto}
+  .landing-compact-visual{height:350px}
+  .landing-compact-badge{right:calc(50% - 185px);bottom:20px}
+}
+
+@media(max-width:600px){
+  .site-header{height:64px}
+  .brand{gap:9px}
+  .brand-mark{width:35px;height:35px;border-radius:10px}
+  .brand strong{font-size:13px}
+  .brand small{font-size:7px;margin-top:4px}
+  .header-status{padding:6px 9px;font-size:8px}
+  .status-dot{width:6px;height:6px}
+
+  .landing-compact-grid{display:block;padding:30px 0 34px;text-align:left}
+  .landing-compact-copy{width:100%;max-width:none}
+  .landing-compact-copy .landing-kicker{justify-content:flex-start;font-size:7px}
+  .landing-compact-copy h1{font-size:36px;line-height:1.03;letter-spacing:-.052em;margin:13px 0 14px}
+  .landing-compact-copy .landing-lead{font-size:13px;line-height:1.52;margin-bottom:17px}
+  .landing-main-cta{width:100%;min-width:0;min-height:57px;padding:15px 13px;font-size:10.5px;gap:10px}
+  .landing-compact-copy .landing-reassurance{text-align:center;font-size:7.5px;line-height:1.4;margin-top:9px}
+
+  .landing-compact-visual{display:none}
+
+  .landing-quick-points{padding:42px 0 44px}
+  .landing-quick-heading{margin-bottom:20px}
+  .landing-quick-heading span{font-size:7px}
+  .landing-quick-heading h2{font-size:27px;line-height:1.08}
+  .landing-quick-grid{grid-template-columns:1fr;gap:8px;margin-bottom:20px}
+  .landing-quick-grid article{padding:15px 14px;gap:10px;border-radius:11px}
+  .landing-quick-grid article>b{width:27px;height:27px;font-size:7px}
+  .landing-quick-grid h3{font-size:13px;margin:0 0 3px}
+  .landing-quick-grid p{font-size:8.5px;line-height:1.45}
+  .landing-quick-points>.container>.landing-cta{width:100%;min-width:0}
+  .landing-footer-compact{padding:18px 0}
+  .landing-footer-compact .container{display:block;text-align:center}
+  .landing-footer-compact strong,.landing-footer-compact span{display:block;font-size:7px}
+  .landing-footer-compact span{margin-top:5px}
+}
+
+@media(max-width:370px){
+  .landing-compact-copy h1{font-size:33px}
+  .landing-compact-copy .landing-lead{font-size:12.5px}
+  .landing-main-cta{font-size:10px}
+}
