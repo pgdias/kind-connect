@@ -19,6 +19,8 @@ create table if not exists public.quiz_sessions (
   utm_term text
 );
 
+alter table public.quiz_sessions add column if not exists visitor_id text;
+
 create table if not exists public.quiz_answers (
   id uuid primary key default gen_random_uuid(),
   session_id text not null references public.quiz_sessions(session_id) on delete cascade,
