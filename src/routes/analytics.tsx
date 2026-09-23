@@ -1,9 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 
-const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL as string | undefined;
-const SUPABASE_KEY = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY as string | undefined;
-
 type Overview = {
   total_visitors: number;
   unique_visitors: number;
@@ -46,175 +43,18 @@ type Funnel = {
 
 type LoadResult<T> = { label: string; data?: T; error?: string };
 
-type QuizSessionRow = {
-  session_id: string;
-  visitor_id: string | null;
-  utm_source: string | null;
-  utm_medium: string | null;
-  utm_campaign: string | null;
-  utm_content: string | null;
-  utm_term: string | null;
-};
-
-type QuizEventRow = {
-  session_id: string;
-  event_name: string;
-};
-
-function buildCampaignFunnel(sessions: QuizSessionRow[], events: QuizEventRow[]): CampaignFunnel[] {
-  const eventSets = new Map<string, Set<string>>();
-  events.forEach((event) => {
-    const set = eventSets.get(event.session_id) ?? new Set<string>();
-    set.add(event.event_name);
-    eventSets.set(event.session_id, set);
-  });
-
-  const groups = new Map<string, CampaignFunnel>();
-  const visitorSets = new Map<string, {
-    visitors: Set<string>;
-    starters: Set<string>;
-    completions: Set<string>;
-    results: Set<string>;
-    checkouts: Set<string>;
-    ctas: Set<string>;
-  }>();
-
-  for (const session of sessions) {
-    const eventsForSession = eventSets.get(session.session_id) ?? new Set<string>();
-    const source = session.utm_source?.trim() || "Direto / não identificado";
-    const medium = session.utm_medium?.trim() || "—";
-    const campaign = session.utm_campaign?.trim() || "—";
-    const content = session.utm_content?.trim() || "—";
-    const term = session.utm_term?.trim() || "—";
-    const key = [source, medium, campaign, content, term].join("\u001f");
-    const current = groups.get(key) ?? {
-      source, medium, campaign, content, term,
-      unique_visitors: 0, sessions: 0,
-      unique_quiz_starters: 0, quiz_starts: 0,
-      unique_quiz_completions: 0, quiz_completions: 0,
-      unique_result_viewers: 0, result_views: 0,
-      unique_checkout_visitors: 0, checkout_clicks: 0,
-      unique_cta_visitors: 0, cta_clicks: 0,
-    };
-    const unique = visitorSets.get(key) ?? {
-      visitors: new Set<string>(), starters: new Set<string>(), completions: new Set<string>(),
-      results: new Set<string>(), checkouts: new Set<string>(), ctas: new Set<string>(),
-    };
-
-    current.sessions += 1;
-    const visitorId = session.visitor_id || "";
-    if (visitorId) unique.visitors.add(visitorId);
-
-    if (eventsForSession.has("quiz_started")) {
-      current.quiz_starts += 1;
-      if (visitorId) unique.starters.add(visitorId);
-    }
-    if (eventsForSession.has("quiz_completed")) {
-      current.quiz_completions += 1;
-      if (visitorId) unique.completions.add(visitorId);
-    }
-    if (eventsForSession.has("quiz_completed") && eventsForSession.has("result_viewed")) {
-      current.result_views += 1;
-      if (visitorId) unique.results.add(visitorId);
-    }
-    if (eventsForSession.has("quiz_completed") && eventsForSession.has("result_viewed") && eventsForSession.has("checkout_click")) {
-      current.checkout_clicks += 1;
-      if (visitorId) unique.checkouts.add(visitorId);
-    }
-    if (eventsForSession.has("cta_click")) {
-      current.cta_clicks += 1;
-      if (visitorId) unique.ctas.add(visitorId);
-    }
-
-    visitorSets.set(key, unique);
-    groups.set(key, current);
-  }
-
-  return Array.from(groups.entries()).map(([key, group]) => {
-    const unique = visitorSets.get(key)!;
-    return {
-      ...group,
-      unique_visitors: unique.visitors.size,
-      unique_quiz_starters: unique.starters.size,
-      unique_quiz_completions: unique.completions.size,
-      unique_result_viewers: unique.results.size,
-      unique_checkout_visitors: unique.checkouts.size,
-      unique_cta_visitors: unique.ctas.size,
-    };
-  }).sort((a, b) =>
-    b.unique_checkout_visitors - a.unique_checkout_visitors ||
-    b.unique_quiz_completions - a.unique_quiz_completions ||
-    b.unique_visitors - a.unique_visitors ||
-    b.sessions - a.sessions
-  );
-}
-
-async function getCampaignFunnelWithFallback(): Promise<LoadResult<CampaignFunnel[]>> {
-  const primary = await getData<CampaignFunnel[]>(
-    "Funil por campanha",
-    "analytics_campaign_funnel?select=*&order=unique_checkout_visitors.desc,unique_quiz_completions.desc,unique_visitors.desc"
-  );
-  if (!primary.error) return primary;
-
-  if (primary.error.includes("analytics_campaign_funnel")) {
-    const rpc = await getData<CampaignFunnel[]>(
-      "Funil por campanha",
-      "rpc/get_analytics_campaign_funnel"
-    );
-    if (!rpc.error) {
-      return {
-        label: "Funil por campanha",
-        data: [...(rpc.data ?? [])].sort((a, b) =>
-          b.unique_checkout_visitors - a.unique_checkout_visitors ||
-          b.unique_quiz_completions - a.unique_quiz_completions ||
-          b.unique_visitors - a.unique_visitors ||
-          b.sessions - a.sessions
-        ),
-      };
-    }
-  }
-
-  const [sessions, events] = await Promise.all([
-    getData<QuizSessionRow[]>(
-      "Dados de campanha",
-      "quiz_sessions?select=session_id,visitor_id,utm_source,utm_medium,utm_campaign,utm_content,utm_term&order=started_at.asc"
-    ),
-    getData<QuizEventRow[]>(
-      "Eventos de campanha",
-      "quiz_events?select=session_id,event_name&order=created_at.asc"
-    ),
-  ]);
-
-  if (!sessions.error && !events.error) {
-    return {
-      label: "Funil por campanha",
-      data: buildCampaignFunnel(sessions.data ?? [], events.data ?? []),
-    };
-  }
-
-  return {
-    label: "Funil por campanha",
-    error: [primary.error, sessions.error, events.error].filter(Boolean).join(" | "),
-  };
-}
-
-
-
 export const Route = createFileRoute("/analytics")({ component: AnalyticsPage });
 
-async function getData<T>(label: string, path: string): Promise<LoadResult<T>> {
-  if (!SUPABASE_URL || !SUPABASE_KEY) {
-    return { label, error: "Variáveis VITE_SUPABASE_URL ou VITE_SUPABASE_PUBLISHABLE_KEY não foram encontradas no build." };
-  }
-
+async function getData<T>(label: string, resourcePath: string): Promise<LoadResult<T>> {
   try {
-    const response = await fetch(`${SUPABASE_URL}/rest/v1/${path}`, {
+    const resource = resourcePath.split("?")[0].replace(/^rpc\//, "");
+    const response = await fetch(`/api/analytics?resource=${encodeURIComponent(resource)}`, {
       cache: "no-store",
-      headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}`, "Cache-Control": "no-cache" },
+      credentials: "same-origin",
+      headers: { "Cache-Control": "no-cache" },
     });
 
     const body = await response.text();
-
     if (!response.ok) {
       let detail = body;
       try {
@@ -227,13 +67,18 @@ async function getData<T>(label: string, path: string): Promise<LoadResult<T>> {
     }
 
     try {
-      return { label, data: JSON.parse(body) as T };
+      const parsed = JSON.parse(body);
+      return { label, data: parsed.data as T };
     } catch {
-      return { label, error: "O Supabase respondeu com um formato inesperado." };
+      return { label, error: "O servidor de analytics respondeu com um formato inesperado." };
     }
   } catch (err) {
-    return { label, error: err instanceof Error ? err.message : "Erro de rede ao acessar o Supabase." };
+    return { label, error: err instanceof Error ? err.message : "Erro de rede ao acessar o servidor de analytics." };
   }
+}
+
+async function getCampaignFunnel(): Promise<LoadResult<CampaignFunnel[]>> {
+  return getData<CampaignFunnel[]>("Funil por campanha", "analytics_campaign_funnel");
 }
 
 function formatDay(value: string) {
@@ -260,6 +105,44 @@ function AnalyticsPage() {
   const [errors, setErrors] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
+  const [authenticated, setAuthenticated] = useState(false);
+  const [checkingAuth, setCheckingAuth] = useState(true);
+  const [adminKey, setAdminKey] = useState("");
+  const [authError, setAuthError] = useState("");
+  const login = async () => {
+    setAuthError("");
+    if (!adminKey.trim()) {
+      setAuthError("Digite a chave de acesso.");
+      return;
+    }
+    try {
+      const response = await fetch("/api/analytics", {
+        method: "POST",
+        credentials: "same-origin",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ key: adminKey }),
+      });
+      if (!response.ok) {
+        setAuthError("Chave inválida.");
+        return;
+      }
+      setAdminKey("");
+      setAuthenticated(true);
+    } catch {
+      setAuthError("Não foi possível conectar ao servidor de analytics.");
+    }
+  };
+  const logout = async () => {
+    await fetch("/api/analytics", { method: "DELETE", credentials: "same-origin" }).catch(() => undefined);
+    setAuthenticated(false);
+    setOverview(null);
+    setDaily([]);
+    setFunnel(null);
+    setTrafficSources([]);
+    setDevices([]);
+    setCampaigns([]);
+    setCampaignFunnel([]);
+  };
   const load = async () => {
     setLoading(true);
     setErrors([]);
@@ -271,7 +154,7 @@ function AnalyticsPage() {
         getData<TrafficSource[]>("Origem do tráfego", "analytics_traffic_sources?select=source,medium,unique_visitors,sessions"),
         getData<Device[]>("Dispositivos", "analytics_devices?select=device,unique_visitors,sessions"),
         getData<Campaign[]>("Campanhas UTM", "analytics_campaigns?select=source,medium,campaign,content,term,unique_visitors,sessions"),
-        getCampaignFunnelWithFallback(),
+        getCampaignFunnel(),
       ]);
 
     const results = [summary, days, funnelData, trafficSourcesData, devicesData, campaignsData];
@@ -291,7 +174,48 @@ function AnalyticsPage() {
     }
   };
 
-  useEffect(() => { void load(); }, []);
+  useEffect(() => {
+    let cancelled = false;
+    void fetch("/api/analytics", { credentials: "same-origin", cache: "no-store" })
+      .then(async (response) => {
+        if (!cancelled && response.ok) {
+          setAuthenticated(true);
+          await load();
+        }
+      })
+      .finally(() => {
+        if (!cancelled) setCheckingAuth(false);
+      });
+    return () => { cancelled = true; };
+  }, []);
+
+  if (checkingAuth) {
+    return (
+      <main style={{ minHeight: "100vh", background: "#f5f7fa", color: "#172033", fontFamily: "Inter, system-ui, sans-serif", padding: "32px 20px", display: "grid", placeItems: "center" }}>
+        <div style={{ maxWidth: 420, width: "100%", background: "#fff", borderRadius: 16, padding: 28, boxShadow: "0 10px 30px rgba(15,23,42,.08)" }}>
+          <div style={{ fontSize: 12, fontWeight: 800, letterSpacing: 1.5, color: "#64748b" }}>BLINDA BOLSA</div>
+          <h1 style={{ margin: "8px 0", fontSize: 28 }}>Verificando acesso</h1>
+          <p style={{ margin: 0, color: "#64748b" }}>Protegendo o painel de analytics…</p>
+        </div>
+      </main>
+    );
+  }
+
+  if (!authenticated) {
+    return (
+      <main style={{ minHeight: "100vh", background: "#f5f7fa", color: "#172033", fontFamily: "Inter, system-ui, sans-serif", padding: "32px 20px", display: "grid", placeItems: "center" }}>
+        <form onSubmit={(event) => { event.preventDefault(); void login(); }} style={{ maxWidth: 420, width: "100%", background: "#fff", borderRadius: 16, padding: 28, boxShadow: "0 10px 30px rgba(15,23,42,.08)" }}>
+          <div style={{ fontSize: 12, fontWeight: 800, letterSpacing: 1.5, color: "#64748b" }}>BLINDA BOLSA</div>
+          <h1 style={{ margin: "8px 0", fontSize: 28 }}>Analytics protegido</h1>
+          <p style={{ margin: "0 0 20px", color: "#64748b", lineHeight: 1.5 }}>Este painel é privado. Informe a chave de acesso para continuar.</p>
+          <label style={{ display: "block", fontSize: 13, fontWeight: 700, marginBottom: 7 }} htmlFor="analytics-key">Chave de acesso</label>
+          <input id="analytics-key" type="password" autoComplete="current-password" value={adminKey} onChange={(event) => setAdminKey(event.target.value)} autoFocus style={{ width: "100%", boxSizing: "border-box", border: "1px solid #cbd5e1", borderRadius: 10, padding: "12px 13px", fontSize: 16 }} />
+          {authError ? <p role="alert" style={{ color: "#b91c1c", fontSize: 13, margin: "10px 0 0" }}>{authError}</p> : null}
+          <button type="submit" style={{ width: "100%", marginTop: 16, border: 0, borderRadius: 10, padding: "12px 16px", background: "#172033", color: "#fff", fontWeight: 800, cursor: "pointer" }}>Entrar</button>
+        </form>
+      </main>
+    );
+  }
 
   return (
     <main style={{ minHeight: "100vh", background: "#f5f7fa", color: "#172033", fontFamily: "Inter, system-ui, sans-serif", padding: "32px 20px" }}>
@@ -304,6 +228,7 @@ function AnalyticsPage() {
           </div>
           <div style={{ display: "flex", gap: 10, flexWrap: "wrap", justifyContent: "flex-end" }}>
             <button onClick={() => void load()} disabled={loading} style={{ border: 0, borderRadius: 10, padding: "11px 16px", background: "#172033", color: "#fff", fontWeight: 700, cursor: loading ? "wait" : "pointer", opacity: loading ? 0.7 : 1 }}>{loading ? "Atualizando..." : "Atualizar"}</button>
+            <button onClick={() => void logout()} style={{ border: "1px solid #cbd5e1", borderRadius: 10, padding: "11px 16px", background: "#fff", color: "#172033", fontWeight: 700, cursor: "pointer" }}>Sair</button>
           </div>
         </div>
 
