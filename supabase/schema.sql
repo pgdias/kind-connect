@@ -286,3 +286,19 @@ order by unique_visitors desc, sessions desc;
 
 grant select on public.analytics_traffic_sources to anon;
 grant select on public.analytics_devices to anon;
+
+-- Relatório de campanhas UTM.
+create or replace view public.analytics_campaigns as
+select
+  coalesce(nullif(utm_source, ''), 'Direto / não identificado') as source,
+  coalesce(nullif(utm_medium, ''), '—') as medium,
+  coalesce(nullif(utm_campaign, ''), '—') as campaign,
+  coalesce(nullif(utm_content, ''), '—') as content,
+  coalesce(nullif(utm_term, ''), '—') as term,
+  count(distinct visitor_id)::bigint as unique_visitors,
+  count(*)::bigint as sessions
+from public.quiz_sessions
+group by 1, 2, 3, 4, 5
+order by unique_visitors desc, sessions desc;
+
+grant select on public.analytics_campaigns to anon;
