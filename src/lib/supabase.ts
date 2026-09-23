@@ -133,18 +133,9 @@ export async function saveQuizAnswer(
     },
   );
 
-  const sessionUpdated = await request(
-    `quiz_sessions?session_id=eq.${encodeURIComponent(sessionId)}`,
-    {
-      method: "PATCH",
-      body: JSON.stringify({
-        current_step: questionId,
-        ...(completed ? { completed_at: new Date().toISOString() } : {}),
-      }),
-    },
-  );
-
-  return answerSaved && sessionUpdated;
+  // Completion is tracked as an event so the public browser never needs
+  // SELECT access to quiz_sessions in order to update a session row.
+  return answerSaved;
 }
 
 type QuizAnswer = {
