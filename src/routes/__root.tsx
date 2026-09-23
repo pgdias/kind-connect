@@ -2,6 +2,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Outlet, Link, createRootRouteWithContext, useRouter, HeadContent, Scripts } from "@tanstack/react-router";
 import { useEffect, type ReactNode } from "react";
 import appCss from "../styles.css?url";
+import professionalCss from "../professional-theme.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 
 function NotFoundComponent(){return <div className="placeholder"><div><span>404</span><h1>Página não encontrada</h1><p>A página que você procura não existe.</p><Link className="secondary-button" to="/">Voltar para o início</Link></div></div>}
@@ -25,6 +26,7 @@ export const Route=createRootRouteWithContext<{queryClient:QueryClient}>()({
     {name:"twitter:description",content:"Descubra quais pontos podem merecer conferência. Teste rápido e informativo."}
   ],links:[
     {rel:"stylesheet",href:appCss},
+    {rel:"stylesheet",href:professionalCss},
     {rel:"icon",href:"/favicon.ico",type:"image/x-icon"},
     {rel:"canonical",href:"https://blindabolsa.netlify.app/"}
   ]}),
