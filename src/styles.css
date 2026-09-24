@@ -1143,20 +1143,20 @@
 .activity-notification strong{
   display:block;
   color:#86efac;
-  font-size:8px;
+  font-size:9px;
   font-weight:950;
   letter-spacing:.13em;
 }
 .activity-notification p{
   margin:3px 0 2px;
   color:#f1f4f2;
-  font-size:9px;
+  font-size:10px;
   line-height:1.35;
 }
 .activity-notification p b{color:#fff}
 .activity-notification small{
   color:#66716c;
-  font-size:8px;
+  font-size:9px;
 }
 .activity-notification-close{
   align-self:start;
@@ -1182,7 +1182,7 @@
     border-radius:9px;
   }
   .activity-notification-icon{width:26px;height:26px;font-size:10px}
-  .activity-notification strong{font-size:7px}
-  .activity-notification p{font-size:8.5px}
-  .activity-notification small{font-size:7px}
+  .activity-notification strong{font-size:8px}
+  .activity-notification p{font-size:9.5px}
+  .activity-notification small{font-size:8px}
 }
