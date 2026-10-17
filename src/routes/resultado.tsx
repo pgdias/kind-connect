@@ -157,6 +157,7 @@ function ResultPage() {
   const [ready, setReady] = useState(false);
   const [secondsLeft, setSecondsLeft] = useState(60);
   const [availabilitySeconds, setAvailabilitySeconds] = useState(1800);
+  const [videoLoadError, setVideoLoadError] = useState(false);
 
   useEffect(() => {
     void trackEvent("result_viewed");
@@ -286,23 +287,37 @@ function ResultPage() {
               </section>
 
               {videoAvailable ? (
-                <section className="vsl-video-wrap">
-                  <div className="vsl-video-placeholder">
-                  <div className="vsl-video-top">
-                    <span>BLINDA BOLSA FAMÍLIA</span>
-                    <span>APRESENTAÇÃO</span>
-                  </div>
-                  <div className="vsl-video-center">
-                    <div className="vsl-big-play">▶</div>
-                    <strong>ASSISTA ANTES DE CONTINUAR</strong>
-                    <span>O que você precisa saber para não deixar uma possível pendência para depois.</span>
-                  </div>
-                  <div className="vsl-video-bottom">
-                    <span>▶</span>
-                    <div><i /></div>
-                    <span>VSL</span>
-                  </div>
-                  </div>
+                <section className="vsl-video-wrap" aria-label="Apresentação em vídeo">
+                  {!videoLoadError ? (
+                    <video
+                      className="vsl-video-player"
+                      controls
+                      playsInline
+                      preload="metadata"
+                      onError={() => setVideoLoadError(true)}
+                      aria-label="Vídeo de apresentação do Blinda Bolsa Família"
+                    >
+                      <source src="/videos/vsl.mp4" type="video/mp4" />
+                      Seu navegador não conseguiu carregar o vídeo.
+                    </video>
+                  ) : (
+                    <div className="vsl-video-placeholder">
+                      <div className="vsl-video-top">
+                        <span>BLINDA BOLSA FAMÍLIA</span>
+                        <span>APRESENTAÇÃO</span>
+                      </div>
+                      <div className="vsl-video-center">
+                        <div className="vsl-big-play">▶</div>
+                        <strong>VÍDEO EM PREPARAÇÃO</strong>
+                        <span>Esta apresentação estará disponível em breve.</span>
+                      </div>
+                      <div className="vsl-video-bottom">
+                        <span>▶</span>
+                        <div><i /></div>
+                        <span>VSL</span>
+                      </div>
+                    </div>
+                  )}
                 </section>
               ) : (
                 <section className="vsl-expired-card">
