@@ -139,7 +139,6 @@ function ActivityNotifications({ active }: { active: boolean }) {
     <div className="activity-notification" role="status" aria-live="polite">
       <div className="activity-notification-icon">✓</div>
       <div>
-        <strong>COMPRA REALIZADA</strong>
         <p>
           <b>{ACTIVITY_BUYERS[index][0]}</b>, de <b>{ACTIVITY_BUYERS[index][1]}</b>, acabou de adquirir o <b>Blinda Bolsa Família</b>.
         </p>
