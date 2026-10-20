@@ -154,7 +154,8 @@ export const Route = createFileRoute("/resultado")({ component: ResultPage });
 function ResultPage() {
   const [answers, setAnswers] = useState<Answer[]>([]);
   const [ready, setReady] = useState(false);
-  const [secondsLeft, setSecondsLeft] = useState(60);
+  const [countdownStarted, setCountdownStarted] = useState(false);
+  const [secondsLeft, setSecondsLeft] = useState(260);
   const [availabilitySeconds, setAvailabilitySeconds] = useState(1800);
   const [videoLoadError, setVideoLoadError] = useState(false);
 
@@ -193,14 +194,14 @@ function ResultPage() {
   }, [ready]);
 
   useEffect(() => {
-    if (!ready || secondsLeft <= 0) return;
+    if (!ready || !countdownStarted || secondsLeft <= 0) return;
 
     const timer = window.setInterval(() => {
       setSecondsLeft((current) => Math.max(current - 1, 0));
     }, 1000);
 
     return () => window.clearInterval(timer);
-  }, [ready, secondsLeft]);
+  }, [ready, countdownStarted, secondsLeft]);
 
   const attentionPoints = useMemo(() => {
     const points: string[] = [];
@@ -240,7 +241,7 @@ function ResultPage() {
 
   const hasAnswers = answers.length > 0;
   const count = attentionPoints.length;
-  const offerReady = secondsLeft === 0;
+  const offerReady = countdownStarted && secondsLeft === 0;
   const videoAvailable = availabilitySeconds > 0;
   const availabilityMinutes = Math.floor(availabilitySeconds / 60).toString().padStart(2, "0");
   const availabilitySecondsPart = (availabilitySeconds % 60).toString().padStart(2, "0");
@@ -294,6 +295,7 @@ function ResultPage() {
                       playsInline
                       preload="metadata"
                       onError={() => setVideoLoadError(true)}
+                      onPlay={() => setCountdownStarted(true)}
                       aria-label="Vídeo de apresentação do Blinda Bolsa Família"
                     >
                       <source src="/videos/vsl.mp4" type="video/mp4" />
