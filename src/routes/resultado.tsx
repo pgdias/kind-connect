@@ -317,13 +317,7 @@ function ResultPage() {
                 </section>
               )}
 
-              {offerReady && (
-                <section className="delayed-offer">
-                  <a className="delayed-buy-button" href={CHECKOUT_URL} onClick={() => void trackEvent("checkout_click")}>
-                    QUERO BLINDAR MEU BOLSA FAMÍLIA <span>→</span>
-                  </a>
-                </section>
-              )}
+      
             </>
           ) : (
             <div className="result-hero">
