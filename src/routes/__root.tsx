@@ -12,13 +12,7 @@ export const Route=createRootRouteWithContext<{queryClient:QueryClient}>()({
 head:()=>({meta:[{charSet:"utf-8"},{name:"viewport",content:"width=device-width, initial-scale=1"},{title:"Blinda Bolsa Família | Descubra o que merece atenção"},{name:"description",content:"Teste gratuito e informativo para identificar pontos do Bolsa Família e do Cadastro Único que podem merecer conferência. Leva cerca de 2 minutos."},{name:"robots",content:"index, follow, max-image-preview:large"},{name:"keywords",content:"Bolsa Família, Cadastro Único, CadÚnico, atualização cadastral, benefício, pendência Bolsa Família, regras Bolsa Família, teste Bolsa Família"},{name:"author",content:"Blinda Bolsa Família"},{property:"og:title",content:"Blinda Bolsa Família | Você sabe se está tudo certo?"},{property:"og:description",content:"Faça um teste gratuito e descubra quais pontos relacionados ao seu Bolsa Família podem merecer atenção."},{property:"og:type",content:"website"},{property:"og:locale",content:"pt_BR"},{property:"og:site_name",content:"Blinda Bolsa Família"},{name:"twitter:card",content:"summary_large_image"},{name:"twitter:title",content:"Blinda Bolsa Família | Teste gratuito"},{name:"twitter:description",content:"Descubra quais pontos podem merecer conferência. Teste rápido e informativo."}],links:[{rel:"stylesheet",href:appCss},{rel:"stylesheet",href:professionalCss},{rel:"stylesheet",href:analyticsPremiumCss},{rel:"icon",href:"/favicon.ico",type:"image/x-icon"},{rel:"canonical",href:"https://blindabolsa.netlify.app/"}]}),shellComponent:RootShell,component:RootComponent,notFoundComponent:NotFoundComponent,errorComponent:ErrorComponent});
 
 function RootShell({children}:{children:ReactNode}){
-  useEffect(()=>{
-    const script=document.createElement("script");
-    script.src="https://player.vplay.com.br/embed.min.js";
-    script.async=true;
-    document.body.appendChild(script);
-    return ()=>{script.remove();};
-  },[]);
+ 
   return <html lang="pt-BR"><head><HeadContent/></head><body>{children}<Scripts/></body></html>;
 }
 
