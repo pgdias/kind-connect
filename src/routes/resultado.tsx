@@ -286,24 +286,15 @@ function ResultPage() {
               </section>
 
               {videoAvailable ? (
-                <section className="vsl-video-wrap">
-                  <div className="vsl-video-placeholder">
-                  <div className="vsl-video-top">
-                    <span>BLINDA BOLSA FAMÍLIA</span>
-                    <span>APRESENTAÇÃO</span>
-                  </div>
-                  <div className="vsl-video-center">
-                    <div className="vsl-big-play">▶</div>
-                    <strong>ASSISTA ANTES DE CONTINUAR</strong>
-                    <span>O que você precisa saber para não deixar uma possível pendência para depois.</span>
-                  </div>
-                  <div className="vsl-video-bottom">
-                    <span>▶</span>
-                    <div><i /></div>
-                    <span>VSL</span>
-                  </div>
-                  </div>
-                </section>
+               <section className="vsl-video-wrap">
+  <div
+    data-vplay="6fce00a3-efeb-4f89-9b49-dc3bcf3d7845"
+    data-aspect-ratio="9/16"
+    data-border-radius="26"
+    data-poster="https://video.vplay.com.br/users/151/media/4a1e7906-ce29-4de6-bdaf-bb8baced0306/poster/v1792525841179/poster.jpg"
+    data-loading="eager"
+  />
+</section>
               ) : (
                 <section className="vsl-expired-card">
                   <span>APRESENTAÇÃO ENCERRADA</span>
