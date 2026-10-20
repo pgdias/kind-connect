@@ -125,7 +125,7 @@ function ActivityNotifications({ active }: { active: boolean }) {
           playNotificationSound();
         }, 120);
       }, 25000);
-    }, 18000);
+    }, 0);
 
     return () => {
       window.clearTimeout(firstNotification);
@@ -139,7 +139,6 @@ function ActivityNotifications({ active }: { active: boolean }) {
     <div className="activity-notification" role="status" aria-live="polite">
       <div className="activity-notification-icon">✓</div>
       <div>
-        <strong>COMPRA REALIZADA</strong>
         <p>
           <b>{ACTIVITY_BUYERS[index][0]}</b>, de <b>{ACTIVITY_BUYERS[index][1]}</b>, acabou de adquirir o <b>Blinda Bolsa Família</b>.
         </p>
@@ -155,8 +154,9 @@ export const Route = createFileRoute("/resultado")({ component: ResultPage });
 function ResultPage() {
   const [answers, setAnswers] = useState<Answer[]>([]);
   const [ready, setReady] = useState(false);
-  const [secondsLeft, setSecondsLeft] = useState(60);
+  const [videoSeconds, setVideoSeconds] = useState(0);
   const [availabilitySeconds, setAvailabilitySeconds] = useState(1800);
+  const [videoLoadError, setVideoLoadError] = useState(false);
 
   useEffect(() => {
     void trackEvent("result_viewed");
@@ -191,16 +191,6 @@ function ResultPage() {
     const availabilityTimer = window.setInterval(tick, 1000);
     return () => window.clearInterval(availabilityTimer);
   }, [ready]);
-
-  useEffect(() => {
-    if (!ready || secondsLeft <= 0) return;
-
-    const timer = window.setInterval(() => {
-      setSecondsLeft((current) => Math.max(current - 1, 0));
-    }, 1000);
-
-    return () => window.clearInterval(timer);
-  }, [ready, secondsLeft]);
 
   const attentionPoints = useMemo(() => {
     const points: string[] = [];
@@ -240,7 +230,7 @@ function ResultPage() {
 
   const hasAnswers = answers.length > 0;
   const count = attentionPoints.length;
-  const offerReady = secondsLeft === 0;
+  const offerReady = videoSeconds >= 260;
   const videoAvailable = availabilitySeconds > 0;
   const availabilityMinutes = Math.floor(availabilitySeconds / 60).toString().padStart(2, "0");
   const availabilitySecondsPart = (availabilitySeconds % 60).toString().padStart(2, "0");
@@ -286,23 +276,38 @@ function ResultPage() {
               </section>
 
               {videoAvailable ? (
-                <section className="vsl-video-wrap">
-                  <div className="vsl-video-placeholder">
-                  <div className="vsl-video-top">
-                    <span>BLINDA BOLSA FAMÍLIA</span>
-                    <span>APRESENTAÇÃO</span>
-                  </div>
-                  <div className="vsl-video-center">
-                    <div className="vsl-big-play">▶</div>
-                    <strong>ASSISTA ANTES DE CONTINUAR</strong>
-                    <span>O que você precisa saber para não deixar uma possível pendência para depois.</span>
-                  </div>
-                  <div className="vsl-video-bottom">
-                    <span>▶</span>
-                    <div><i /></div>
-                    <span>VSL</span>
-                  </div>
-                  </div>
+                <section className="vsl-video-wrap" aria-label="Apresentação em vídeo">
+                  {!videoLoadError ? (
+                    <video
+                      className="vsl-video-player"
+                      controls
+                      playsInline
+                      preload="metadata"
+                      onError={() => setVideoLoadError(true)}
+                      onTimeUpdate={(event) => setVideoSeconds(event.currentTarget.currentTime)}
+                      aria-label="Vídeo de apresentação do Blinda Bolsa Família"
+                    >
+                      <source src="/videos/vsl.mp4" type="video/mp4" />
+                      Seu navegador não conseguiu carregar o vídeo.
+                    </video>
+                  ) : (
+                    <div className="vsl-video-placeholder">
+                      <div className="vsl-video-top">
+                        <span>BLINDA BOLSA FAMÍLIA</span>
+                        <span>APRESENTAÇÃO</span>
+                      </div>
+                      <div className="vsl-video-center">
+                        <div className="vsl-big-play">▶</div>
+                        <strong>VÍDEO EM PREPARAÇÃO</strong>
+                        <span>Esta apresentação estará disponível em breve.</span>
+                      </div>
+                      <div className="vsl-video-bottom">
+                        <span>▶</span>
+                        <div><i /></div>
+                        <span>VSL</span>
+                      </div>
+                    </div>
+                  )}
                 </section>
               ) : (
                 <section className="vsl-expired-card">
@@ -312,13 +317,7 @@ function ResultPage() {
                 </section>
               )}
 
-              {offerReady && (
-                <section className="delayed-offer">
-                  <a className="delayed-buy-button" href={CHECKOUT_URL} onClick={() => void trackEvent("checkout_click")}>
-                    QUERO BLINDAR MEU BOLSA FAMÍLIA <span>→</span>
-                  </a>
-                </section>
-              )}
+      
             </>
           ) : (
             <div className="result-hero">
