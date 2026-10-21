@@ -296,11 +296,51 @@ async function handleApiRoutes(request: Request): Promise<Response | null> {
   }
 }
 
+async function serveStatic(request: Request): Promise<Response | null> {
+  const url = new URL(request.url);
+  const path = url.pathname;
+
+  if (!path.startsWith("/assets/") && path !== "/favicon.ico") return null;
+
+  try {
+    const filePath = path === "/favicon.ico"
+      ? "dist/client/favicon.ico"
+      : `dist/client${path}`;
+
+    const f = Bun.file(filePath);
+    if (!(await f.exists())) return null;
+
+    const ext = filePath.split(".").pop()?.toLowerCase();
+    const mimeTypes: Record<string, string> = {
+      js: "application/javascript",
+      mjs: "application/javascript",
+      css: "text/css",
+      ico: "image/x-icon",
+      png: "image/png",
+      svg: "image/svg+xml",
+      woff: "font/woff",
+      woff2: "font/woff2",
+    };
+
+    return new Response(f, {
+      headers: {
+        "Content-Type": mimeTypes[ext ?? ""] || "application/octet-stream",
+        "Cache-Control": "public, max-age=31536000, immutable",
+      },
+    });
+  } catch {
+    return null;
+  }
+}
+
 export default {
   async fetch(request: Request, env: unknown, ctx: unknown) {
     try {
       const apiResponse = await handleApiRoutes(request);
       if (apiResponse) return apiResponse;
+
+      const staticResponse = await serveStatic(request);
+      if (staticResponse) return staticResponse;
 
       const handler = await getServerEntry();
       const response = await handler.fetch(request, env, ctx);
