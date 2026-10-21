@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { recordQuizCompletion, saveQuizAnswer, saveQuizSummary, startQuizSession, trackEvent } from "../lib/supabase";
+import { recordQuizCompletion, saveQuizAnswer, saveQuizSummary, startQuizSession, trackEvent } from "../lib/api";
 
 type Answer = { questionId: number; value: string };
 type Question = { id: number; tag: string; title: string; subtitle?: string; options: string[] };

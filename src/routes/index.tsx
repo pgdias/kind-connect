@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect } from "react";
-import { startQuizSession, trackEvent } from "../lib/supabase";
+import { startQuizSession, trackEvent } from "../lib/api";
 
 export const Route = createFileRoute("/")({ component: Index });
 

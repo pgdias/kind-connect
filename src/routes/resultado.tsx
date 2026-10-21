@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
-import { trackEvent } from "../lib/supabase";
+import { trackEvent } from "../lib/api";
 
 type Answer = { questionId: number; value: string };
 
