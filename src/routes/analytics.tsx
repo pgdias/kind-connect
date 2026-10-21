@@ -50,7 +50,9 @@ async function getData<T>(label: string, path: string): Promise<LoadResult<T>> {
       try {
         const parsed = JSON.parse(body);
         detail = parsed.message || parsed.error || parsed.hint || body;
-      } catch {}
+      } catch {
+        // Ignore JSON parse errors
+      }
       return { label, error: `${response.status}: ${detail}` };
     }
     return { label, data: JSON.parse(body) as T };
