@@ -204,9 +204,20 @@ function ResultPage() {
   useEffect(() => {
     if (!ready || answers.length === 0) return;
 
+    const player = document.querySelector<HTMLElement>(
+      '[data-vplay="6fce00a3-efeb-4f89-9b49-dc3bcf3d7845"]',
+    );
+    if (!player) return;
+
     const script = document.createElement("script");
     script.src = "https://player.vplay.com.br/embed.min.js";
     script.async = true;
+    script.onload = () => {
+      console.info("VPlay embed script carregado.");
+    };
+    script.onerror = () => {
+      console.error("Não foi possível carregar o player VPlay.");
+    };
     document.body.appendChild(script);
 
     return () => {
