@@ -307,8 +307,13 @@ async function serveStatic(request: Request): Promise<Response | null> {
       ? "dist/client/favicon.ico"
       : `dist/client${path}`;
 
+    console.log(`[Static] Request: ${path} -> filePath: ${filePath}`);
+    
     const f = Bun.file(filePath);
-    if (!(await f.exists())) return null;
+    const exists = await f.exists();
+    console.log(`[Static] File exists: ${exists} for ${filePath}`);
+    
+    if (!exists) return null;
 
     const ext = filePath.split(".").pop()?.toLowerCase();
     const mimeTypes: Record<string, string> = {
@@ -322,13 +327,16 @@ async function serveStatic(request: Request): Promise<Response | null> {
       woff2: "font/woff2",
     };
 
+    console.log(`[Static] Serving: ${filePath} (${mimeTypes[ext ?? ""] || "application/octet-stream"})`);
+    
     return new Response(f, {
       headers: {
         "Content-Type": mimeTypes[ext ?? ""] || "application/octet-stream",
         "Cache-Control": "public, max-age=31536000, immutable",
       },
     });
-  } catch {
+  } catch (e) {
+    console.error(`[Static] Error:`, e);
     return null;
   }
 }
