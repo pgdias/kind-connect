@@ -14,4 +14,4 @@ COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/package.json ./
 ENV NODE_ENV=production
 EXPOSE 3000
-CMD ["bun", "run", "dist/server/entry.mjs"]
+CMD ["bun", "run", "dist/server/server.js"]
