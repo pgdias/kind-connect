@@ -201,6 +201,20 @@ function ResultPage() {
 
     return () => window.clearInterval(timer);
   }, [ready, secondsLeft]);
+  useEffect(() => {
+    if (!ready || answers.length === 0) return;
+
+    const script = document.createElement("script");
+    script.src = "https://player.vplay.com.br/embed.min.js";
+    script.async = true;
+    document.body.appendChild(script);
+
+    return () => {
+      script.remove();
+    };
+  }, [ready, answers.length]);
+
+
 
   const attentionPoints = useMemo(() => {
     const points: string[] = [];
