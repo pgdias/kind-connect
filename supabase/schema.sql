@@ -1,5 +1,5 @@
--- Blinda Bolsa Família — analytics do quiz
--- Execute este SQL no Supabase > SQL Editor.
+-- Blinda Bolsa Família — analytics do quiz (PostgreSQL puro)
+-- Este SQL roda automaticamente no container PostgreSQL via docker-entrypoint-initdb.d
 
 create extension if not exists pgcrypto;
 
@@ -60,29 +60,6 @@ create index if not exists quiz_answers_session_id_idx on public.quiz_answers(se
 create index if not exists quiz_answers_question_id_idx on public.quiz_answers(question_id);
 create index if not exists respostas_quiz_created_at_idx on public.respostas_quiz(created_at);
 
-alter table public.quiz_sessions enable row level security;
-alter table public.quiz_answers enable row level security;
-alter table public.respostas_quiz enable row level security;
-
-drop policy if exists "quiz sessions public insert" on public.quiz_sessions;
-create policy "quiz sessions public insert" on public.quiz_sessions for insert to anon with check (true);
-
-drop policy if exists "quiz sessions public update" on public.quiz_sessions;
-create policy "quiz sessions public update" on public.quiz_sessions for update to anon using (true) with check (true);
-
-drop policy if exists "quiz answers public insert" on public.quiz_answers;
-create policy "quiz answers public insert" on public.quiz_answers for insert to anon with check (true);
-
-drop policy if exists "quiz answers public update" on public.quiz_answers;
-create policy "quiz answers public update" on public.quiz_answers for update to anon using (true) with check (true);
-
-drop policy if exists "respostas quiz public insert" on public.respostas_quiz;
-create policy "respostas quiz public insert" on public.respostas_quiz for insert to anon with check (true);
-
-revoke select on public.quiz_sessions from anon;
-revoke select on public.quiz_answers from anon;
-revoke select on public.respostas_quiz from anon;
-
 create table if not exists public.quiz_events (
   id uuid primary key default gen_random_uuid(),
   session_id text not null references public.quiz_sessions(session_id) on delete cascade,
@@ -94,20 +71,6 @@ create table if not exists public.quiz_events (
 create index if not exists quiz_events_session_id_idx on public.quiz_events(session_id);
 create index if not exists quiz_events_event_name_idx on public.quiz_events(event_name);
 create index if not exists quiz_events_created_at_idx on public.quiz_events(created_at);
-
-alter table public.quiz_events enable row level security;
-
-drop policy if exists "quiz events public insert" on public.quiz_events;
-create policy "quiz events public insert" on public.quiz_events for insert to anon with check (true);
-
-revoke select on public.quiz_events from anon;
-
-grant insert on public.quiz_sessions to anon;
-grant update on public.quiz_sessions to anon;
-grant insert on public.quiz_answers to anon;
-grant update on public.quiz_answers to anon;
-grant insert on public.quiz_events to anon;
-grant insert on public.respostas_quiz to anon;
 
 -- Endpoint seguro para registrar a conclusão.
 -- Ele valida que a sessão existe antes de gravar o evento.
@@ -146,9 +109,6 @@ begin
 end;
 $$;
 
-revoke all on function public.record_quiz_completion(text) from public;
-grant execute on function public.record_quiz_completion(text) to anon;
-
 -- Limpa todos os dados acumulados durante os testes.
 -- Use somente quando estiver pronto para começar a coleta real.
 create or replace function public.reset_analytics_data()
@@ -165,9 +125,6 @@ begin
   return true;
 end;
 $;
-
-revoke all on function public.reset_analytics_data() from public;
-grant execute on function public.reset_analytics_data() to anon;
 
 -- Analytics: funil por sessão, com métricas de visitantes únicos separadas.
 create or replace view public.analytics_funnel_overview as
@@ -229,8 +186,6 @@ select
   (select count(*) from checkout_visitors)::bigint as unique_checkout_visitors,
   (select count(*) from cta_visitors)::bigint as unique_cta_visitors;
 
-grant select on public.analytics_funnel_overview to anon;
-
 create or replace view public.analytics_visitors_overview as
 with counts as (
   select
@@ -262,9 +217,6 @@ where started_at >= current_date - interval '29 days'
 group by started_at::date
 order by day;
 
-grant select on public.analytics_visitors_overview to anon;
-grant select on public.analytics_visitors_daily to anon;
-
 
 -- Relatórios de aquisição e dispositivo.
 create or replace view public.analytics_traffic_sources as
@@ -286,9 +238,6 @@ from public.quiz_sessions
 group by 1
 order by unique_visitors desc, sessions desc;
 
-grant select on public.analytics_traffic_sources to anon;
-grant select on public.analytics_devices to anon;
-
 -- Relatório de campanhas UTM.
 create or replace view public.analytics_campaigns as
 select
@@ -303,4 +252,44 @@ from public.quiz_sessions
 group by 1, 2, 3, 4, 5
 order by unique_visitors desc, sessions desc;
 
-grant select on public.analytics_campaigns to anon;
+-- View computed on-the-fly by API (campaign-funnel)
+-- Kept here for reference, API computes if view doesn't exist
+create or replace view public.analytics_campaign_funnel as
+with session_events as (
+  select
+    qs.session_id,
+    qs.visitor_id,
+    qs.utm_source,
+    qs.utm_medium,
+    qs.utm_campaign,
+    qs.utm_content,
+    qs.utm_term,
+    array_agg(qe.event_name) as events
+  from public.quiz_sessions qs
+  left join public.quiz_events qe on qe.session_id = qs.session_id
+  group by qs.session_id, qs.visitor_id, qs.utm_source, qs.utm_medium, qs.utm_campaign, qs.utm_content, qs.utm_term
+),
+aggregated as (
+  select
+    coalesce(nullif(utm_source, ''), 'Direto') as source,
+    coalesce(nullif(utm_medium, ''), '—') as medium,
+    coalesce(nullif(utm_campaign, ''), '—') as campaign,
+    coalesce(nullif(utm_content, ''), '—') as content,
+    coalesce(nullif(utm_term, ''), '—') as term,
+    count(distinct visitor_id)::bigint as unique_visitors,
+    count(*)::bigint as sessions,
+    count(distinct visitor_id) filter (where 'quiz_started' = any(events))::bigint as unique_quiz_starters,
+    count(*) filter (where 'quiz_started' = any(events))::bigint as quiz_starts,
+    count(distinct visitor_id) filter (where 'quiz_completed' = any(events))::bigint as unique_quiz_completions,
+    count(*) filter (where 'quiz_completed' = any(events))::bigint as quiz_completions,
+    count(distinct visitor_id) filter (where 'quiz_completed' = any(events) and 'result_viewed' = any(events))::bigint as unique_result_viewers,
+    count(*) filter (where 'quiz_completed' = any(events) and 'result_viewed' = any(events))::bigint as result_views,
+    count(distinct visitor_id) filter (where 'quiz_completed' = any(events) and 'result_viewed' = any(events) and 'checkout_click' = any(events))::bigint as unique_checkout_visitors,
+    count(*) filter (where 'quiz_completed' = any(events) and 'result_viewed' = any(events) and 'checkout_click' = any(events))::bigint as checkout_clicks,
+    count(distinct visitor_id) filter (where 'cta_click' = any(events))::bigint as unique_cta_visitors,
+    count(*) filter (where 'cta_click' = any(events))::bigint as cta_clicks
+  from session_events
+  group by 1, 2, 3, 4, 5
+)
+select * from aggregated
+order by unique_visitors desc, sessions desc;

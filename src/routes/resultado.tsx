@@ -32,7 +32,7 @@ const ACTIVITY_BUYERS = [
 let notificationAudioContext: AudioContext | null = null;
 
 function getNotificationAudioContext() {
-  const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+  const AudioContextClass = window.AudioContext;
   if (!AudioContextClass) return null;
 
   if (!notificationAudioContext) {
@@ -135,13 +135,15 @@ function ActivityNotifications({ active }: { active: boolean }) {
 
   if (!active || !visible) return null;
 
+  const buyer = ACTIVITY_BUYERS[index % ACTIVITY_BUYERS.length]!;
+
   return (
     <div className="activity-notification" role="status" aria-live="polite">
       <div className="activity-notification-icon">✓</div>
       <div>
         <strong>COMPRA REALIZADA</strong>
         <p>
-          <b>{ACTIVITY_BUYERS[index][0]}</b>, de <b>{ACTIVITY_BUYERS[index][1]}</b>, acabou de adquirir o <b>Blinda Bolsa Família</b>.
+          <b>{buyer[0]}</b>, de <b>{buyer[1]}</b>, acabou de adquirir o <b>Blinda Bolsa Família</b>.
         </p>
         <small>Agora mesmo</small>
       </div>

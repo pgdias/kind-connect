@@ -1,0 +1,52 @@
+name: CD Deploy
+
+on:
+  workflow_run:
+    workflows: ["CI"]
+    types: [completed]
+    branches: [main]
+
+jobs:
+  deploy:
+    name: Deploy to Proxmox CT via Tailscale
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Connect to Tailscale
+        uses: tailscale/github-action@v2
+        with:
+          authkey: ${{ secrets.TAILSCALE_AUTHKEY }}
+
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.TAILSCALE_IP }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          port: 22
+          script: |
+            set -e
+            mkdir -p ${{ secrets.SSH_PATH }}
+            cd ${{ secrets.SSH_PATH }}
+            
+            # Create .env if it doesn't exist
+            if [ ! -f .env ]; then
+              cat > .env << 'ENVEOF'
+DATABASE_URL=postgres://postgres:senha@db:5432/blinda
+NODE_ENV=production
+ENVEOF
+            fi
+
+            # Pull latest image
+            docker compose pull
+
+            # Stop and remove old containers
+            docker compose down --remove-orphans
+
+            # Start new containers
+            docker compose up -d
+
+            # Clean up old images
+            docker image prune -f
+
+            echo "Deploy completed successfully!"

@@ -1,6 +1,3 @@
-const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL as string | undefined;
-const SUPABASE_KEY = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY as string | undefined;
-
 const SESSION_STORAGE_KEY = "blindaQuizSessionId";
 const VISITOR_STORAGE_KEY = "blindaVisitorId";
 const VISITOR_COOKIE_KEY = "blindaVisitorId";
@@ -84,27 +81,19 @@ function getUtmParams() {
   };
 }
 
-async function request(path: string, init: RequestInit = {}) {
-  if (!SUPABASE_URL || !SUPABASE_KEY) {
-    console.error("[Blinda Bolsa] Supabase env vars ausentes.");
-    return false;
-  }
-
+async function apiRequest(path: string, init: RequestInit = {}) {
   try {
-    const response = await fetch(`${SUPABASE_URL}/rest/v1/${path}`, {
+    const response = await fetch(`/api/${path}`, {
       ...init,
       headers: {
-        apikey: SUPABASE_KEY,
-        Authorization: `Bearer ${SUPABASE_KEY}`,
         "Content-Type": "application/json",
-        Prefer: "return=minimal",
         ...(init.headers || {}),
       },
     });
 
     if (!response.ok) {
       const body = await response.text().catch(() => "");
-      console.error(`[Blinda Bolsa] Supabase ${response.status} em ${path}`, body);
+      console.error(`[Blinda Bolsa] API ${response.status} em ${path}`, body);
       return false;
     }
 
@@ -122,7 +111,7 @@ export async function trackEvent(
   const sessionId = await startQuizSession();
   if (!sessionId) return false;
 
-  return request("quiz_events", {
+  return apiRequest("quiz-events", {
     method: "POST",
     body: JSON.stringify({
       session_id: sessionId,
@@ -134,26 +123,23 @@ export async function trackEvent(
 
 export async function recordQuizCompletion() {
   const sessionId = await startQuizSession();
-  if (!sessionId || !SUPABASE_URL || !SUPABASE_KEY) return false;
+  if (!sessionId) return false;
 
   try {
-    const response = await fetch(`${SUPABASE_URL}/rest/v1/rpc/record_quiz_completion`, {
+    const response = await fetch("/api/rpc/record-completion", {
       method: "POST",
-      headers: {
-        apikey: SUPABASE_KEY,
-        Authorization: `Bearer ${SUPABASE_KEY}`,
-        "Content-Type": "application/json",
-      },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ p_session_id: sessionId }),
     });
 
     if (!response.ok) {
       const body = await response.text().catch(() => "");
-      console.error(`[Blinda Bolsa] Supabase ${response.status} em record_quiz_completion`, body);
+      console.error(`[Blinda Bolsa] API ${response.status} em record_quiz_completion`, body);
       return false;
     }
 
-    return true;
+    const data = await response.json();
+    return data.result === true;
   } catch (error) {
     console.error("[Blinda Bolsa] Falha de rede em record_quiz_completion", error);
     return false;
@@ -177,7 +163,7 @@ export async function startQuizSession() {
 
     const utm = getUtmParams();
 
-    const ok = await request("quiz_sessions", {
+    const ok = await apiRequest("quiz-sessions", {
       method: "POST",
       body: JSON.stringify({
         session_id: sessionId,
@@ -211,7 +197,7 @@ export async function saveQuizAnswer(
   const sessionId = await startQuizSession();
   if (!sessionId) return false;
 
-  return request("quiz_answers", {
+  return apiRequest("quiz-answers", {
     method: "POST",
     body: JSON.stringify({
       session_id: sessionId,
@@ -239,7 +225,7 @@ export async function saveQuizSummary(
     respostas_completas: answers,
   });
 
-  return request("respostas_quiz", {
+  return apiRequest("respostas-quiz", {
     method: "POST",
     body: JSON.stringify({
       resposta_1: values[1] ?? null,

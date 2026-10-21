@@ -99,6 +99,7 @@ function QuizPage() {
   }, []);
 
   const question = questions[current];
+  if (!question) return <div className="quiz-loading">Carregando...</div>;
   const selected = answers.find((answer) => answer.questionId === question.id)?.value;
   const progress = ((current + 1) / questions.length) * 100;
 
