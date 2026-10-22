@@ -1,4 +1,3 @@
-
 name: CD Deploy
 
 on:
@@ -7,11 +6,15 @@ on:
     types: [completed]
     branches: [main]
 
+permissions:
+  contents: read
+
 jobs:
   deploy:
     name: Deploy to Proxmox CT via Tailscale
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - name: Connect to Tailscale
         uses: tailscale/github-action@v2
@@ -30,14 +33,14 @@ jobs:
 
       - name: Deploy via SSH
         uses: appleboy/ssh-action@v1
-        timeout-minutes: 2
+        timeout-minutes: 12
         with:
           host: ${{ secrets.TAILSCALE_IP }}
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_KEY }}
           port: 22
           timeout: 30s
-          command_timeout: 1m
-          debug: true
+          command_timeout: 10m
+          debug: false
           script: |
             bash /opt/kind-connect/scripts/deploy.sh

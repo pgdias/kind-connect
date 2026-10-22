@@ -1,41 +1,39 @@
-#!/bin/bash
-set -e
-
-# Deploy script for kind-connect
-# Usage: ./deploy.sh
-
-set -e
+#!/usr/bin/env bash
+set -Eeuo pipefail
 
 SSH_PATH="${SSH_PATH:-/opt/kind-connect}"
 
-echo "🚀 Iniciando deploy..."
+echo "==> Iniciando deploy em ${SSH_PATH}"
+cd "${SSH_PATH}"
 
-mkdir -p "$SSH_PATH"
-cd "$SSH_PATH"
-
-# Create .env if it doesn't exist
-if [ ! -f .env ]; then
-  cat > .env << 'ENVEOF'
-DATABASE_URL=postgres://postgres:8js72nd723ng00s12k@db:5432/blinda
-NODE_ENV=production
-ENVEOF
-  echo "✅ .env criado"
+if [[ ! -f docker-compose.yml ]]; then
+  echo "ERRO: docker-compose.yml não encontrado em ${SSH_PATH}" >&2
+  exit 1
 fi
 
-# Pull latest image
-echo "📥 Baixando imagem mais recente..."
+if [[ ! -f .env ]]; then
+  echo "ERRO: arquivo .env ausente. Crie-o no servidor com POSTGRES_PASSWORD antes do deploy." >&2
+  exit 1
+fi
+
+if ! grep -qE '^POSTGRES_PASSWORD=.+$' .env; then
+  echo "ERRO: .env precisa conter POSTGRES_PASSWORD com a senha do banco." >&2
+  exit 1
+fi
+
+echo "==> Validando configuração do Docker Compose"
+docker compose config -q
+
+echo "==> Baixando imagens"
 docker compose pull
 
-# Stop and remove old containers
-echo "🛑 Parando containers antigos..."
-docker compose down --remove-orphans
+echo "==> Atualizando serviços sem derrubar a versão atual antecipadamente"
+docker compose up -d --remove-orphans --wait --wait-timeout 120
 
-# Start new containers
-echo "🚀 Iniciando containers..."
-docker compose up -d
+echo "==> Estado dos serviços"
+docker compose ps
 
-# Clean up old images
-echo "🧹 Limpando imagens antigas..."
+echo "==> Limpando imagens não utilizadas"
 docker image prune -f
 
-echo "✅ Deploy concluído com sucesso!"
+echo "==> Deploy concluído"
