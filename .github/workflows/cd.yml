@@ -25,28 +25,4 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           port: 22
           script: |
-            set -e
-            mkdir -p ${{ secrets.SSH_PATH }}
-            cd ${{ secrets.SSH_PATH }}
-            
-            # Create .env if it doesn't exist
-            if [ ! -f .env ]; then
-              cat > .env << 'ENVEOF'
-DATABASE_URL=postgres://postgres:8js72nd723ng00s12k@db:5432/blinda
-NODE_ENV=production
-ENVEOF
-            fi
-
-            # Pull latest image
-            docker compose pull
-
-            # Stop and remove old containers
-            docker compose down --remove-orphans
-
-            # Start new containers
-            docker compose up -d
-
-            # Clean up old images
-            docker image prune -f
-
-            echo "Deploy completed successfully!"
+            bash /opt/kind-connect/scripts/deploy.sh
