@@ -88,9 +88,9 @@ function AnalyticsPage() {
     setLoading(true);
     setErrors([]);
     const [summary, days, fun, src, dev, camp, cf] = await Promise.all([
-      getData<Overview[]>("Resumo", "visitors"),
+      getData<Overview>("Resumo", "visitors"),
       getData<Daily[]>("Diário", "daily"),
-      getData<Funnel[]>("Funil", "funnel"),
+      getData<Funnel>("Funil", "funnel"),
       getData<TrafficSource[]>("Origens", "traffic"),
       getData<Device[]>("Dispositivos", "devices"),
       getData<Campaign[]>("UTM", "campaigns"),
@@ -98,9 +98,9 @@ function AnalyticsPage() {
     ]);
     const fails = [summary, days, fun, src, dev, camp, cf].filter((x) => x.error).map((x) => `${x.label}: ${x.error}`);
     setErrors(fails);
-    if (summary.data) setOverview(summary.data[0] || null);
+    if (summary.data) setOverview(summary.data as Overview);
     if (days.data) setDaily(days.data);
-    if (fun.data) setFunnel(fun.data[0] || null);
+    if (fun.data) setFunnel(fun.data as Funnel);
     if (src.data) setSources(src.data);
     if (dev.data) setDevices(dev.data);
     if (camp.data) setCampaigns(camp.data);
