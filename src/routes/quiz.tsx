@@ -83,11 +83,15 @@ function readAnswers(): Answer[] {
 }
 
 function QuizPage() {
-  const [current, setCurrent] = useState(() => readStep() - 1);
-  const [answers, setAnswers] = useState<Answer[]>(readAnswers);
+  const [current, setCurrent] = useState<number>(0);
+  const [answers, setAnswers] = useState<Answer[]>([]);
   const [processing, setProcessing] = useState(false);
+  const [hydrated, setHydrated] = useState(false);
 
   useEffect(() => {
+    setHydrated(true);
+    setCurrent(readStep() - 1);
+    setAnswers(readAnswers());
     void startQuizSession();
     void trackEvent("quiz_started");
   }, []);
@@ -97,6 +101,8 @@ function QuizPage() {
     window.addEventListener("popstate", onPopState);
     return () => window.removeEventListener("popstate", onPopState);
   }, []);
+
+  if (!hydrated) return <div className="quiz-loading">Carregando...</div>;
 
   const question = questions[current];
   if (!question) return <div className="quiz-loading">Carregando...</div>;
