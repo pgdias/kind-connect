@@ -61,6 +61,46 @@ async function getData<T>(label: string, path: string): Promise<LoadResult<T>> {
   }
 }
 
+function toNumber<T extends Record<string, unknown>>(obj: T, keys: (keyof T)[]): T {
+  const result = { ...obj } as Record<string, unknown>;
+  for (const key of keys) {
+    if (key in result && typeof result[key] === "string") {
+      result[key] = Number(result[key]);
+    }
+  }
+  return result as T;
+}
+
+function convertOverview(obj: unknown): Overview {
+  const o = obj as Record<string, unknown>;
+  return {
+    total_visitors: Number(o.total_visitors),
+    unique_visitors: Number(o.unique_visitors),
+    visitors_today: Number(o.visitors_today),
+    visitors_7d: Number(o.visitors_7d),
+    visitors_30d: Number(o.visitors_30d),
+    completed_quizzes: Number(o.completed_quizzes),
+    unfinished_quizzes: Number(o.unfinished_quizzes),
+  };
+}
+
+function convertFunnel(obj: unknown): Funnel {
+  const o = obj as Record<string, unknown>;
+  return {
+    visitors: Number(o.visitors),
+    quiz_starts: Number(o.quiz_starts),
+    quiz_completions: Number(o.quiz_completions),
+    result_views: Number(o.result_views),
+    checkout_clicks: Number(o.checkout_clicks),
+    cta_clicks: Number(o.cta_clicks),
+    unique_quiz_starters: Number(o.unique_quiz_starters),
+    unique_quiz_completions: Number(o.unique_quiz_completions),
+    unique_result_viewers: Number(o.unique_result_viewers),
+    unique_checkout_visitors: Number(o.unique_checkout_visitors),
+    unique_cta_visitors: Number(o.unique_cta_visitors),
+  };
+}
+
 async function getCampaignFunnel(): Promise<LoadResult<CampaignFunnel[]>> {
   const primary = await getData<CampaignFunnel[]>("Campanhas", "campaign-funnel");
   if (!primary.error) return primary;
@@ -99,9 +139,9 @@ function AnalyticsPage() {
       ]);
       const fails = [summary, days, fun, src, dev, camp, cf].filter((x) => x.error).map((x) => `${x.label}: ${x.error}`);
       setErrors(fails);
-      if (summary.data) setOverview(summary.data as Overview);
+      if (summary.data) setOverview(convertOverview(summary.data));
       if (days.data) setDaily(days.data);
-      if (fun.data) setFunnel(fun.data as Funnel);
+      if (fun.data) setFunnel(convertFunnel(fun.data));
       if (src.data) setSources(src.data);
       if (dev.data) setDevices(dev.data);
       if (camp.data) setCampaigns(camp.data);
