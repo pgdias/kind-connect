@@ -30,10 +30,14 @@ jobs:
 
       - name: Deploy via SSH
         uses: appleboy/ssh-action@v1
+        timeout-minutes: 2
         with:
           host: ${{ secrets.TAILSCALE_IP }}
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_KEY }}
           port: 22
+          timeout: 30s
+          command_timeout: 1m
+          debug: true
           script: |
             bash /opt/kind-connect/scripts/deploy.sh
