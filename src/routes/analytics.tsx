@@ -87,26 +87,32 @@ function AnalyticsPage() {
   const load = async () => {
     setLoading(true);
     setErrors([]);
-    const [summary, days, fun, src, dev, camp, cf] = await Promise.all([
-      getData<Overview>("Resumo", "visitors"),
-      getData<Daily[]>("Diário", "daily"),
-      getData<Funnel>("Funil", "funnel"),
-      getData<TrafficSource[]>("Origens", "traffic"),
-      getData<Device[]>("Dispositivos", "devices"),
-      getData<Campaign[]>("UTM", "campaigns"),
-      getCampaignFunnel(),
-    ]);
-    const fails = [summary, days, fun, src, dev, camp, cf].filter((x) => x.error).map((x) => `${x.label}: ${x.error}`);
-    setErrors(fails);
-    if (summary.data) setOverview(summary.data as Overview);
-    if (days.data) setDaily(days.data);
-    if (fun.data) setFunnel(fun.data as Funnel);
-    if (src.data) setSources(src.data);
-    if (dev.data) setDevices(dev.data);
-    if (camp.data) setCampaigns(camp.data);
-    if (cf.data) setCampaignFunnel(cf.data);
-    setUpdated(new Date());
-    setLoading(false);
+    try {
+      const [summary, days, fun, src, dev, camp, cf] = await Promise.all([
+        getData<Overview>("Resumo", "visitors"),
+        getData<Daily[]>("Diário", "daily"),
+        getData<Funnel>("Funil", "funnel"),
+        getData<TrafficSource[]>("Origens", "traffic"),
+        getData<Device[]>("Dispositivos", "devices"),
+        getData<Campaign[]>("UTM", "campaigns"),
+        getCampaignFunnel(),
+      ]);
+      const fails = [summary, days, fun, src, dev, camp, cf].filter((x) => x.error).map((x) => `${x.label}: ${x.error}`);
+      setErrors(fails);
+      if (summary.data) setOverview(summary.data as Overview);
+      if (days.data) setDaily(days.data);
+      if (fun.data) setFunnel(fun.data as Funnel);
+      if (src.data) setSources(src.data);
+      if (dev.data) setDevices(dev.data);
+      if (camp.data) setCampaigns(camp.data);
+      if (cf.data) setCampaignFunnel(cf.data);
+      setUpdated(new Date());
+    } catch (err) {
+      console.error("[Analytics] Load error:", err);
+      setErrors(["Erro ao carregar dados: " + (err instanceof Error ? err.message : String(err))]);
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => { void load(); }, []);
