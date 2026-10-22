@@ -1,3 +1,4 @@
+
 name: CD Deploy
 
 on:
@@ -16,6 +17,16 @@ jobs:
         uses: tailscale/github-action@v2
         with:
           authkey: ${{ secrets.TAILSCALE_AUTHKEY }}
+
+      - name: Diagnose Tailscale and SSH connectivity
+        shell: bash
+        run: |
+          echo "=== Tailscale status ==="
+          tailscale status
+          echo "=== Tailscale ping ==="
+          tailscale ping --timeout=10s 100.89.42.81 || true
+          echo "=== TCP port 22 test ==="
+          nc -vz -w 5 100.89.42.81 22
 
       - name: Deploy via SSH
         uses: appleboy/ssh-action@v1
