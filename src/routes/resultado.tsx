@@ -178,14 +178,14 @@ function ResultPage() {
   useEffect(() => {
     if (!ready) return;
 
-    const key = "blindaVslAvailabilityDeadline";
+    const key = "blindaVslAvailabilityDeadline5Min";
     let deadline = 0;
     try {
       const saved = Number(sessionStorage.getItem(key) || "0");
-      deadline = Number.isFinite(saved) && saved > Date.now() ? saved : Date.now() + 30 * 60 * 1000;
+      deadline = Number.isFinite(saved) && saved > Date.now() ? saved : Date.now() + 5 * 60 * 1000;
       sessionStorage.setItem(key, String(deadline));
     } catch {
-      deadline = Date.now() + 30 * 60 * 1000;
+      deadline = Date.now() + 5 * 60 * 1000;
     }
 
     const tick = () => setAvailabilitySeconds(Math.max(0, Math.ceil((deadline - Date.now()) / 1000)));
