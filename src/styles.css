@@ -1115,12 +1115,12 @@
   right:20px;
   top:82px;
   z-index:60;
-  width:min(270px,calc(100vw - 40px));
+  width:min(240px,calc(100vw - 40px));
   display:grid;
-  grid-template-columns:28px 1fr 12px;
+  grid-template-columns:25px 1fr 10px;
   align-items:center;
-  gap:7px;
-  padding:8px 8px 8px 7px;
+  gap:6px;
+  padding:7px 7px 7px 6px;
   border:1px solid #303532;
   border-radius:12px;
   background:rgba(15,18,17,.96);
@@ -1129,8 +1129,8 @@
   animation:activity-notification-in .35s ease both;
 }
 .activity-notification-icon{
-  width:28px;
-  height:28px;
+  width:25px;
+  height:25px;
   display:grid;
   place-items:center;
   border-radius:10px;
@@ -1143,20 +1143,20 @@
 .activity-notification strong{
   display:block;
   color:#86efac;
-  font-size:9px;
+  font-size:8px;
   font-weight:950;
   letter-spacing:.13em;
 }
 .activity-notification p{
   margin:3px 0 2px;
   color:#f1f4f2;
-  font-size:10px;
+  font-size:9px;
   line-height:1.35;
 }
 .activity-notification p b{color:#fff}
 .activity-notification small{
   color:#66716c;
-  font-size:9px;
+  font-size:8px;
 }
 .activity-notification-close{
   align-self:start;
@@ -1174,15 +1174,15 @@
     right:10px;
     top:70px;
     bottom:auto;
-    width:235px;
+    width:215px;
     max-width:calc(100vw - 20px);
-    grid-template-columns:26px minmax(0,1fr) 12px;
-    gap:6px;
-    padding:7px;
+    grid-template-columns:24px minmax(0,1fr) 10px;
+    gap:5px;
+    padding:6px;
     border-radius:9px;
   }
-  .activity-notification-icon{width:26px;height:26px;font-size:10px}
-  .activity-notification strong{font-size:13px}
-  .activity-notification p{font-size:14.5px}
-  .activity-notification small{font-size:13px}
+  .activity-notification-icon{width:24px;height:24px;font-size:9px}
+  .activity-notification strong{font-size:12px}
+  .activity-notification p{font-size:13px}
+  .activity-notification small{font-size:12px}
 }
