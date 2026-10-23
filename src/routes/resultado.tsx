@@ -122,7 +122,7 @@ function ActivityNotifications({ active }: { active: boolean }) {
           setVisible(true);
           playNotificationSound();
         }, 120);
-      }, 25000);
+      }, 7000);
     }, 230000);
 
     return () => {
