@@ -116,7 +116,7 @@ returns boolean
 language plpgsql
 security definer
 set search_path = public
-as $
+as $$
 begin
   delete from public.respostas_quiz where true;
   delete from public.quiz_events where true;
@@ -124,7 +124,7 @@ begin
   delete from public.quiz_sessions where true;
   return true;
 end;
-$;
+$$;
 
 -- Analytics: funil por sessão, com métricas de visitantes únicos separadas.
 create or replace view public.analytics_funnel_overview as
