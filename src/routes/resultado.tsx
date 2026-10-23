@@ -4,8 +4,6 @@ import { trackEvent } from "../lib/api";
 
 type Answer = { questionId: number; value: string };
 
-const CHECKOUT_URL = "https://pay.cakto.com.br/38xq22v_1131074";
-
 const ACTIVITY_BUYERS = [
   ["Maria Silva", "Fortaleza (CE)"],
   ["Ana Souza", "Salvador (BA)"],
