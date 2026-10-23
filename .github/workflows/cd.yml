@@ -43,4 +43,4 @@ jobs:
           command_timeout: 10m
           debug: false
           script: |
-            bash /opt/kind-connect/scripts/deploy.sh
+            bash /root/kind-connect/scripts/deploy.sh
