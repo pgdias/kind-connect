@@ -901,6 +901,7 @@
 
 
 /* ===== VSL / RESULTADO PAGE ===== */
+html:has(.vsl-sales-page), body:has(.vsl-sales-page){background:#070909!important;}
 .vsl-sales-page{min-height:100vh;background:#070909;color:#fff}
 .vsl-sales-page .result-header{height:70px;display:flex;align-items:center;justify-content:space-between;padding:0 max(20px,calc((100vw - 1120px)/2));background:rgba(7,9,9,.95);border-bottom:1px solid #202422;position:sticky;top:0;z-index:30;backdrop-filter:blur(14px)}
 .vsl-sales-page .quiz-brand{display:flex;align-items:center;gap:10px;color:#fff}
