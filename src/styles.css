@@ -909,10 +909,10 @@
 .vsl-sales-page .quiz-safe{color:#9da5a1;border:1px solid #292e2b;background:#111412;border-radius:999px;padding:7px 10px;font-size:7px;font-weight:850;letter-spacing:.1em}
 .vsl-sales-page .result-main{min-height:calc(100vh - 70px);padding:35px 20px 70px;background:radial-gradient(circle at 50% 0%,rgba(191,18,28,.10),transparent 32%),#070909}
 .vsl-sales-page .vsl-sales-container{width:min(860px,100%);margin:0 auto}
-.live-result-banner{display:flex;align-items:center;justify-content:center;gap:9px;min-height:42px;padding:9px 14px;border:1px solid #302526;border-radius:8px;background:#100d0e;color:#d7dcda;font-size:8px;letter-spacing:.1em}
+.live-result-banner{display:flex;align-items:center;justify-content:center;gap:9px;min-height:42px;padding:9px 14px;border:1px solid #302526;border-radius:8px;background:#100d0e;color:#d7dcda;font-size:9px;letter-spacing:.1em}
 .live-result-dot{width:7px;height:7px;flex:0 0 auto;border-radius:50%;background:#e01823;box-shadow:0 0 0 4px rgba(224,24,35,.12),0 0 14px rgba(224,24,35,.35)}
 .live-result-divider{width:1px;height:14px;background:#3b3233}
-.live-result-banner b{color:#fff;font-size:8px;font-weight:900}
+.live-result-banner b{color:#fff;font-size:9px;font-weight:900}
 .vsl-headline{text-align:center;padding:39px 10px 27px}
 .vsl-headline h1{max-width:790px;margin:0 auto 15px;color:#fff;font-size:clamp(35px,5vw,56px);line-height:1.02;letter-spacing:-.055em}
 .vsl-headline h1 em{color:#f0242e;font-style:normal}
@@ -947,7 +947,7 @@
 .vsl-sales-page .result-header{height:64px;padding:0 15px}
 .vsl-sales-page .quiz-brand{gap:8px}.vsl-sales-page .quiz-brand-mark{width:32px;height:32px;font-size:14px}.vsl-sales-page .quiz-brand strong{font-size:9px;letter-spacing:.08em}.vsl-sales-page .quiz-safe{padding:6px 8px;font-size:6px}
 .vsl-sales-page .result-main{min-height:calc(100vh - 64px);padding:20px 14px 45px}
-.live-result-banner{min-height:38px;gap:6px;padding:8px 9px;font-size:6.5px}.live-result-banner b{font-size:6.5px}.live-result-divider{height:11px}
+.live-result-banner{min-height:38px;gap:6px;padding:8px 9px;font-size:7.5px}.live-result-banner b{font-size:7.5px}.live-result-divider{height:11px}
 .vsl-headline{padding:29px 3px 21px}.vsl-headline h1{font-size:34px;line-height:1.03;letter-spacing:-.05em;margin-bottom:13px}.vsl-headline p{font-size:10px;line-height:1.55}.vsl-headline p strong{font-size:10px}
 .vsl-video-placeholder{min-height:300px;border-radius:11px}.vsl-video-top,.vsl-video-bottom{padding:13px 12px;font-size:6px}.vsl-video-center{padding:18px}.vsl-big-play{width:60px;height:60px;margin-bottom:14px;font-size:20px}.vsl-video-center strong{font-size:9px}.vsl-video-center span{font-size:7.5px;max-width:290px}
 .delayed-offer{padding-top:20px}.delayed-buy-button{padding:16px 13px;font-size:10px;gap:8px}.delayed-buy-button span{font-size:17px}
@@ -1036,7 +1036,7 @@
 }
 .vsl-availability-label{
   color:#c8cfcc;
-  font-size:9px;
+  font-size:10px;
   font-weight:850;
   letter-spacing:.13em;
 }
@@ -1055,7 +1055,7 @@
   border-radius:4px;
   color:#ff6670;
   background:rgba(224,24,35,.08);
-  font-size:6px;
+  font-size:7px;
   font-weight:950;
   letter-spacing:.11em;
 }
@@ -1100,9 +1100,9 @@
     gap:7px;
     padding:7px 10px;
   }
-  .vsl-availability-label{font-size:7px;letter-spacing:.08em}
+  .vsl-availability-label{font-size:8px;letter-spacing:.08em}
   .vsl-availability-inner strong{min-width:62px;font-size:19px}
-  .vsl-availability-note{font-size:6px;padding:4px 6px}
+  .vsl-availability-note{font-size:7px;padding:4px 6px}
   .vsl-expired-card{min-height:250px;padding:32px 18px;border-radius:11px}
   .vsl-expired-card h2{font-size:25px}
   .vsl-expired-card p{font-size:8.5px}
