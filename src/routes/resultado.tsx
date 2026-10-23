@@ -268,7 +268,7 @@ function ResultPage() {
         <span className="quiz-safe">AVALIAÇÃO INFORMATIVA</span>
       </header>
 
-      <ActivityNotifications active={offerReady} />
+      <ActivityNotifications active={hasAnswers} />
 
       <section className="vsl-availability-bar" aria-live="polite">
         <div className="vsl-availability-inner">
