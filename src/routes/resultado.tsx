@@ -123,7 +123,7 @@ function ActivityNotifications({ active }: { active: boolean }) {
           playNotificationSound();
         }, 120);
       }, 25000);
-    }, 10000);
+    }, 230000);
 
     return () => {
       window.clearTimeout(firstNotification);
