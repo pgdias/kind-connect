@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -Eeuo pipefail
 
-SSH_PATH="${SSH_PATH:-/opt/kind-connect}"
+SSH_PATH="${SSH_PATH:-/root/kind-connect}"
 
 echo "==> Iniciando deploy em ${SSH_PATH}"
 cd "${SSH_PATH}"
