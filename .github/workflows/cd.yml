@@ -31,16 +31,26 @@ jobs:
           echo "=== TCP port 22 test ==="
           nc -vz -w 5 100.89.42.81 22
 
-      - name: Deploy via SSH
-        uses: appleboy/ssh-action@v1
+      - name: Deploy via SSH (with diagnostics)
+        shell: bash
         timeout-minutes: 12
-        with:
-          host: ${{ secrets.TAILSCALE_IP }}
-          username: ${{ secrets.SSH_USER }}
-          key: ${{ secrets.SSH_KEY }}
-          port: 22
-          timeout: 30s
-          command_timeout: 10m
-          debug: false
-          script: |
-            bash /root/kind-connect/scripts/deploy.sh
+        env:
+          TAILSCALE_IP: ${{ secrets.TAILSCALE_IP }}
+          SSH_USER: ${{ secrets.SSH_USER }}
+          SSH_KEY: ${{ secrets.SSH_KEY }}
+        run: |
+          set -Eeuo pipefail
+          key_file="$(mktemp)"
+          trap 'rm -f "$key_file"' EXIT
+          printf '%s\n' "$SSH_KEY" > "$key_file"
+          chmod 600 "$key_file"
+          echo "=== Starting SSH connection to deploy host ==="
+          timeout --foreground 10m ssh -vv \
+            -i "$key_file" \
+            -p 22 \
+            -o BatchMode=yes \
+            -o ConnectTimeout=20 \
+            -o ConnectionAttempts=1 \
+            -o StrictHostKeyChecking=accept-new \
+            "$SSH_USER@$TAILSCALE_IP" \
+            'bash /root/kind-connect/scripts/deploy.sh'
