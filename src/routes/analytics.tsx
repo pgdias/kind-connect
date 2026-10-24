@@ -99,7 +99,7 @@ async function getCampaignFunnel(): Promise<LoadResult<CampaignFunnel[]>> {
 
 function pct(v: number, b: number) { return b ? Math.min(v / b * 100, 100) : 0; }
 function fmtPct(v: number) { return v.toLocaleString("pt-BR", { maximumFractionDigits: 1 }) + "%"; }
-function day(v: string) { return new Intl.DateTimeFormat("pt-BR", { day: "2-digit", month: "short" }).format(new Date(v + "T12:00:00")).replace(".", ""); }
+function day(v: string) { const date = new Date(v); if (Number.isNaN(date.getTime())) return "—"; return new Intl.DateTimeFormat("pt-BR", { day: "2-digit", month: "short", timeZone: "UTC" }).format(date).replace(".", ""); }
 function icon(kind: string) { return kind === "users" ? "◉" : kind === "quiz" ? "✦" : kind === "check" ? "✓" : kind === "cart" ? "↗" : "•"; }
 
 function AnalyticsPage() {
