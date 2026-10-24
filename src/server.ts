@@ -185,7 +185,31 @@ async function handleApiRoutes(request: Request): Promise<Response | null> {
     }
 
     if (path === "/api/analytics/funnel" && request.method === "GET") {
-      const result = await sql`SELECT * FROM public.analytics_funnel_overview`;
+      const result = await sql`
+        WITH session_events AS (
+          SELECT session_id,
+            bool_or(event_name = 'quiz_started') AS started,
+            bool_or(event_name = 'quiz_completed') AS completed,
+            bool_or(event_name = 'result_viewed') AS result_viewed,
+            bool_or(event_name = 'checkout_click') AS checkout_clicked,
+            bool_or(event_name = 'cta_click') AS cta_clicked
+          FROM public.quiz_events GROUP BY session_id
+        )
+        SELECT
+          (SELECT count(*) FROM public.quiz_sessions)::bigint AS visitors,
+          count(*) FILTER (WHERE started)::bigint AS quiz_starts,
+          count(*) FILTER (WHERE completed)::bigint AS quiz_completions,
+          count(*) FILTER (WHERE completed AND result_viewed)::bigint AS result_views,
+          count(*) FILTER (WHERE completed AND result_viewed AND checkout_clicked)::bigint AS checkout_clicks,
+          count(*) FILTER (WHERE cta_clicked)::bigint AS cta_clicks,
+          count(DISTINCT qs.visitor_id) FILTER (WHERE se.started AND qs.visitor_id IS NOT NULL)::bigint AS unique_quiz_starters,
+          count(DISTINCT qs.visitor_id) FILTER (WHERE se.completed AND qs.visitor_id IS NOT NULL)::bigint AS unique_quiz_completions,
+          count(DISTINCT qs.visitor_id) FILTER (WHERE se.completed AND se.result_viewed AND qs.visitor_id IS NOT NULL)::bigint AS unique_result_viewers,
+          count(DISTINCT qs.visitor_id) FILTER (WHERE se.completed AND se.result_viewed AND se.checkout_clicked AND qs.visitor_id IS NOT NULL)::bigint AS unique_checkout_visitors,
+          count(DISTINCT qs.visitor_id) FILTER (WHERE se.cta_clicked AND qs.visitor_id IS NOT NULL)::bigint AS unique_cta_visitors
+        FROM session_events se
+        LEFT JOIN public.quiz_sessions qs ON qs.session_id = se.session_id
+      `;
       return new Response(JSON.stringify(result[0] ?? {}), {
         status: 200,
         headers: { "Content-Type": "application/json" },
@@ -193,7 +217,21 @@ async function handleApiRoutes(request: Request): Promise<Response | null> {
     }
 
     if (path === "/api/analytics/visitors" && request.method === "GET") {
-      const result = await sql`SELECT * FROM public.analytics_visitors_overview`;
+      const result = await sql`
+        SELECT
+          count(*)::bigint AS total_visitors,
+          count(DISTINCT visitor_id)::bigint AS unique_visitors,
+          count(DISTINCT visitor_id) FILTER (WHERE started_at::date = current_date)::bigint AS visitors_today,
+          count(DISTINCT visitor_id) FILTER (WHERE started_at >= now() - interval '7 days')::bigint AS visitors_7d,
+          count(DISTINCT visitor_id) FILTER (WHERE started_at >= now() - interval '30 days')::bigint AS visitors_30d,
+          (SELECT count(DISTINCT session_id) FROM public.quiz_events WHERE event_name = 'quiz_completed')::bigint AS completed_quizzes,
+          greatest(
+            (SELECT count(DISTINCT session_id) FROM public.quiz_events WHERE event_name = 'quiz_started') -
+            (SELECT count(DISTINCT session_id) FROM public.quiz_events WHERE event_name = 'quiz_completed'),
+            0
+          )::bigint AS unfinished_quizzes
+        FROM public.quiz_sessions
+      `;
       return new Response(JSON.stringify(result[0] ?? {}), {
         status: 200,
         headers: { "Content-Type": "application/json" },
@@ -201,7 +239,13 @@ async function handleApiRoutes(request: Request): Promise<Response | null> {
     }
 
     if (path === "/api/analytics/daily" && request.method === "GET") {
-      const result = await sql`SELECT * FROM public.analytics_visitors_daily`;
+      const result = await sql`
+        SELECT started_at::date AS day, count(DISTINCT visitor_id)::bigint AS visitors
+        FROM public.quiz_sessions
+        WHERE started_at >= current_date - interval '29 days'
+        GROUP BY started_at::date
+        ORDER BY started_at::date
+      `;
       return new Response(JSON.stringify(result), {
         status: 200,
         headers: { "Content-Type": "application/json" },
@@ -209,7 +253,16 @@ async function handleApiRoutes(request: Request): Promise<Response | null> {
     }
 
     if (path === "/api/analytics/traffic" && request.method === "GET") {
-      const result = await sql`SELECT * FROM public.analytics_traffic_sources`;
+      const result = await sql`
+        SELECT
+          coalesce(nullif(utm_source, ''), 'Direto / não identificado') AS source,
+          coalesce(nullif(utm_medium, ''), '—') AS medium,
+          count(DISTINCT visitor_id)::bigint AS unique_visitors,
+          count(*)::bigint AS sessions
+        FROM public.quiz_sessions
+        GROUP BY 1, 2
+        ORDER BY unique_visitors DESC, sessions DESC
+      `;
       return new Response(JSON.stringify(result), {
         status: 200,
         headers: { "Content-Type": "application/json" },
@@ -217,7 +270,15 @@ async function handleApiRoutes(request: Request): Promise<Response | null> {
     }
 
     if (path === "/api/analytics/devices" && request.method === "GET") {
-      const result = await sql`SELECT * FROM public.analytics_devices`;
+      const result = await sql`
+        SELECT
+          coalesce(nullif(device_type, ''), 'unknown') AS device,
+          count(DISTINCT visitor_id)::bigint AS unique_visitors,
+          count(*)::bigint AS sessions
+        FROM public.quiz_sessions
+        GROUP BY 1
+        ORDER BY unique_visitors DESC, sessions DESC
+      `;
       return new Response(JSON.stringify(result), {
         status: 200,
         headers: { "Content-Type": "application/json" },
@@ -225,7 +286,19 @@ async function handleApiRoutes(request: Request): Promise<Response | null> {
     }
 
     if (path === "/api/analytics/campaigns" && request.method === "GET") {
-      const result = await sql`SELECT * FROM public.analytics_campaigns`;
+      const result = await sql`
+        SELECT
+          coalesce(nullif(utm_source, ''), 'Direto / não identificado') AS source,
+          coalesce(nullif(utm_medium, ''), '—') AS medium,
+          coalesce(nullif(utm_campaign, ''), '—') AS campaign,
+          coalesce(nullif(utm_content, ''), '—') AS content,
+          coalesce(nullif(utm_term, ''), '—') AS term,
+          count(DISTINCT visitor_id)::bigint AS unique_visitors,
+          count(*)::bigint AS sessions
+        FROM public.quiz_sessions
+        GROUP BY 1, 2, 3, 4, 5
+        ORDER BY unique_visitors DESC, sessions DESC
+      `;
       return new Response(JSON.stringify(result), {
         status: 200,
         headers: { "Content-Type": "application/json" },
