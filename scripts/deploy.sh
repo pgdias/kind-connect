@@ -24,11 +24,16 @@ fi
 echo "==> Validando configuração do Docker Compose"
 docker compose config -q
 
-echo "==> Baixando imagens"
-docker compose pull
+echo "==> Verificando imagens transferidas pelo GitHub Actions"
+for image in ghcr.io/pgdias/kind-connect:latest postgres:16-alpine; do
+  if ! docker image inspect "$image" >/dev/null 2>&1; then
+    echo "ERRO: imagem ${image} não está disponível localmente. O workflow deve transferir as imagens antes do deploy." >&2
+    exit 1
+  fi
+done
 
-echo "==> Atualizando serviços sem derrubar a versão atual antecipadamente"
-docker compose up -d --remove-orphans --wait --wait-timeout 120
+echo "==> Atualizando serviços sem tentar acessar registries no servidor"
+docker compose up -d --pull never --remove-orphans --wait --wait-timeout 120
 
 echo "==> Estado dos serviços"
 docker compose ps
