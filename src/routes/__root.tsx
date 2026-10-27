@@ -31,6 +31,13 @@ function RootShell({children}:{children:ReactNode}){
             `,
           }}
         />
+        <script
+          src="https://cdn.utmify.com.br/scripts/utms/latest.js"
+          async
+          defer
+          data-utmify-prevent-xcod-sck=""
+          data-utmify-prevent-subids=""
+        />
       </head>
       <body>
         <noscript>
