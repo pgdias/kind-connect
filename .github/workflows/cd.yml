@@ -49,19 +49,19 @@ jobs:
           set -Eeuo pipefail
           key_file="$(mktemp)"
           trap 'rm -f "$key_file"' EXIT
-          printf '%s\\n' "$SSH_KEY" > "$key_file"
+          printf '%s\n' "$SSH_KEY" > "$key_file"
           chmod 600 "$key_file"
 
           # Pass the short-lived token through the encrypted SSH input, not as a command-line argument.
           GHCR_TOKEN_B64="$(printf '%s' "$GHCR_TOKEN" | base64 -w 0)"
           echo "=== Pulling images directly on the deploy host ==="
-          ssh -i "$key_file" \\
-            -p 22 \\
-            -o BatchMode=yes \\
-            -o ConnectTimeout=20 \\
-            -o ConnectionAttempts=1 \\
-            -o StrictHostKeyChecking=accept-new \\
-            "$SSH_USER@$TAILSCALE_IP" \\
+          ssh -i "$key_file" \
+            -p 22 \
+            -o BatchMode=yes \
+            -o ConnectTimeout=20 \
+            -o ConnectionAttempts=1 \
+            -o StrictHostKeyChecking=accept-new \
+            "$SSH_USER@$TAILSCALE_IP" \
             'bash -s' <<REMOTE_SCRIPT
           set -Eeuo pipefail
           cleanup() { docker logout ghcr.io >/dev/null 2>&1 || true; }
