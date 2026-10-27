@@ -37,7 +37,7 @@ jobs:
           echo "=== TCP port 22 test ==="
           nc -vz -w 5 100.89.42.81 22
 
-      - name: Transfer Docker images to deploy host
+      - name: Pull Docker images directly on deploy host
         shell: bash
         timeout-minutes: 8
         env:
@@ -47,27 +47,29 @@ jobs:
           GHCR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           set -Eeuo pipefail
-          printf '%s' "$GHCR_TOKEN" | docker login ghcr.io --username "$GITHUB_ACTOR" --password-stdin
-          echo "=== Pulling application and PostgreSQL images on the GitHub runner ==="
-          docker pull ghcr.io/pgdias/kind-connect:latest
-          docker pull postgres:16-alpine
-
           key_file="$(mktemp)"
           trap 'rm -f "$key_file"' EXIT
-          printf '%s\n' "$SSH_KEY" > "$key_file"
+          printf '%s\\n' "$SSH_KEY" > "$key_file"
           chmod 600 "$key_file"
 
-          echo "=== Streaming images to the deploy host over Tailscale SSH ==="
-          docker save ghcr.io/pgdias/kind-connect:latest postgres:16-alpine |
-            gzip -1 |
-            ssh -i "$key_file" \
-              -p 22 \
-              -o BatchMode=yes \
-              -o ConnectTimeout=20 \
-              -o ConnectionAttempts=1 \
-              -o StrictHostKeyChecking=accept-new \
-              "$SSH_USER@$TAILSCALE_IP" \
-              'gunzip | docker load'
+          # Pass the short-lived token through the encrypted SSH input, not as a command-line argument.
+          GHCR_TOKEN_B64="$(printf '%s' "$GHCR_TOKEN" | base64 -w 0)"
+          echo "=== Pulling images directly on the deploy host ==="
+          ssh -i "$key_file" \\
+            -p 22 \\
+            -o BatchMode=yes \\
+            -o ConnectTimeout=20 \\
+            -o ConnectionAttempts=1 \\
+            -o StrictHostKeyChecking=accept-new \\
+            "$SSH_USER@$TAILSCALE_IP" \\
+            'bash -s' <<REMOTE_SCRIPT
+          set -Eeuo pipefail
+          cleanup() { docker logout ghcr.io >/dev/null 2>&1 || true; }
+          trap cleanup EXIT
+          printf '%s' '$GHCR_TOKEN_B64' | base64 -d | docker login ghcr.io --username '$GITHUB_ACTOR' --password-stdin
+          docker pull ghcr.io/pgdias/kind-connect:latest
+          docker pull postgres:16-alpine
+          REMOTE_SCRIPT
 
       - name: Deploy via SSH (with diagnostics)
         shell: bash
