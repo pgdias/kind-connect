@@ -8,6 +8,7 @@ on:
 
 permissions:
   contents: read
+  packages: read
 
 jobs:
   deploy:
@@ -31,9 +32,41 @@ jobs:
           echo "=== TCP port 22 test ==="
           nc -vz -w 5 100.89.42.81 22
 
+      - name: Transfer Docker images to deploy host
+        shell: bash
+        timeout-minutes: 8
+        env:
+          TAILSCALE_IP: ${{ secrets.TAILSCALE_IP }}
+          SSH_USER: ${{ secrets.SSH_USER }}
+          SSH_KEY: ${{ secrets.SSH_KEY }}
+          GHCR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -Eeuo pipefail
+          printf '%s' "$GHCR_TOKEN" | docker login ghcr.io --username "$GITHUB_ACTOR" --password-stdin
+          echo "=== Pulling application and PostgreSQL images on the GitHub runner ==="
+          docker pull ghcr.io/pgdias/kind-connect:latest
+          docker pull postgres:16-alpine
+
+          key_file="$(mktemp)"
+          trap 'rm -f "$key_file"' EXIT
+          printf '%s\n' "$SSH_KEY" > "$key_file"
+          chmod 600 "$key_file"
+
+          echo "=== Streaming images to the deploy host over Tailscale SSH ==="
+          docker save ghcr.io/pgdias/kind-connect:latest postgres:16-alpine |
+            gzip -1 |
+            ssh -i "$key_file" \
+              -p 22 \
+              -o BatchMode=yes \
+              -o ConnectTimeout=20 \
+              -o ConnectionAttempts=1 \
+              -o StrictHostKeyChecking=accept-new \
+              "$SSH_USER@$TAILSCALE_IP" \
+              'gunzip | docker load'
+
       - name: Deploy via SSH (with diagnostics)
         shell: bash
-        timeout-minutes: 12
+        timeout-minutes: 5
         env:
           TAILSCALE_IP: ${{ secrets.TAILSCALE_IP }}
           SSH_USER: ${{ secrets.SSH_USER }}
@@ -45,7 +78,7 @@ jobs:
           printf '%s\n' "$SSH_KEY" > "$key_file"
           chmod 600 "$key_file"
           echo "=== Starting SSH connection to deploy host ==="
-          timeout --foreground 10m ssh -vv \
+          timeout --foreground 4m ssh \
             -i "$key_file" \
             -p 22 \
             -o BatchMode=yes \
