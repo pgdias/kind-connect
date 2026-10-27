@@ -17,6 +17,11 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
       - name: Connect to Tailscale
         uses: tailscale/github-action@v2
         with:
@@ -77,6 +82,15 @@ jobs:
           trap 'rm -f "$key_file"' EXIT
           printf '%s\n' "$SSH_KEY" > "$key_file"
           chmod 600 "$key_file"
+          echo "=== Copying current deploy script to server ==="
+          scp -i "$key_file" \
+            -P 22 \
+            -o BatchMode=yes \
+            -o ConnectTimeout=20 \
+            -o ConnectionAttempts=1 \
+            -o StrictHostKeyChecking=accept-new \
+            scripts/deploy.sh \
+            "$SSH_USER@$TAILSCALE_IP:/root/kind-connect/scripts/deploy.sh"
           echo "=== Starting SSH connection to deploy host ==="
           timeout --foreground 4m ssh \
             -i "$key_file" \
