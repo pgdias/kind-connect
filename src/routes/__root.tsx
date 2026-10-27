@@ -38,6 +38,14 @@ function RootShell({children}:{children:ReactNode}){
           data-utmify-prevent-xcod-sck=""
           data-utmify-prevent-subids=""
         />
+        <script
+          dangerouslySetInnerHTML={{ __html: 'window.pixelId = "6ae12a45dcb6017f5230a156";' }}
+        />
+        <script
+          src="https://cdn.utmify.com.br/scripts/pixel/pixel.js"
+          async
+          defer
+        />
       </head>
       <body>
         <noscript>
