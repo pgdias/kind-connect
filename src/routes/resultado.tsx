@@ -154,9 +154,6 @@ export const Route = createFileRoute("/resultado")({ component: ResultPage });
 function ResultPage() {
   const [answers, setAnswers] = useState<Answer[]>([]);
   const [ready, setReady] = useState(false);
-  const [secondsLeft, setSecondsLeft] = useState(60);
-  const [availabilitySeconds, setAvailabilitySeconds] = useState(1800);
-
   useEffect(() => {
     void trackEvent("result_viewed");
     try {
@@ -172,34 +169,6 @@ function ResultPage() {
     }
   }, []);
 
-  useEffect(() => {
-    if (!ready) return;
-
-    const key = "blindaVslAvailabilityDeadline5Min";
-    let deadline = 0;
-    try {
-      const saved = Number(sessionStorage.getItem(key) || "0");
-      deadline = Number.isFinite(saved) && saved > Date.now() ? saved : Date.now() + 5 * 60 * 1000;
-      sessionStorage.setItem(key, String(deadline));
-    } catch {
-      deadline = Date.now() + 5 * 60 * 1000;
-    }
-
-    const tick = () => setAvailabilitySeconds(Math.max(0, Math.ceil((deadline - Date.now()) / 1000)));
-    tick();
-    const availabilityTimer = window.setInterval(tick, 1000);
-    return () => window.clearInterval(availabilityTimer);
-  }, [ready]);
-
-  useEffect(() => {
-    if (!ready || secondsLeft <= 0) return;
-
-    const timer = window.setInterval(() => {
-      setSecondsLeft((current) => Math.max(current - 1, 0));
-    }, 1000);
-
-    return () => window.clearInterval(timer);
-  }, [ready, secondsLeft]);
   useEffect(() => {
     if (!ready || answers.length === 0) return;
 
@@ -253,11 +222,6 @@ function ResultPage() {
 
   const hasAnswers = answers.length > 0;
   const count = attentionPoints.length;
-  const offerReady = secondsLeft === 0;
-  const videoAvailable = availabilitySeconds > 0;
-  const availabilityMinutes = Math.floor(availabilitySeconds / 60).toString().padStart(2, "0");
-  const availabilitySecondsPart = (availabilitySeconds % 60).toString().padStart(2, "0");
-
   return (
     <main className="result-page vsl-sales-page">
       <header className="quiz-header result-header">
@@ -269,14 +233,6 @@ function ResultPage() {
       </header>
 
       <ActivityNotifications active={hasAnswers} />
-
-      <section className="vsl-availability-bar" aria-live="polite">
-        <div className="vsl-availability-inner">
-          <span className="vsl-availability-label">ESTA APRESENTAÇÃO FICA DISPONÍVEL POR</span>
-          <strong>{availabilityMinutes}:{availabilitySecondsPart}</strong>
-          <span className="vsl-availability-note">ASSISTA AGORA</span>
-        </div>
-      </section>
 
       <section className="result-main">
         <div className="result-container vsl-sales-container">
@@ -298,23 +254,15 @@ function ResultPage() {
                 </p>
               </section>
 
-              {videoAvailable ? (
-               <section className="vsl-video-wrap">
-  <div
-    data-vplay="6fce00a3-efeb-4f89-9b49-dc3bcf3d7845"
-    data-aspect-ratio="9/16"
-    data-border-radius="26"
-    data-poster="https://video.vplay.com.br/users/151/media/4a1e7906-ce29-4de6-bdaf-bb8baced0306/poster/v1792525841179/poster.jpg"
-    data-loading="eager"
-  />
-</section>
-              ) : (
-                <section className="vsl-expired-card">
-                  <span>APRESENTAÇÃO ENCERRADA</span>
-                  <h2>Esta apresentação não está mais disponível nesta sessão.</h2>
-                  <p>Se você ainda quiser consultar o conteúdo, atualize a página para iniciar uma nova sessão.</p>
-                </section>
-              )}
+              <section className="vsl-video-wrap">
+                <div
+                  data-vplay="6fce00a3-efeb-4f89-9b49-dc3bcf3d7845"
+                  data-aspect-ratio="9/16"
+                  data-border-radius="26"
+                  data-poster="https://video.vplay.com.br/users/151/media/4a1e7906-ce29-4de6-bdaf-bb8baced0306/poster/v1792525841179/poster.jpg"
+                  data-loading="eager"
+                />
+              </section>
 
             </>
           ) : (
