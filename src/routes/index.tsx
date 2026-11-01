@@ -19,7 +19,7 @@ function Arrow() {
 
 function CTA() {
   return (
-    <Link className="primary-button landing-cta landing-main-cta" to="/quiz" onClick={() => void trackEvent("cta_click", { location: "landing" })}>
+    <Link className="primary-button landing-cta landing-main-cta pulse-cta" to="/quiz" onClick={() => void trackEvent("cta_click", { location: "landing" })}>
       DESCOBRIR O QUE POSSO ESTAR DEIXANDO PASSAR
       <Arrow />
     </Link>
@@ -141,6 +141,19 @@ function Index() {
 
   return (
     <div className="page">
+      <style>{`
+        @keyframes landing-cta-pulse {
+          0%, 100% { transform: scale(1); box-shadow: 0 13px 30px rgba(30,112,71,.18); }
+          50% { transform: scale(1.025); box-shadow: 0 16px 36px rgba(30,112,71,.30); }
+        }
+        .landing-main-cta.pulse-cta {
+          animation: landing-cta-pulse 2s ease-in-out infinite;
+          transform-origin: center;
+        }
+        @media (prefers-reduced-motion: reduce) {
+          .landing-main-cta.pulse-cta { animation: none; }
+        }
+      `}</style>
       <Header />
       <main>
         <Hero />
