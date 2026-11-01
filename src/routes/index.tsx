@@ -20,7 +20,7 @@ function Arrow() {
 function CTA() {
   return (
     <Link className="primary-button landing-cta landing-main-cta pulse-cta" to="/quiz" onClick={() => void trackEvent("cta_click", { location: "landing" })}>
-      DESCOBRIR O QUE POSSO ESTAR DEIXANDO PASSAR
+      DESCOBRIR SE ESTOU COMETENDO ERROS QUE PODEM CAUSAR O CANCELAMENTO DO MEU BOLSA FAMÍLIA
       <Arrow />
     </Link>
   );
