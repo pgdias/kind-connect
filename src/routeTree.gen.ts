@@ -60,6 +60,8 @@ export interface FileRoutesByTo {
   '/analytics': typeof AnalyticsRoute
   '/quiz': typeof QuizRoute
   '/resultado': typeof ResultadoRoute
+  '/obrigado': typeof ObrigadoRoute
+  '/oferta-especial': typeof OfertaEspecialRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -67,13 +69,15 @@ export interface FileRoutesById {
   '/analytics': typeof AnalyticsRoute
   '/quiz': typeof QuizRoute
   '/resultado': typeof ResultadoRoute
+  '/obrigado': typeof ObrigadoRoute
+  '/oferta-especial': typeof OfertaEspecialRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/analytics' | '/quiz' | '/resultado' | '/obrigado'
+  fullPaths: '/' | '/analytics' | '/quiz' | '/resultado' | '/obrigado' | '/oferta-especial'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/analytics' | '/quiz' | '/resultado' | '/obrigado'
-  id: '__root__' | '/' | '/analytics' | '/quiz' | '/resultado' | '/obrigado'
+  to: '/' | '/analytics' | '/quiz' | '/resultado' | '/obrigado' | '/oferta-especial'
+  id: '__root__' | '/' | '/analytics' | '/quiz' | '/resultado' | '/obrigado' | '/oferta-especial'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
