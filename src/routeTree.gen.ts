@@ -76,6 +76,8 @@ export interface FileRoutesByTo {
   '/resultado': typeof ResultadoRoute
   '/obrigado': typeof ObrigadoRoute
   '/oferta-especial': typeof OfertaEspecialRoute
+  '/quiz-credito': typeof QuizCreditoRoute
+  '/oferta-score': typeof OfertaScoreRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -85,10 +87,12 @@ export interface FileRoutesById {
   '/resultado': typeof ResultadoRoute
   '/obrigado': typeof ObrigadoRoute
   '/oferta-especial': typeof OfertaEspecialRoute
+  '/quiz-credito': typeof QuizCreditoRoute
+  '/oferta-score': typeof OfertaScoreRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/analytics' | '/quiz' | '/resultado' | '/obrigado' | '/oferta-especial' | '/quiz-credito'
+  fullPaths: '/' | '/analytics' | '/quiz' | '/resultado' | '/obrigado' | '/oferta-especial' | '/quiz-credito' | '/oferta-score'
   fileRoutesByTo: FileRoutesByTo
   to: '/' | '/analytics' | '/quiz' | '/resultado' | '/obrigado' | '/oferta-especial' | '/quiz-credito'
   id: '__root__' | '/' | '/analytics' | '/quiz' | '/resultado' | '/obrigado' | '/oferta-especial' | '/quiz-credito'
