@@ -30,7 +30,7 @@ function ThankYouPage() {
           --ty-line: rgba(174, 199, 218, .13);
           --ty-muted: #a9b8c8;
           --ty-white: #f7f9fc;
-          --ty-gold: #e7c477;
+          --ty-gold: #ffd12e;
           width: 100%;
           min-height: 100vh;
           min-height: 100svh;
@@ -108,7 +108,7 @@ function ThankYouPage() {
         .ty-step-number {
           display: grid; place-items: center; width: 28px; height: 28px; margin-bottom: 13px;
           border: 1px solid rgba(116, 215, 192, .28); border-radius: 9px;
-          background: rgba(87, 191, 166, .1); color: #83dfc8; font-size: 11px; font-weight: 850;
+          background: rgba(87, 191, 166, .1); color: #38d6a6; font-size: 11px; font-weight: 850;
         }
         .ty-step h3 { margin: 0 0 7px; color: #f4f7fa; font-size: 14px; }
         .ty-step p { margin: 0; color: #aebdca; font-size: 12px; line-height: 1.65; }
@@ -161,7 +161,7 @@ function ThankYouPage() {
         }
         .ty-bonus strong { display: block; margin: 1px 0 5px; color: #f0d18e; font-size: 10px; letter-spacing: .12em; }
         .ty-bonus p { margin: 0; color: #c6d0d9; font-size: 12px; line-height: 1.6; }
-        .ty-price-box { margin: 24px auto 0; padding: 19px 16px; max-width: 440px; border: 1px solid rgba(231,196,119,.25); border-radius: 14px; background: rgba(7,19,33,.42); text-align: center; }
+        .ty-price-box { margin: 24px auto 0; padding: 19px 16px; max-width: 440px; border: 1px solid rgba(255,209,46,.28); border-radius: 14px; background: rgba(7,19,33,.42); text-align: center; }
         .ty-price-label { margin: 0 0 5px; color: #c2ccd6; font-size: 11px; letter-spacing: .08em; text-transform: uppercase; }
         .ty-price { color: #f4d895; font-size: clamp(38px,7vw,48px); font-weight: 900; line-height: 1.1; letter-spacing: -.05em; }
         .ty-price-detail { margin: 5px 0 0; color: #aebdca; font-size: 11px; }
@@ -256,14 +256,14 @@ function ThankYouPage() {
         <section className="ty-offer" aria-labelledby="ty-offer-title">
           <div className="ty-offer-copy">
             <span className="ty-offer-label">CONTEÚDO EXTRA PARA VOCÊ</span>
-            <h2 id="ty-offer-title">QUER ENTENDER COMO FUNCIONA O <span>SCORE</span> E O QUE PODE INFLUENCIAR SEU LIMITE?</h2>
+            <h2 id="ty-offer-title">QUER APRENDER A BUSCAR UM <span>LIMITE MAIOR</span> NO CARTÃO?</h2>
             <div className="ty-offer-sales-copy">
-              <p>Depois de garantir seu material do Blinda Bolsa Família, você também pode descobrir informações sobre cartão de crédito, limite e alternativas para quem está com restrição no CPF.</p>
-              <p>Preparamos algumas perguntas rápidas para entender o que você procura e mostrar um conteúdo que pode ajudar você a conhecer melhor esse assunto.</p>
-              <p><strong>Leva apenas alguns instantes. Não pediremos CPF, senha ou dados bancários.</strong></p>
+              <p>Além do seu material, preparamos um conteúdo sobre como buscar um limite melhor no cartão e uma dica bônus de instituição que divulga opções para quem está com o nome negativado.</p>
+              <p>Responda a 5 perguntas rápidas. No final, você verá o conteúdo e poderá decidir se faz sentido para você.</p>
+              <p><strong>É gratuito. Não pediremos CPF, senha nem dados bancários.</strong></p>
             </div>
             <div className="ty-buy-wrap">
-              <a className="ty-buy-button" href="/quiz-credito">QUERO DESCOBRIR MAIS SOBRE CARTÃO E LIMITE →</a>
+              <a className="ty-buy-button" href="/quiz-credito">QUERO VER COMO BUSCAR UM LIMITE MAIOR →</a>
             </div>
           </div>
         </section>
