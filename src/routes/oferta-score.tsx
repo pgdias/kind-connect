@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import aumentaScoreCapa from "../lib/aumenta-score-capa";
 import { useEffect, useState } from "react";
 
 export const Route = createFileRoute("/oferta-score")({ component: ScoreOffer });
@@ -40,7 +41,7 @@ function ScoreOffer() {
             <div className="so-item"><strong>BÔNUS: DICA DE BANCO</strong>Conheça a instituição apresentada no material, que divulga opções para quem está negativado.</div>
           </div>
           <p>Acesse o conteúdo, assista às aulas no seu ritmo e confira a dica bônus.</p>
-          <div className="so-product-image"><img src="/aumenta-score-capa.jpg" alt="Capa do produto Aumenta Score — Limite de Cartão de Crédito" /></div>
+          <div className="so-product-image"><img src={aumentaScoreCapa} alt="Capa do produto Aumenta Score — Limite de Cartão de Crédito" /></div>
           <div className="so-price">R$ 29,00</div>
           <p className="so-sub">Pagamento único · Aumenta Score + Bônus</p>
           <a className="so-cta" href="https://pay.cakto.com.br/rx38zo7_1271604" target="_blank" rel="noopener noreferrer">QUERO APRENDER A BUSCAR UM LIMITE MAIOR →</a>
