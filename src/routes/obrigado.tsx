@@ -150,6 +150,19 @@ function ThankYouPage() {
         }
         .ty-bonus strong { display: block; margin: 1px 0 5px; color: #f0d18e; font-size: 10px; letter-spacing: .12em; }
         .ty-bonus p { margin: 0; color: #c6d0d9; font-size: 12px; line-height: 1.6; }
+        .ty-buy-wrap { margin-top: 22px; text-align: center; }
+        .ty-buy-button {
+          display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+          width: 100%; max-width: 440px; min-height: 58px; padding: 15px 22px;
+          border: 1px solid rgba(255, 230, 166, .75); border-radius: 13px;
+          background: linear-gradient(135deg, #f3d58e, #d9ad54);
+          box-shadow: 0 10px 28px rgba(211, 166, 76, .2), inset 0 1px rgba(255,255,255,.45);
+          color: #172334; font-size: 15px; font-weight: 900; letter-spacing: .015em;
+          text-decoration: none; text-align: center; transition: transform .18s ease, filter .18s ease;
+        }
+        .ty-buy-button:hover { transform: translateY(-2px); filter: brightness(1.06); }
+        .ty-buy-button:focus-visible { outline: 3px solid #8ce2cb; outline-offset: 4px; }
+        .ty-buy-note { margin: 9px 0 0; color: #9eacb9; font-size: 10px; line-height: 1.5; }
         .ty-disclaimer { margin: 15px 0 0; color: #94a4b3; font-size: 10px; line-height: 1.65; }
         .ty-help {
           display: flex; align-items: center; justify-content: space-between; gap: 20px;
@@ -240,6 +253,17 @@ function ThankYouPage() {
               <strong>BÔNUS INFORMATIVO</strong>
               <p>Conheça o banco apresentado no bônus e as informações sobre como solicitar crédito mesmo com restrição no CPF.</p>
             </div>
+          </div>
+          <div className="ty-buy-wrap">
+            <a
+              className="ty-buy-button"
+              href="https://pay.cakto.com.br/rx38zo7_1271604"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              QUERO ACESSAR O AUMENTA SCORE + BÔNUS <span aria-hidden="true">→</span>
+            </a>
+            <p className="ty-buy-note">Acesse o checkout seguro para conhecer as condições e concluir sua compra.</p>
           </div>
           <p className="ty-disclaimer">
             Resultados variam de pessoa para pessoa. Não há garantia de aumento do score, ampliação de limite ou aprovação de crédito; a decisão é sempre da instituição financeira.
