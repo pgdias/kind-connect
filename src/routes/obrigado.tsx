@@ -150,7 +150,6 @@ function ThankYouPage() {
         .ty-offer-sales-copy h3 { margin: 0 0 12px; color: #f0d18e; font-size: 15px; line-height: 1.35; letter-spacing: -.01em; }
         .ty-offer-sales-copy p { margin: 0 0 10px; }
         .ty-offer-sales-copy strong { color: #f3e4c1; }
-        .ty-disclaimer { margin: 9px 0 0; color: #a9b5c1; font-size: 9px; line-height: 1.5; }
         .ty-bonus {
           display: flex; gap: 14px; align-items: flex-start; margin-top: 23px; padding: 17px 18px;
           border: 1px solid rgba(231, 196, 119, .23); border-radius: 14px;
@@ -185,8 +184,6 @@ function ThankYouPage() {
         }
         .ty-buy-button:hover { transform: translateY(-2px); filter: brightness(1.06); }
         .ty-buy-button:focus-visible { outline: 3px solid #8ce2cb; outline-offset: 4px; }
-        .ty-buy-note { margin: 9px 0 0; color: #9eacb9; font-size: 10px; line-height: 1.5; }
-        .ty-disclaimer { margin: 15px 0 0; color: #94a4b3; font-size: 10px; line-height: 1.65; }
         .ty-help {
           display: flex; align-items: center; justify-content: space-between; gap: 20px;
           margin-top: 28px; padding: 19px 21px; border: 1px solid var(--ty-line);
@@ -196,6 +193,7 @@ function ThankYouPage() {
         .ty-help p { margin: 0; color: #aab9c6; font-size: 11px; line-height: 1.6; }
         .ty-help-mark { flex: 0 0 auto; color: #80d9c2; font-size: 22px; }
         .ty-footer { margin: 25px 0 0; color: #718395; font-size: 10px; line-height: 1.7; text-align: center; }
+        .ty-footer-disclaimer { display: block; max-width: 760px; margin: 9px auto 0; color: #687b8d; font-size: 8px; line-height: 1.5; }
         @media (max-width: 650px) {
           .ty-page { padding: 23px 13px 42px; }
           .ty-topbar { margin-bottom: 24px; }
@@ -297,9 +295,6 @@ function ThankYouPage() {
               QUERO ACESSAR O AUMENTA SCORE + BÔNUS <span aria-hidden="true">→</span>
             </a>
           </div>
-          <p className="ty-disclaimer">
-            Resultados variam de pessoa para pessoa. Não há garantia de aumento do score, ampliação de limite ou aprovação de crédito; a decisão é sempre da instituição financeira.
-          </p>
           <p className="ty-choice-note">Você decide se deseja adicionar esse conteúdo. Se preferir não seguir com esta oferta, poderá conferir uma alternativa na próxima página.</p>
           <a className="ty-decline-button" href="/oferta-especial">Não quero adicionar por R$ 29,00 — ver outra opção</a>
         </section>
@@ -315,6 +310,9 @@ function ThankYouPage() {
         <footer className="ty-footer">
           BLINDA BOLSA FAMÍLIA · Obrigado pela confiança.<br />
           Utilize as informações do material como orientação e consulte sempre os canais oficiais para questões sobre seu benefício.
+          <small className="ty-footer-disclaimer">
+            *Importante: o conteúdo é educativo e informativo. Não garante aumento de score, aprovação de cartão, concessão de crédito ou aumento de limite. Cada instituição possui seus próprios critérios de análise.
+          </small>
         </footer>
       </div>
     </main>
