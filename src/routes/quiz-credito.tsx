@@ -2,11 +2,11 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 
 const questions = [
-  { title: "Você já tem cartão de crédito?", subtitle: "Queremos entender seu momento.", options: ["Sim, mas o limite é baixo", "Sim, tenho um limite que atende", "Não tenho cartão", "Já tentei, mas não consegui aprovação"] },
-  { title: "O que você mais gostaria de conseguir?", subtitle: "Escolha o que é mais importante para você agora.", options: ["Aumentar o limite do meu cartão", "Conseguir meu primeiro cartão", "Encontrar alternativas mesmo com restrição no CPF", "Entender melhor como funciona o score"] },
-  { title: "Atualmente, seu nome está com alguma restrição (negativado)?", subtitle: "Essa resposta ajuda a direcionar as informações apresentadas.", options: ["Sim", "Não", "Não sei / nunca consultei"] },
-  { title: "Você sabe o que é score de crédito?", subtitle: "Score é uma pontuação que empresas podem considerar ao avaliar pedidos de crédito.", options: ["Sim, sei como funciona", "Já ouvi falar, mas não entendo direito", "Não, é a primeira vez que vejo esse termo"] },
-  { title: "Se pudesse aprender sobre isso, o que gostaria de entender primeiro?", subtitle: "Não existe resposta certa ou errada.", options: ["O que pode influenciar meu score", "O que posso fazer para buscar um limite melhor", "Quais alternativas existem para quem está negativado", "Quero aprender tudo isso"] },
+  { title: "Hoje você tem cartão de crédito?", subtitle: "Escolha a opção que mais combina com sua situação.", options: ["Tenho, mas o limite é muito baixo", "Tenho e queria aumentar meu limite", "Ainda não tenho cartão", "Já tentei conseguir, mas fui recusado"] },
+  { title: "Qual é o seu maior objetivo neste momento?", subtitle: "Queremos mostrar o conteúdo mais relacionado ao que você procura.", options: ["Aumentar o limite do meu cartão", "Conseguir meu primeiro cartão", "Conhecer opções mesmo estando negativado", "Entender por que meu limite é tão baixo"] },
+  { title: "Seu CPF está negativado atualmente?", subtitle: "Pode responder sem informar seus dados pessoais.", options: ["Sim, estou negativado", "Não, meu nome está limpo", "Não sei"] },
+  { title: "Você sabe o que é limite de crédito de crédito?", subtitle: "limite de crédito é uma pontuação que empresas podem considerar ao avaliar pedidos de crédito.", options: ["Sim, sei como funciona", "Já ouvi falar, mas não entendo direito", "Não, é a primeira vez que vejo esse termo"] },
+  { title: "Se pudesse aprender sobre isso, o que gostaria de entender primeiro?", subtitle: "Não existe resposta certa ou errada.", options: ["O que pode influenciar meu limite de crédito", "O que posso fazer para buscar um limite melhor", "Quais alternativas existem para quem está negativado", "Quero aprender tudo isso"] },
 ];
 
 export const Route = createFileRoute("/quiz-credito")({ component: CreditQuiz });
@@ -28,7 +28,7 @@ function CreditQuiz() {
     }
     setBusy(true);
     sessionStorage.setItem("blindaCreditQuizAnswers", JSON.stringify(next));
-    window.location.assign("/oferta-score");
+    window.location.assign("/oferta-limite de crédito");
   }
 
   return (
@@ -54,11 +54,11 @@ function CreditQuiz() {
         @media(max-width:520px){.cq-card{padding:23px 18px}.cq-options button{padding:15px}}
       `}</style>
       <div className="cq-shell">
-        <header className="cq-brand"><span>✓</span> BLINDA BOLSA FAMÍLIA</header>
+        <header className="cq-brand"><span>✓</span> </header>
         {step === 0 && <section className="cq-welcome">
-          <span className="cq-count">QUIZ GRATUITO · 5 PERGUNTAS RÁPIDAS</span>
-          <h1>QUER ENTENDER O QUE PODE ESTAR POR TRÁS DE UM LIMITE BAIXO OU DE UM CARTÃO NÃO APROVADO?</h1>
-          <p>Descubra o que é score, por que essa pontuação pode ser considerada pelos bancos e conheça informações sobre alternativas de crédito — inclusive para quem está com o nome negativado.</p>
+          <span className="cq-count">5 PERGUNTAS RÁPIDAS · GRÁTIS</span>
+          <h1>QUER AUMENTAR O LIMITE DO SEU CARTÃO OU CONSEGUIR UM, MESMO COM O NOME SUJO?</h1>
+          <p>Responda 5 perguntas rápidas e veja um conteúdo sobre o que pode influenciar o limite do cartão, além de uma dica de instituição que oferece opções para quem está negativado.</p>
         </section>}
         <div className="cq-progress"><span style={{width: ((step+1)/questions.length*100)+"%"}} /></div>
         <div className="cq-count">PERGUNTA {step+1} DE {questions.length}</div>
@@ -70,7 +70,7 @@ function CreditQuiz() {
           </div>
           {step>0 && <button className="cq-back" type="button" onClick={()=>setStep(step-1)}>← Voltar</button>}
         </section>
-        <footer className="cq-foot">Responda sem informar CPF, senha ou dados bancários. Esta é uma orientação educativa, não uma análise de crédito.</footer>
+        <footer className="cq-foot">Não informe CPF, senha ou dados bancários. O quiz é gratuito e não consulta seu crédito.</footer>
       </div>
     </main>
   );
