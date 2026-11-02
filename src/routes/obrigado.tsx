@@ -181,7 +181,13 @@ function ThankYouPage() {
           box-shadow: 0 10px 28px rgba(211, 166, 76, .2), inset 0 1px rgba(255,255,255,.45);
           color: #172334; font-size: 15px; font-weight: 900; letter-spacing: .015em;
           text-decoration: none; text-align: center; transition: transform .18s ease, filter .18s ease;
+          transform-origin: center; animation: ty-card-quiz-pulse 2.4s ease-in-out infinite;
         }
+        @keyframes ty-card-quiz-pulse {
+          0%, 100% { transform: scale(1); box-shadow: 0 10px 28px rgba(211, 166, 76, .2), inset 0 1px rgba(255,255,255,.45); }
+          50% { transform: scale(1.018); box-shadow: 0 13px 32px rgba(211, 166, 76, .3), inset 0 1px rgba(255,255,255,.45); }
+        }
+        @media (prefers-reduced-motion: reduce) { .ty-buy-button { animation: none; } }
         .ty-buy-button:hover { transform: translateY(-2px); filter: brightness(1.06); }
         .ty-buy-button:focus-visible { outline: 3px solid #8ce2cb; outline-offset: 4px; }
         .ty-help {
