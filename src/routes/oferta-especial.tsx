@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import aumentaScoreCapa from "../lib/aumenta-score-capa";
 
 export const Route = createFileRoute("/oferta-especial")({
   head: () => ({
@@ -69,7 +70,7 @@ function SpecialOfferPage() {
             <strong>Você continua recebendo o mesmo pacote apresentado anteriormente</strong>, agora por um valor menor nesta oferta.
           </div>
           <div className="ds-image">
-            <img src="/aumenta-score-capa.jpg" alt="Capa do curso Aumenta Score — Limite de Cartão de Crédito" />
+            <img src={aumentaScoreCapa} alt="Capa do curso Aumenta Score — Limite de Cartão de Crédito" />
           </div>
           <div className="ds-includes">
             <h2>O QUE ESTÁ INCLUÍDO</h2>
