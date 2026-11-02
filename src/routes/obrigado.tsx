@@ -264,19 +264,20 @@ function ThankYouPage() {
               <span className="ty-offer-label">CONTEÚDO COMPLEMENTAR</span>
               <h2 id="ty-offer-title">Aumenta Score <span>+ BÔNUS</span></h2>
               <div className="ty-offer-sales-copy">
-                <h3>SEU PRÓXIMO PASSO PODE SER ENTENDER MELHOR COMO O SCORE FUNCIONA — E QUAIS CAMINHOS VOCÊ PODE AVALIAR.</h3>
-                <p>Conseguir crédito nem sempre é simples. Uma solicitação pode ser recusada, um limite pode não ser o esperado e, muitas vezes, fica a dúvida: <strong>o que será que as instituições consideram nessa análise?</strong></p>
-                <p>O score é um dos dados que podem ser considerados na avaliação de crédito. Conhecer melhor esse indicador, os fatores relacionados a ele e os cuidados com sua vida financeira ajuda você a tomar decisões mais conscientes.</p>
-                <p>Foi para reunir essas informações em um só lugar que criamos o <strong>AUMENTA SCORE + BÔNUS</strong>: um conteúdo complementar, em videoaulas, para você estudar no seu ritmo e entender por onde começar.</p>
-                <p><strong>O QUE VOCÊ VAI ENCONTRAR NO PACOTE:</strong></p>
+                <h3>QUER CONSEGUIR UM CARTÃO OU TER UM LIMITE MELHOR? ENTENDA PRIMEIRO O QUE É SCORE.</h3>
+                <p>Você já pediu um cartão e não foi aprovado? Ou recebeu um limite tão baixo que não atende ao que precisava?</p>
+                <p><strong>Score é uma pontuação usada pelas empresas para avaliar o seu perfil na hora de analisar um pedido de crédito.</strong> Em palavras simples, funciona como uma nota baseada em informações do seu histórico financeiro.</p>
+                <p>Essa pontuação pode influenciar a análise, mas não decide tudo sozinha: cada banco também considera seus próprios critérios. Por isso, entender o que pode influenciar o score é um passo para conhecer melhor como funciona o pedido de crédito.</p>
+                <p>O <strong>AUMENTA SCORE + BÔNUS</strong> reúne videoaulas e um conteúdo complementar para você aprender sobre o assunto e conhecer uma alternativa divulgada para pessoas com restrição no CPF.</p>
+                <p><strong>VEJA O QUE VEM NO PACOTE:</strong></p>
               </div>
               <div className="ty-includes">
-                <div className="ty-include"><strong>CURSO EM VIDEOAULAS</strong>Conteúdo organizado para conhecer fatores relacionados ao score e cuidados que podem ajudar na sua organização financeira.</div>
-                <div className="ty-include"><strong>BÔNUS COMPLEMENTAR</strong>Informações sobre uma instituição que divulga possibilidades de crédito para pessoas com restrição no CPF, para você analisar os critérios diretamente com ela.</div>
+                <div className="ty-include"><strong>CURSO AUMENTA SCORE</strong>Entenda o que é essa pontuação, o que pode influenciar sua nota e quais cuidados conhecer para buscar melhores oportunidades de crédito.</div>
+                <div className="ty-include"><strong>BÔNUS: ALTERNATIVA DE CRÉDITO</strong>Conheça a instituição apresentada no material e consulte diretamente se há uma opção disponível para quem está com restrição no CPF.</div>
               </div>
               <div className="ty-offer-sales-copy">
-                <p style={{ marginTop: "16px" }}>A proposta não é prometer aprovação ou resultado automático. É oferecer informação para que você compreenda melhor o assunto, avalie as alternativas e decida com mais clareza.</p>
-                <p><strong>Se esse conteúdo faz sentido para o seu momento, você pode adicioná-lo agora pelo valor apresentado abaixo.</strong></p>
+                <p style={{ marginTop: "16px" }}>Você estuda no seu ritmo e entende melhor um assunto que muita gente só descobre quando tem um cartão recusado ou recebe um limite baixo.</p>
+                <p><strong>Adicione o curso e o bônus por R$ 29,00, em pagamento único.</strong></p>
               </div>
             </div>
           </div>
