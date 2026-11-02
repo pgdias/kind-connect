@@ -38,7 +38,7 @@ function CreditQuiz() {
         .cq-page{min-height:100vh;min-height:100svh;padding:25px 15px 45px;color:#f7f9fc;background:radial-gradient(ellipse at 50% 0%,rgba(26,100,111,.28),transparent 48%),#071321;font-family:Inter,ui-sans-serif,system-ui,sans-serif}
         .cq-shell{max-width:680px;margin:auto}
         .cq-brand{text-align:center;margin:5px 0 32px;color:#e9f0f7;font-size:12px;font-weight:850;letter-spacing:.15em}
-        .cq-brand span{color:#83dfc8;margin-right:9px}
+        .cq-brand span{color:#83dfc8;margin-right:9px}\n        .cq-welcome{margin:0 0 23px;padding:22px;border:1px solid rgba(231,196,119,.25);border-radius:16px;background:rgba(231,196,119,.06)}.cq-welcome h1{margin:11px 0;color:#fff;font-size:clamp(23px,4.8vw,31px);line-height:1.13;letter-spacing:-.03em}.cq-welcome p{margin:0;color:#c4d0da;font-size:13px;line-height:1.65}
         .cq-progress{height:6px;background:#1b3041;border-radius:99px;overflow:hidden;margin-bottom:27px}
         .cq-progress span{display:block;height:100%;background:linear-gradient(90deg,#55c9ad,#e7c477);transition:width .2s}
         .cq-count{color:#8ce2cb;font-size:11px;font-weight:850;letter-spacing:.12em}
@@ -54,6 +54,11 @@ function CreditQuiz() {
       `}</style>
       <div className="cq-shell">
         <header className="cq-brand"><span>✓</span> BLINDA BOLSA FAMÍLIA</header>
+        {step === 0 && <section className="cq-welcome">
+          <span className="cq-count">QUIZ GRATUITO · 5 PERGUNTAS RÁPIDAS</span>
+          <h1>QUER ENTENDER O QUE PODE ESTAR POR TRÁS DE UM LIMITE BAIXO OU DE UM CARTÃO NÃO APROVADO?</h1>
+          <p>Descubra o que é score, por que essa pontuação pode ser considerada pelos bancos e conheça informações sobre alternativas de crédito — inclusive para quem está com o nome negativado.</p>
+        </section>}
         <div className="cq-progress"><span style={{width: ((step+1)/questions.length*100)+"%"}} /></div>
         <div className="cq-count">PERGUNTA {step+1} DE {questions.length}</div>
         <section className="cq-card">
