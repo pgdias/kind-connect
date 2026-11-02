@@ -274,7 +274,6 @@ function ThankYouPage() {
             >
               QUERO ACESSAR O AUMENTA SCORE + BÔNUS <span aria-hidden="true">→</span>
             </a>
-            <p className="ty-buy-note">Acesse o checkout seguro para conhecer as condições e concluir sua compra.</p>
           </div>
           <p className="ty-disclaimer">
             Resultados variam de pessoa para pessoa. Não há garantia de aumento do score, ampliação de limite ou aprovação de crédito; a decisão é sempre da instituição financeira.
