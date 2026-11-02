@@ -16,6 +16,7 @@ import { Route as ResultadoRouteImport } from './routes/resultado'
 import { Route as ObrigadoRouteImport } from './routes/obrigado'
 import { Route as OfertaEspecialRouteImport } from './routes/oferta-especial'
 import { Route as QuizCreditoRouteImport } from './routes/quiz-credito'
+import { Route as OfertaScoreRouteImport } from './routes/oferta-score'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -45,6 +46,16 @@ const ObrigadoRoute = ObrigadoRouteImport.update({
 const OfertaEspecialRoute = OfertaEspecialRouteImport.update({
   id: '/oferta-especial',
   path: '/oferta-especial',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const QuizCreditoRoute = QuizCreditoRouteImport.update({
+  id: '/quiz-credito',
+  path: '/quiz-credito',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OfertaScoreRoute = OfertaScoreRouteImport.update({
+  id: '/oferta-score',
+  path: '/oferta-score',
   getParentRoute: () => rootRouteImport,
 } as any)
 
