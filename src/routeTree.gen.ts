@@ -14,7 +14,7 @@ import { Route as AnalyticsRouteImport } from './routes/analytics'
 import { Route as QuizRouteImport } from './routes/quiz'
 import { Route as ResultadoRouteImport } from './routes/resultado'
 import { Route as ObrigadoRouteImport } from './routes/obrigado'
-import { Route as OfertaEspecialRouteImport } from './routes/oferta-especial'
+import { Route as OfertaEspecialRouteImport } from './routes/oferta-especial'\nimport { Route as QuizCreditoRouteImport } from './routes/quiz-credito'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -74,10 +74,10 @@ export interface FileRoutesById {
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/analytics' | '/quiz' | '/resultado' | '/obrigado' | '/oferta-especial'
+  fullPaths: '/' | '/analytics' | '/quiz' | '/resultado' | '/obrigado' | '/oferta-especial' | '/quiz-credito'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/analytics' | '/quiz' | '/resultado' | '/obrigado' | '/oferta-especial'
-  id: '__root__' | '/' | '/analytics' | '/quiz' | '/resultado' | '/obrigado' | '/oferta-especial'
+  to: '/' | '/analytics' | '/quiz' | '/resultado' | '/obrigado' | '/oferta-especial' | '/quiz-credito'
+  id: '__root__' | '/' | '/analytics' | '/quiz' | '/resultado' | '/obrigado' | '/oferta-especial' | '/quiz-credito'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
