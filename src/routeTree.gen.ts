@@ -13,6 +13,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AnalyticsRouteImport } from './routes/analytics'
 import { Route as QuizRouteImport } from './routes/quiz'
 import { Route as ResultadoRouteImport } from './routes/resultado'
+import { Route as ObrigadoRouteImport } from './routes/obrigado'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -34,12 +35,18 @@ const ResultadoRoute = ResultadoRouteImport.update({
   path: '/resultado',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ObrigadoRoute = ObrigadoRouteImport.update({
+  id: '/obrigado',
+  path: '/obrigado',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/analytics': typeof AnalyticsRoute
   '/quiz': typeof QuizRoute
   '/resultado': typeof ResultadoRoute
+  '/obrigado': typeof ObrigadoRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -56,10 +63,10 @@ export interface FileRoutesById {
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/analytics' | '/quiz' | '/resultado'
+  fullPaths: '/' | '/analytics' | '/quiz' | '/resultado' | '/obrigado'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/analytics' | '/quiz' | '/resultado'
-  id: '__root__' | '/' | '/analytics' | '/quiz' | '/resultado'
+  to: '/' | '/analytics' | '/quiz' | '/resultado' | '/obrigado'
+  id: '__root__' | '/' | '/analytics' | '/quiz' | '/resultado' | '/obrigado'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -67,6 +74,7 @@ export interface RootRouteChildren {
   AnalyticsRoute: typeof AnalyticsRoute
   QuizRoute: typeof QuizRoute
   ResultadoRoute: typeof ResultadoRoute
+  ObrigadoRoute: typeof ObrigadoRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -99,6 +107,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ResultadoRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/obrigado': {
+      id: '/obrigado'
+      path: '/obrigado'
+      fullPath: '/obrigado'
+      preLoaderRoute: typeof ObrigadoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -107,6 +122,7 @@ const rootRouteChildren: RootRouteChildren = {
   AnalyticsRoute: AnalyticsRoute,
   QuizRoute: QuizRoute,
   ResultadoRoute: ResultadoRoute,
+  ObrigadoRoute: ObrigadoRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
