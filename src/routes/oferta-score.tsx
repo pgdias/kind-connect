@@ -10,10 +10,9 @@ function ScoreOffer() {
   const opening=goal.includes("limite")?"Você quer buscar um limite melhor no cartão.":goal.includes("primeiro cartão")?"Você quer entender como buscar seu primeiro cartão.":goal.includes("negativado")?"Você quer conhecer alternativas mesmo com restrição no CPF.":"Você quer entender melhor como funciona o crédito.";
   return (
     <main className="so-page">
-      <style>
+      <style>{`
         @keyframes so-gentle-pulse{0%,100%{transform:scale(1);box-shadow:0 8px 22px rgba(233,185,0,.16)}50%{transform:scale(1.018);box-shadow:0 12px 28px rgba(233,185,0,.28)}}
         @media(prefers-reduced-motion:reduce){.so-cta{animation:none}}
-{`
         html:has(.so-page),body:has(.so-page){margin:0!important;background:#061b2a!important}
         .so-page,.so-page *{box-sizing:border-box}
         .so-page{min-height:100vh;min-height:100svh;padding:25px 15px 45px;color:#f7f9fc;background:radial-gradient(ellipse at 50% 0%,rgba(26,100,111,.28),transparent 48%),#071321;font-family:Inter,ui-sans-serif,system-ui,sans-serif}
