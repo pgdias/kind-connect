@@ -65,7 +65,7 @@ function CreditQuiz() {
           <h1>{q.title}</h1>
           <p>{q.subtitle}</p>
           <div className="cq-options">
-            {q.options.map(option=><button type="button" key={option} disabled={busy} onClick={()=>choose(option)}>{option}　→</button>)}
+            {q.options.map(option=><button type="button" key={option} disabled={busy} onClick={()=>choose(option)}>{option} →</button>)}
           </div>
           {step>0 && <button className="cq-back" type="button" onClick={()=>setStep(step-1)}>← Voltar</button>}
         </section>
