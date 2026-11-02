@@ -138,6 +138,10 @@ function ThankYouPage() {
         .ty-offer h2 { margin: 13px 0 9px; color: #fff; font-size: clamp(25px, 4vw, 34px); line-height: 1.08; letter-spacing: -.04em; }
         .ty-offer h2 span { color: var(--ty-gold); }
         .ty-offer-intro { margin: 0; color: #e2e8ef; font-size: 16px; line-height: 1.75; font-weight: 600; }
+        .ty-offer-sales-copy { margin-top: 12px; color: #c6d0d9; font-size: 12px; line-height: 1.65; }
+        .ty-offer-sales-copy h3 { margin: 0 0 12px; color: #f0d18e; font-size: 15px; line-height: 1.35; letter-spacing: -.01em; }
+        .ty-offer-sales-copy p { margin: 0 0 10px; }
+        .ty-offer-sales-copy strong { color: #f3e4c1; }
         .ty-disclaimer { margin: 9px 0 0; color: #a9b5c1; font-size: 9px; line-height: 1.5; }
         .ty-bonus {
           display: flex; gap: 14px; align-items: flex-start; margin-top: 23px; padding: 17px 18px;
@@ -241,10 +245,17 @@ function ThankYouPage() {
             <div className="ty-offer-copy">
               <span className="ty-offer-label">CONTEÚDO COMPLEMENTAR</span>
               <h2 id="ty-offer-title">Aumenta Score <span>+ BÔNUS</span></h2>
-              <p className="ty-offer-intro">
-                Aprenda como aumentar seu score e ampliar seu limite de cartão de crédito.
-                Inclui bônus exclusivo: banco que aprova crédito mesmo com nome sujo.
-              </p>
+              <div className="ty-offer-sales-copy">
+                <h3>VOCÊ GOSTARIA DE ENTENDER COMO AUMENTAR SEU SCORE E TER MAIS POSSIBILIDADES DE CONSEGUIR CRÉDITO?</h3>
+                <p>Você já tentou conseguir um cartão com limite maior ou fazer uma solicitação de crédito e não conseguiu?</p>
+                <p>Muita gente não sabe o que pode influenciar o score, por onde começar ou quais possibilidades existem quando o nome está negativado.</p>
+                <p>Por isso, conheça o <strong>AUMENTA SCORE + BÔNUS!</strong></p>
+                <p>Um curso em videoaulas que vai mostrar como aumentar seu score e buscar ampliar seu limite de cartão de crédito.</p>
+                <p><strong>E TEM MAIS! Você também recebe um BÔNUS EXCLUSIVO:</strong></p>
+                <p>Um conteúdo sobre banco que oferece possibilidade de crédito mesmo para quem está com o nome sujo.</p>
+                <p>Você vai poder conhecer essas informações e entender melhor as alternativas disponíveis antes de tomar sua decisão.</p>
+                <p><strong>Não fique na dúvida! Clique no botão abaixo, confira os detalhes e veja como ter acesso ao curso e ao bônus.</strong></p>
+              </div>
             </div>
           </div>
           <div className="ty-bonus">
