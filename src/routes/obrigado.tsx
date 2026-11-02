@@ -162,7 +162,18 @@ function ThankYouPage() {
         }
         .ty-bonus strong { display: block; margin: 1px 0 5px; color: #f0d18e; font-size: 10px; letter-spacing: .12em; }
         .ty-bonus p { margin: 0; color: #c6d0d9; font-size: 12px; line-height: 1.6; }
-        .ty-buy-wrap { margin-top: 22px; text-align: center; }
+        .ty-price-box { margin: 24px auto 0; padding: 19px 16px; max-width: 440px; border: 1px solid rgba(231,196,119,.25); border-radius: 14px; background: rgba(7,19,33,.42); text-align: center; }
+        .ty-price-label { margin: 0 0 5px; color: #c2ccd6; font-size: 11px; letter-spacing: .08em; text-transform: uppercase; }
+        .ty-price { color: #f4d895; font-size: clamp(38px,7vw,48px); font-weight: 900; line-height: 1.1; letter-spacing: -.05em; }
+        .ty-price-detail { margin: 5px 0 0; color: #aebdca; font-size: 11px; }
+        .ty-includes { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 10px; margin-top: 20px; }
+        .ty-include { padding: 14px; border: 1px solid rgba(174,199,218,.13); border-radius: 12px; background: rgba(7,19,33,.34); color: #d7e0e8; font-size: 12px; line-height: 1.55; }
+        .ty-include strong { display: block; margin-bottom: 4px; color: #f0d18e; font-size: 12px; }
+        .ty-choice-note { margin: 13px auto 0; max-width: 440px; color: #aebdca; font-size: 11px; line-height: 1.6; text-align: center; }
+        .ty-decline-button { display: flex; align-items: center; justify-content: center; width: 100%; max-width: 440px; min-height: 48px; margin: 12px auto 0; padding: 12px 18px; border: 1px solid rgba(174,199,218,.25); border-radius: 12px; background: rgba(7,19,33,.35); color: #c3ced8; font-size: 12px; font-weight: 700; text-decoration: none; text-align: center; transition: border-color .18s ease, color .18s ease, background .18s ease; }
+        .ty-decline-button:hover { border-color: rgba(174,199,218,.55); color: #fff; background: rgba(174,199,218,.07); }
+        .ty-decline-button:focus-visible { outline: 3px solid #8ce2cb; outline-offset: 4px; }
+        .ty-buy-wrap { margin-top: 18px; text-align: center; }
         .ty-buy-button {
           display: inline-flex; align-items: center; justify-content: center; gap: 10px;
           width: 100%; max-width: 440px; min-height: 58px; padding: 15px 22px;
@@ -196,6 +207,7 @@ function ThankYouPage() {
           .ty-step h3 { padding-top: 2px; }
           .ty-offer { margin-top: 32px; padding: 22px 18px; }
           .ty-offer-layout { grid-template-columns: 1fr; gap: 20px; }
+          .ty-includes { grid-template-columns: 1fr; }
           .ty-product-art { min-height: 150px; max-width: 100%; }
           .ty-help { align-items: flex-start; }
         }
@@ -254,24 +266,26 @@ function ThankYouPage() {
               <span className="ty-offer-label">CONTEÚDO COMPLEMENTAR</span>
               <h2 id="ty-offer-title">Aumenta Score <span>+ BÔNUS</span></h2>
               <div className="ty-offer-sales-copy">
-                <h3>VOCÊ GOSTARIA DE ENTENDER COMO AUMENTAR SEU SCORE E TER MAIS POSSIBILIDADES DE CONSEGUIR CRÉDITO?</h3>
-                <p>Você já tentou conseguir um cartão com limite maior ou fazer uma solicitação de crédito e não conseguiu?</p>
-                <p>Muita gente não sabe o que pode influenciar o score, por onde começar ou quais possibilidades existem quando o nome está negativado.</p>
-                <p>Por isso, conheça o <strong>AUMENTA SCORE + BÔNUS!</strong></p>
-                <p>Um curso em videoaulas que vai mostrar como aumentar seu score e buscar ampliar seu limite de cartão de crédito.</p>
-                <p><strong>E TEM MAIS! Você também recebe um BÔNUS EXCLUSIVO:</strong></p>
-                <p>Um conteúdo sobre banco que oferece possibilidade de crédito mesmo para quem está com o nome sujo.</p>
-                <p>Você vai poder conhecer essas informações e entender melhor as alternativas disponíveis antes de tomar sua decisão.</p>
-                <p><strong>Não fique na dúvida! Clique no botão abaixo, confira os detalhes e veja como ter acesso ao curso e ao bônus.</strong></p>
+                <h3>SEU PRÓXIMO PASSO PODE SER ENTENDER MELHOR COMO O SCORE FUNCIONA — E QUAIS CAMINHOS VOCÊ PODE AVALIAR.</h3>
+                <p>Conseguir crédito nem sempre é simples. Uma solicitação pode ser recusada, um limite pode não ser o esperado e, muitas vezes, fica a dúvida: <strong>o que será que as instituições consideram nessa análise?</strong></p>
+                <p>O score é um dos dados que podem ser considerados na avaliação de crédito. Conhecer melhor esse indicador, os fatores relacionados a ele e os cuidados com sua vida financeira ajuda você a tomar decisões mais conscientes.</p>
+                <p>Foi para reunir essas informações em um só lugar que criamos o <strong>AUMENTA SCORE + BÔNUS</strong>: um conteúdo complementar, em videoaulas, para você estudar no seu ritmo e entender por onde começar.</p>
+                <p><strong>O QUE VOCÊ VAI ENCONTRAR NO PACOTE:</strong></p>
+              </div>
+              <div className="ty-includes">
+                <div className="ty-include"><strong>CURSO EM VIDEOAULAS</strong>Conteúdo organizado para conhecer fatores relacionados ao score e cuidados que podem ajudar na sua organização financeira.</div>
+                <div className="ty-include"><strong>BÔNUS COMPLEMENTAR</strong>Informações sobre uma instituição que divulga possibilidades de crédito para pessoas com restrição no CPF, para você analisar os critérios diretamente com ela.</div>
+              </div>
+              <div className="ty-offer-sales-copy">
+                <p style={{ marginTop: "16px" }}>A proposta não é prometer aprovação ou resultado automático. É oferecer informação para que você compreenda melhor o assunto, avalie as alternativas e decida com mais clareza.</p>
+                <p><strong>Se esse conteúdo faz sentido para o seu momento, você pode adicioná-lo agora pelo valor apresentado abaixo.</strong></p>
               </div>
             </div>
           </div>
-          <div className="ty-bonus">
-            <span className="ty-bonus-icon" aria-hidden="true">✦</span>
-            <div>
-              <strong>BÔNUS INFORMATIVO</strong>
-              <p>Conheça o banco apresentado no bônus e as informações sobre como solicitar crédito mesmo com restrição no CPF.</p>
-            </div>
+          <div className="ty-price-box">
+            <p className="ty-price-label">Adicione o conteúdo complementar à sua compra</p>
+            <div className="ty-price">R$ 29,00</div>
+            <p className="ty-price-detail">Pagamento único · acesso ao Aumenta Score + Bônus</p>
           </div>
           <div className="ty-buy-wrap">
             <a
@@ -286,11 +300,8 @@ function ThankYouPage() {
           <p className="ty-disclaimer">
             Resultados variam de pessoa para pessoa. Não há garantia de aumento do score, ampliação de limite ou aprovação de crédito; a decisão é sempre da instituição financeira.
           </p>
-          <p style={{ margin: "13px 0 0", textAlign: "center", fontSize: "11px" }}>
-            <a href="/oferta-especial" style={{ color: "#aebdca", textDecoration: "underline", textUnderlineOffset: "4px" }}>
-              Não quero essa oferta agora
-            </a>
-          </p>
+          <p className="ty-choice-note">Você decide se deseja adicionar esse conteúdo. Se preferir não seguir com esta oferta, poderá conferir uma alternativa na próxima página.</p>
+          <a className="ty-decline-button" href="/oferta-especial">Não quero adicionar por R$ 29,00 — ver outra opção</a>
         </section>
 
         <aside className="ty-help">
