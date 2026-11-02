@@ -26,7 +26,7 @@ function SpecialOfferPage() {
         .ds-mark{display:grid;place-items:center;width:31px;height:31px;border:1px solid rgba(255,209,46,.5);border-radius:10px;color:#ffd12e;background:rgba(255,209,46,.08);font-size:16px}
         .ds-card{overflow:hidden;padding:clamp(23px,5vw,38px);border:1px solid rgba(255,209,46,.3);border-radius:22px;background:radial-gradient(ellipse at 100% 0%,rgba(255,209,46,.12),transparent 40%),linear-gradient(145deg,#0b3542,#082735 72%);box-shadow:0 24px 70px rgba(0,0,0,.34)}
         .ds-eyebrow{display:inline-flex;padding:8px 12px;border:1px solid rgba(255,209,46,.28);border-radius:999px;color:#ffe05a;background:rgba(255,209,46,.07);font-size:10px;font-weight:900;letter-spacing:.13em}
-        .ds-card h1{max-width:650px;margin:18px auto 12px;color:#fff;font-size:clamp(29px,5.6vw,44px);line-height:1.08;letter-spacing:-.045em;text-align:center}
+        .ds-card h1{max-width:650px;margin:18px auto 12px;color:#fff;font-size:clamp(27px,5.6vw,44px);line-height:1.12;letter-spacing:-.035em;text-align:center;text-wrap:balance;overflow-wrap:normal}
         .ds-card h1 span{color:#ffd12e}
         .ds-lead{max-width:590px;margin:0 auto;color:#d0dce2;font-size:15px;line-height:1.75;text-align:center}
         .ds-callout{margin:23px 0 0;padding:17px 18px;border:1px solid rgba(111,224,197,.22);border-radius:14px;background:rgba(4,20,30,.38);color:#e8f4f1;font-size:14px;line-height:1.65;text-align:center}
@@ -47,7 +47,7 @@ function SpecialOfferPage() {
         .ds-decline{display:block;width:fit-content;margin:23px auto 0;color:#b8c5d0;font-size:12px;text-align:center;text-decoration:underline;text-underline-offset:4px}
         .ds-decline:hover{color:#fff}
         .ds-footer{margin-top:19px;color:#718695;font-size:10px;line-height:1.7;text-align:center}
-        @media(max-width:560px){.ds-page{padding:19px 12px 32px}.ds-card{border-radius:18px}.ds-includes{padding:17px 14px}.ds-cta{font-size:13px}}
+        @media(max-width:560px){.ds-page{padding:19px 12px 32px}.ds-card{border-radius:18px;padding:24px 17px}.ds-card h1{max-width:420px;font-size:clamp(25px,7.2vw,32px);line-height:1.14;letter-spacing:-.025em;text-wrap:balance}.ds-lead{font-size:14px;line-height:1.65}.ds-includes{padding:17px 14px}.ds-cta{font-size:13px;line-height:1.35;padding:14px 12px}}
       `}</style>
       <div className="ds-shell">
         <header className="ds-brand">
