@@ -5,7 +5,7 @@ export const Route = createFileRoute("/oferta-score")({ component: ScoreOffer })
 
 function ScoreOffer() {
   const [answers,setAnswers] = useState<string[]>([]);
-  useEffect(()=>{try{const value=JSON.parse(sessionStorage.getItem("blindaCreditQuizAnswers")||"[]");if(Array.isArray(value))setAnswers(value)}catch{}},[]);
+  useEffect(()=>{try{const value=JSON.parse(sessionStorage.getItem("blindaCreditQuizAnswers")||"[]");if(Array.isArray(value))setAnswers(value)}catch{ /* sessão indisponível */ }},[]);
   const goal=answers[1]||"Entender melhor como funciona o crédito";
   const opening=goal.includes("limite")?"Você quer buscar um limite melhor no cartão.":goal.includes("primeiro cartão")?"Você quer entender como buscar seu primeiro cartão.":goal.includes("negativado")?"Você quer conhecer alternativas mesmo com restrição no CPF.":"Você quer entender melhor como funciona o crédito.";
   return (
@@ -26,7 +26,7 @@ function ScoreOffer() {
         @media(max-width:560px){.so-card{padding:25px 18px}.so-grid{grid-template-columns:1fr}}
       `}</style>
       <div className="so-shell">
-        <header className="so-brand">✓　BLINDA BOLSA FAMÍLIA</header>
+        <header className="so-brand">✓ BLINDA BOLSA FAMÍLIA</header>
         <section className="so-card">
           <span className="so-tag">SUA PRÓXIMA ETAPA</span>
           <h1>ENTENDA O SCORE E CONHEÇA CAMINHOS PARA <span>BUSCAR CRÉDITO.</span></h1>
@@ -40,7 +40,7 @@ function ScoreOffer() {
           <p>Você pode estudar no seu ritmo e conhecer melhor o assunto antes de avaliar suas opções.</p>
           <div className="so-price">R$ 29,00</div>
           <p className="so-sub">Pagamento único · Aumenta Score + Bônus</p>
-          <a className="so-cta" href="https://pay.cakto.com.br/rx38zo7_1271604" target="_blank" rel="noopener noreferrer">QUERO ACESSAR O CURSO + BÔNUS　→</a>
+          <a className="so-cta" href="https://pay.cakto.com.br/rx38zo7_1271604" target="_blank" rel="noopener noreferrer">QUERO ACESSAR O CURSO + BÔNUS →</a>
           <a className="so-decline" href="/oferta-especial">Não quero essa oferta por R$ 29,00 — ver opção de R$ 9,90</a>
           <p className="so-legal">*Importante: o conteúdo é educativo e informativo. Não garante aumento de score, aprovação de cartão, concessão de crédito ou aumento de limite. Cada instituição possui seus próprios critérios de análise.</p>
         </section>
