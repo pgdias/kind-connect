@@ -18,6 +18,11 @@ function ThankYouPage() {
   return (
     <main className="ty-page">
       <style>{`
+        html:has(.ty-page), body:has(.ty-page) {
+          margin: 0 !important;
+          min-height: 100%;
+          background: #071321 !important;
+        }
         .ty-page, .ty-page * { box-sizing: border-box; }
         .ty-page {
           --ty-bg: #071321;
@@ -26,7 +31,10 @@ function ThankYouPage() {
           --ty-muted: #a9b8c8;
           --ty-white: #f7f9fc;
           --ty-gold: #e7c477;
+          width: 100%;
           min-height: 100vh;
+          min-height: 100svh;
+          margin: 0;
           padding: 30px 18px 64px;
           color: var(--ty-white);
           background:
