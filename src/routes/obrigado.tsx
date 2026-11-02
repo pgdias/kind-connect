@@ -137,10 +137,8 @@ function ThankYouPage() {
         }
         .ty-offer h2 { margin: 13px 0 9px; color: #fff; font-size: clamp(25px, 4vw, 34px); line-height: 1.08; letter-spacing: -.04em; }
         .ty-offer h2 span { color: var(--ty-gold); }
-        .ty-offer-intro { margin: 0; color: #c1ccd6; font-size: 13px; line-height: 1.7; }
-        .ty-feature-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 11px 15px; margin: 23px 0 0; padding: 0; list-style: none; }
-        .ty-feature-list li { display: flex; gap: 9px; color: #e0e7ed; font-size: 12px; line-height: 1.5; }
-        .ty-feature-list li::before { content: "✓"; flex: 0 0 auto; color: #e8c477; font-weight: 900; }
+        .ty-offer-intro { margin: 0; color: #e2e8ef; font-size: 16px; line-height: 1.75; font-weight: 600; }
+        .ty-disclaimer { margin: 9px 0 0; color: #a9b5c1; font-size: 9px; line-height: 1.5; }
         .ty-bonus {
           display: flex; gap: 14px; align-items: flex-start; margin-top: 23px; padding: 17px 18px;
           border: 1px solid rgba(231, 196, 119, .23); border-radius: 14px;
@@ -174,7 +172,6 @@ function ThankYouPage() {
           .ty-offer { margin-top: 32px; padding: 22px 18px; }
           .ty-offer-layout { grid-template-columns: 1fr; gap: 20px; }
           .ty-product-art { min-height: 150px; max-width: 100%; }
-          .ty-feature-list { grid-template-columns: 1fr; gap: 10px; }
           .ty-help { align-items: flex-start; }
         }
       `}</style>
@@ -232,28 +229,20 @@ function ThankYouPage() {
               <span className="ty-offer-label">CONTEÚDO COMPLEMENTAR</span>
               <h2 id="ty-offer-title">Aumenta Score <span>+ BÔNUS</span></h2>
               <p className="ty-offer-intro">
-                Um material educativo para entender melhor o funcionamento do score,
-                conhecer hábitos de organização financeira e avaliar opções de crédito com mais informação.
+                Aprenda como aumentar seu score e ampliar seu limite de cartão de crédito.
+                Inclui bônus exclusivo: banco que aprova crédito mesmo com nome sujo.
               </p>
-              <ul className="ty-feature-list">
-                <li>O que é score e quais fatores podem influenciá-lo.</li>
-                <li>Hábitos que ajudam na organização financeira.</li>
-                <li>Cuidados antes de solicitar cartão ou crédito.</li>
-                <li>Como analisar propostas e evitar armadilhas.</li>
-              </ul>
             </div>
           </div>
           <div className="ty-bonus">
             <span className="ty-bonus-icon" aria-hidden="true">✦</span>
             <div>
               <strong>BÔNUS INFORMATIVO</strong>
-              <p>Um guia sobre alternativas de crédito para quem tem restrição no CPF e pontos de atenção para reconhecer ofertas arriscadas.</p>
+              <p>Conheça o banco apresentado no bônus e as informações sobre como solicitar crédito mesmo com restrição no CPF.</p>
             </div>
           </div>
           <p className="ty-disclaimer">
-            Conteúdo educativo. O score pode variar conforme os critérios dos birôs de crédito.
-            Aprovação de cartão, concessão de crédito e definição de limite dependem exclusivamente
-            da análise de cada instituição. Não há promessa ou garantia de aumento de score, aprovação ou limite.
+            Resultados variam de pessoa para pessoa. Não há garantia de aumento do score, ampliação de limite ou aprovação de crédito; a decisão é sempre da instituição financeira.
           </p>
         </section>
 
