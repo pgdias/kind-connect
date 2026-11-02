@@ -254,50 +254,18 @@ function ThankYouPage() {
         </section>
 
         <section className="ty-offer" aria-labelledby="ty-offer-title">
-          <div className="ty-offer-layout">
-            <div className="ty-product-art" aria-label="Apresentação visual do conteúdo Aumenta Score mais bônus">
-              <span className="ty-art-label">GUIA COMPLEMENTAR</span>
-              <span className="ty-art-title">AUMENTA<br />SCORE <span>+</span><br /><span>BÔNUS</span></span>
-              <span className="ty-art-footer">EDUCAÇÃO FINANCEIRA</span>
+          <div className="ty-offer-copy">
+            <span className="ty-offer-label">CONTEÚDO EXTRA PARA VOCÊ</span>
+            <h2 id="ty-offer-title">QUER ENTENDER COMO FUNCIONA O <span>SCORE</span> E O QUE PODE INFLUENCIAR SEU LIMITE?</h2>
+            <div className="ty-offer-sales-copy">
+              <p>Depois de garantir seu material do Blinda Bolsa Família, você também pode descobrir informações sobre cartão de crédito, limite e alternativas para quem está com restrição no CPF.</p>
+              <p>Preparamos algumas perguntas rápidas para entender o que você procura e mostrar um conteúdo que pode ajudar você a conhecer melhor esse assunto.</p>
+              <p><strong>Leva apenas alguns instantes. Não pediremos CPF, senha ou dados bancários.</strong></p>
             </div>
-            <div className="ty-offer-copy">
-              <span className="ty-offer-label">CONTEÚDO COMPLEMENTAR</span>
-              <h2 id="ty-offer-title">Aumenta Score <span>+ BÔNUS</span></h2>
-              <div className="ty-offer-sales-copy">
-                <h3>QUER CONSEGUIR UM CARTÃO OU TER UM LIMITE MELHOR? ENTENDA PRIMEIRO O QUE É SCORE.</h3>
-                <p>Você já pediu um cartão e não foi aprovado? Ou recebeu um limite tão baixo que não atende ao que precisava?</p>
-                <p><strong>Score é uma pontuação usada pelas empresas para avaliar o seu perfil na hora de analisar um pedido de crédito.</strong> Em palavras simples, funciona como uma nota baseada em informações do seu histórico financeiro.</p>
-                <p>Essa pontuação pode influenciar a análise, mas não decide tudo sozinha: cada banco também considera seus próprios critérios. Por isso, entender o que pode influenciar o score é um passo para conhecer melhor como funciona o pedido de crédito.</p>
-                <p>O <strong>AUMENTA SCORE + BÔNUS</strong> reúne videoaulas e um conteúdo complementar para você aprender sobre o assunto e conhecer uma alternativa divulgada para pessoas com restrição no CPF.</p>
-                <p><strong>VEJA O QUE VEM NO PACOTE:</strong></p>
-              </div>
-              <div className="ty-includes">
-                <div className="ty-include"><strong>CURSO AUMENTA SCORE</strong>Entenda o que é essa pontuação, o que pode influenciar sua nota e quais cuidados conhecer para buscar melhores oportunidades de crédito.</div>
-                <div className="ty-include"><strong>BÔNUS: ALTERNATIVA DE CRÉDITO</strong>Conheça a instituição apresentada no material e consulte diretamente se há uma opção disponível para quem está com restrição no CPF.</div>
-              </div>
-              <div className="ty-offer-sales-copy">
-                <p style={{ marginTop: "16px" }}>Você estuda no seu ritmo e entende melhor um assunto que muita gente só descobre quando tem um cartão recusado ou recebe um limite baixo.</p>
-                <p><strong>Adicione o curso e o bônus por R$ 29,00, em pagamento único.</strong></p>
-              </div>
+            <div className="ty-buy-wrap">
+              <a className="ty-buy-button" href="/quiz-credito">QUERO DESCOBRIR MAIS SOBRE CARTÃO E LIMITE →</a>
             </div>
           </div>
-          <div className="ty-price-box">
-            <p className="ty-price-label">Adicione o conteúdo complementar à sua compra</p>
-            <div className="ty-price">R$ 29,00</div>
-            <p className="ty-price-detail">Pagamento único · acesso ao Aumenta Score + Bônus</p>
-          </div>
-          <div className="ty-buy-wrap">
-            <a
-              className="ty-buy-button"
-              href="https://pay.cakto.com.br/rx38zo7_1271604"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              QUERO ACESSAR O AUMENTA SCORE + BÔNUS <span aria-hidden="true">→</span>
-            </a>
-          </div>
-          <p className="ty-choice-note">Você decide se deseja adicionar esse conteúdo. Se preferir não seguir com esta oferta, poderá conferir uma alternativa na próxima página.</p>
-          <a className="ty-decline-button" href="/oferta-especial">Não quero adicionar por R$ 29,00 — ver outra opção</a>
         </section>
 
         <aside className="ty-help">
