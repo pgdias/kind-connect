@@ -66,6 +66,8 @@ export interface FileRoutesByFullPath {
   '/resultado': typeof ResultadoRoute
   '/obrigado': typeof ObrigadoRoute
   '/oferta-especial': typeof OfertaEspecialRoute
+  '/quiz-credito': typeof QuizCreditoRoute
+  '/oferta-score': typeof OfertaScoreRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -99,6 +101,8 @@ export interface RootRouteChildren {
   ResultadoRoute: typeof ResultadoRoute
   ObrigadoRoute: typeof ObrigadoRoute
   OfertaEspecialRoute: typeof OfertaEspecialRoute
+  QuizCreditoRoute: typeof QuizCreditoRoute
+  OfertaScoreRoute: typeof OfertaScoreRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -145,6 +149,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof OfertaEspecialRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/quiz-credito': {
+      id: '/quiz-credito'
+      path: '/quiz-credito'
+      fullPath: '/quiz-credito'
+      preLoaderRoute: typeof QuizCreditoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/oferta-score': {
+      id: '/oferta-score'
+      path: '/oferta-score'
+      fullPath: '/oferta-score'
+      preLoaderRoute: typeof OfertaScoreRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -155,6 +173,8 @@ const rootRouteChildren: RootRouteChildren = {
   ResultadoRoute: ResultadoRoute,
   ObrigadoRoute: ObrigadoRoute,
   OfertaEspecialRoute: OfertaEspecialRoute,
+  QuizCreditoRoute: QuizCreditoRoute,
+  OfertaScoreRoute: OfertaScoreRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
