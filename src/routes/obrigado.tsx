@@ -6,7 +6,7 @@ export const Route = createFileRoute("/obrigado")({
       { title: "Compra confirmada | Blinda Bolsa Família" },
       {
         name: "description",
-        content: "Confirmação da compra do Blinda Bolsa Família e informações sobre o material complementar Aumenta Score + BÔNUS.",
+        content: "Confirmação da compra do Blinda Bolsa Família e próximos passos para acessar seu material.",
       },
       { name: "robots", content: "noindex, nofollow" },
     ],
@@ -16,101 +16,259 @@ export const Route = createFileRoute("/obrigado")({
 
 function ThankYouPage() {
   return (
-    <main className="thankyou-page">
+    <main className="ty-page">
       <style>{`
-        .thankyou-page {
+        .ty-page, .ty-page * { box-sizing: border-box; }
+        .ty-page {
+          --ty-bg: #071321;
+          --ty-panel: #0d1d2d;
+          --ty-line: rgba(174, 199, 218, .13);
+          --ty-muted: #a9b8c8;
+          --ty-white: #f7f9fc;
+          --ty-gold: #e7c477;
           min-height: 100vh;
-          padding: 48px 20px 64px;
-          color: #f5f7fb;
+          padding: 30px 18px 64px;
+          color: var(--ty-white);
           background:
-            radial-gradient(ellipse at 50% -15%, rgba(40, 112, 160, .24), transparent 55%),
-            #071321;
+            radial-gradient(ellipse at 50% -10%, rgba(32, 103, 143, .32), transparent 48%),
+            radial-gradient(ellipse at 100% 55%, rgba(185, 145, 67, .08), transparent 38%),
+            var(--ty-bg);
           font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
         }
-        .thankyou-wrap { width: 100%; max-width: 760px; margin: 0 auto; }
-        .thankyou-brand {
-          display: flex; justify-content: center; align-items: center; gap: 10px;
-          margin: 0 auto 38px; color: #eaf3fb; font-size: 13px; font-weight: 800;
-          letter-spacing: .12em; text-align: center;
+        .ty-shell { width: 100%; max-width: 900px; margin: 0 auto; }
+        .ty-topbar {
+          display: flex; align-items: center; justify-content: center; gap: 11px;
+          margin: 0 auto 34px; color: #e9f0f7;
         }
-        .thankyou-brand-mark {
-          display: grid; place-items: center; width: 30px; height: 30px;
-          border: 1px solid rgba(105, 211, 190, .55); border-radius: 9px;
-          color: #72dfc6; font-size: 17px;
+        .ty-logo {
+          display: grid; place-items: center; width: 36px; height: 36px;
+          border: 1px solid rgba(111, 216, 194, .48); border-radius: 11px;
+          color: #79dfc6; background: rgba(63, 176, 153, .09);
+          font-size: 18px; font-weight: 900;
+          box-shadow: 0 0 24px rgba(69, 199, 171, .12);
         }
-        .thankyou-confirmation {
-          padding: 38px 28px; border: 1px solid rgba(116, 213, 194, .22);
-          border-radius: 22px; background: linear-gradient(145deg, rgba(17, 43, 59, .96), rgba(10, 27, 43, .96));
-          text-align: center; box-shadow: 0 22px 70px rgba(0,0,0,.22);
+        .ty-brand { font-size: 12px; font-weight: 850; letter-spacing: .16em; }
+        .ty-hero {
+          position: relative; overflow: hidden; padding: 44px 34px 38px;
+          border: 1px solid rgba(119, 218, 195, .2); border-radius: 24px;
+          background: linear-gradient(135deg, rgba(17, 48, 64, .98), rgba(10, 27, 44, .98) 65%, rgba(13, 34, 50, .98));
+          box-shadow: 0 28px 80px rgba(0, 0, 0, .28);
+          text-align: center;
         }
-        .thankyou-check {
-          display: grid; place-items: center; width: 58px; height: 58px; margin: 0 auto 20px;
-          border-radius: 50%; background: rgba(71, 195, 161, .14); color: #76e2c5;
-          border: 1px solid rgba(118, 226, 197, .42); font-size: 28px; font-weight: 700;
+        .ty-hero::before {
+          content: ""; position: absolute; width: 280px; height: 280px; border-radius: 50%;
+          top: -190px; right: -70px; background: rgba(87, 207, 180, .1); filter: blur(4px);
         }
-        .thankyou-eyebrow { margin: 0 0 12px; color: #83ddc8; font-size: 11px; font-weight: 800; letter-spacing: .16em; }
-        .thankyou-confirmation h1 { margin: 0; color: #fff; font-size: clamp(25px, 5vw, 37px); line-height: 1.16; letter-spacing: -.035em; }
-        .thankyou-confirmation p { margin: 16px 0 0; color: #c3d0dc; font-size: 15px; line-height: 1.65; }
-        .thankyou-next { margin: 15px 0 0 !important; color: #f1f6fa !important; font-weight: 650; }
-        .thankyou-offer { margin-top: 28px; padding: 30px; border: 1px solid rgba(224, 190, 111, .35); border-radius: 22px; background: linear-gradient(145deg, #17283a, #101d2c); }
-        .thankyou-offer-label { display: inline-block; padding: 7px 11px; border-radius: 999px; background: rgba(220, 184, 103, .13); color: #e9c979; font-size: 10px; font-weight: 800; letter-spacing: .13em; }
-        .thankyou-offer h2 { margin: 18px 0 8px; color: #fff; font-size: clamp(24px, 4vw, 32px); line-height: 1.15; letter-spacing: -.025em; }
-        .thankyou-offer h2 span { color: #e9c979; }
-        .thankyou-offer-intro { margin: 0; color: #c5d1dd; font-size: 14px; line-height: 1.65; }
-        .thankyou-benefits { display: grid; gap: 12px; margin: 22px 0; padding: 0; list-style: none; }
-        .thankyou-benefits li { display: flex; gap: 10px; color: #e4ebf1; font-size: 14px; line-height: 1.5; }
-        .thankyou-benefits li::before { content: "✓"; flex: 0 0 auto; color: #e9c979; font-weight: 800; }
-        .thankyou-bonus { margin-top: 18px; padding: 16px 18px; border-radius: 13px; background: rgba(232, 201, 121, .08); border: 1px solid rgba(232, 201, 121, .2); }
-        .thankyou-bonus strong { display: block; margin-bottom: 5px; color: #f0d58f; font-size: 12px; letter-spacing: .08em; }
-        .thankyou-bonus p { margin: 0; color: #d0d9e2; font-size: 13px; line-height: 1.55; }
-        .thankyou-disclaimer { margin: 18px 0 0; color: #9eacba; font-size: 11px; line-height: 1.55; }
-        .thankyou-footer { margin: 24px 0 0; color: #8393a3; font-size: 11px; text-align: center; }
-        @media (max-width: 520px) {
-          .thankyou-page { padding: 30px 14px 44px; }
-          .thankyou-confirmation { padding: 30px 20px; }
-          .thankyou-offer { padding: 24px 20px; }
+        .ty-status {
+          display: inline-flex; align-items: center; gap: 8px; position: relative;
+          padding: 8px 13px; border: 1px solid rgba(115, 221, 195, .28);
+          border-radius: 999px; background: rgba(77, 191, 162, .09);
+          color: #8be5ce; font-size: 10px; font-weight: 850; letter-spacing: .14em;
+        }
+        .ty-status-dot { width: 7px; height: 7px; border-radius: 50%; background: #77dfc3; box-shadow: 0 0 12px rgba(119, 223, 195, .7); }
+        .ty-check {
+          display: grid; place-items: center; width: 68px; height: 68px; margin: 23px auto 18px;
+          border: 1px solid rgba(123, 226, 201, .42); border-radius: 22px;
+          background: linear-gradient(145deg, rgba(75, 190, 160, .22), rgba(75, 190, 160, .07));
+          color: #8ce7d0; font-size: 34px; font-weight: 700;
+          box-shadow: 0 12px 36px rgba(42, 173, 143, .12);
+        }
+        .ty-hero h1 {
+          position: relative; max-width: 680px; margin: 0 auto;
+          color: #fff; font-size: clamp(29px, 5vw, 43px); line-height: 1.1;
+          letter-spacing: -.045em; font-weight: 850;
+        }
+        .ty-hero h1 span { color: #8ce2cb; }
+        .ty-hero-copy {
+          max-width: 580px; margin: 16px auto 0; color: #c2d0dc;
+          font-size: 15px; line-height: 1.75;
+        }
+        .ty-reassurance {
+          display: flex; align-items: center; justify-content: center; gap: 9px;
+          margin: 23px auto 0; color: #e1e9ef; font-size: 12px; font-weight: 650;
+        }
+        .ty-reassurance span { color: #8ce2cb; font-size: 16px; }
+        .ty-section-heading { margin: 38px 0 16px; }
+        .ty-kicker { margin: 0 0 8px; color: #80d9c2; font-size: 10px; font-weight: 850; letter-spacing: .17em; }
+        .ty-section-heading h2 { margin: 0; color: #f5f7fa; font-size: 23px; letter-spacing: -.025em; }
+        .ty-section-heading p { margin: 8px 0 0; color: var(--ty-muted); font-size: 13px; line-height: 1.65; }
+        .ty-steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+        .ty-step {
+          min-height: 148px; padding: 20px 18px; border: 1px solid var(--ty-line);
+          border-radius: 16px; background: linear-gradient(150deg, rgba(17, 38, 57, .92), rgba(10, 25, 40, .92));
+        }
+        .ty-step-number {
+          display: grid; place-items: center; width: 28px; height: 28px; margin-bottom: 13px;
+          border: 1px solid rgba(116, 215, 192, .28); border-radius: 9px;
+          background: rgba(87, 191, 166, .1); color: #83dfc8; font-size: 11px; font-weight: 850;
+        }
+        .ty-step h3 { margin: 0 0 7px; color: #f4f7fa; font-size: 14px; }
+        .ty-step p { margin: 0; color: #aebdca; font-size: 12px; line-height: 1.65; }
+        .ty-offer {
+          position: relative; overflow: hidden; margin-top: 42px; padding: 30px;
+          border: 1px solid rgba(226, 192, 119, .34); border-radius: 22px;
+          background:
+            radial-gradient(ellipse at 100% 0%, rgba(217, 177, 98, .15), transparent 42%),
+            linear-gradient(145deg, #172a3b, #0d1c2b 75%);
+          box-shadow: 0 22px 60px rgba(0, 0, 0, .2);
+        }
+        .ty-offer-layout { display: grid; grid-template-columns: 150px minmax(0, 1fr); gap: 27px; align-items: center; }
+        .ty-product-art {
+          position: relative; display: flex; flex-direction: column; justify-content: flex-end;
+          min-height: 185px; padding: 18px 15px; overflow: hidden;
+          border: 1px solid rgba(239, 208, 142, .48); border-radius: 13px;
+          background: linear-gradient(155deg, #263c4e 0%, #122536 48%, #091724 100%);
+          box-shadow: 8px 10px 0 rgba(0, 0, 0, .16), 0 0 38px rgba(222, 181, 98, .12);
+        }
+        .ty-product-art::before {
+          content: ""; position: absolute; width: 140px; height: 140px; top: -57px; right: -53px;
+          border: 1px solid rgba(231, 196, 119, .4); border-radius: 50%;
+          box-shadow: 0 0 0 13px rgba(231, 196, 119, .04), 0 0 0 27px rgba(231, 196, 119, .03);
+        }
+        .ty-art-label { position: relative; color: #e9ca86; font-size: 8px; font-weight: 900; letter-spacing: .18em; }
+        .ty-art-title { position: relative; margin-top: 9px; color: #fff; font-size: 20px; font-weight: 900; line-height: 1.02; letter-spacing: -.04em; }
+        .ty-art-title span { color: #e8c477; }
+        .ty-art-footer { position: relative; margin-top: 15px; color: #aab8c4; font-size: 8px; letter-spacing: .12em; }
+        .ty-offer-copy { min-width: 0; }
+        .ty-offer-label {
+          display: inline-flex; padding: 7px 10px; border: 1px solid rgba(231, 196, 119, .3);
+          border-radius: 999px; background: rgba(231, 196, 119, .09);
+          color: #edcf91; font-size: 9px; font-weight: 900; letter-spacing: .14em;
+        }
+        .ty-offer h2 { margin: 13px 0 9px; color: #fff; font-size: clamp(25px, 4vw, 34px); line-height: 1.08; letter-spacing: -.04em; }
+        .ty-offer h2 span { color: var(--ty-gold); }
+        .ty-offer-intro { margin: 0; color: #c1ccd6; font-size: 13px; line-height: 1.7; }
+        .ty-feature-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 11px 15px; margin: 23px 0 0; padding: 0; list-style: none; }
+        .ty-feature-list li { display: flex; gap: 9px; color: #e0e7ed; font-size: 12px; line-height: 1.5; }
+        .ty-feature-list li::before { content: "✓"; flex: 0 0 auto; color: #e8c477; font-weight: 900; }
+        .ty-bonus {
+          display: flex; gap: 14px; align-items: flex-start; margin-top: 23px; padding: 17px 18px;
+          border: 1px solid rgba(231, 196, 119, .23); border-radius: 14px;
+          background: rgba(231, 196, 119, .07);
+        }
+        .ty-bonus-icon {
+          display: grid; place-items: center; flex: 0 0 34px; width: 34px; height: 34px;
+          border-radius: 10px; background: rgba(231, 196, 119, .13); color: #f0d18e; font-size: 16px;
+        }
+        .ty-bonus strong { display: block; margin: 1px 0 5px; color: #f0d18e; font-size: 10px; letter-spacing: .12em; }
+        .ty-bonus p { margin: 0; color: #c6d0d9; font-size: 12px; line-height: 1.6; }
+        .ty-disclaimer { margin: 15px 0 0; color: #94a4b3; font-size: 10px; line-height: 1.65; }
+        .ty-help {
+          display: flex; align-items: center; justify-content: space-between; gap: 20px;
+          margin-top: 28px; padding: 19px 21px; border: 1px solid var(--ty-line);
+          border-radius: 15px; background: rgba(12, 28, 44, .78);
+        }
+        .ty-help strong { display: block; margin-bottom: 4px; color: #eef3f7; font-size: 13px; }
+        .ty-help p { margin: 0; color: #aab9c6; font-size: 11px; line-height: 1.6; }
+        .ty-help-mark { flex: 0 0 auto; color: #80d9c2; font-size: 22px; }
+        .ty-footer { margin: 25px 0 0; color: #718395; font-size: 10px; line-height: 1.7; text-align: center; }
+        @media (max-width: 650px) {
+          .ty-page { padding: 23px 13px 42px; }
+          .ty-topbar { margin-bottom: 24px; }
+          .ty-hero { padding: 32px 20px 28px; border-radius: 19px; }
+          .ty-hero-copy { font-size: 13px; }
+          .ty-steps { grid-template-columns: 1fr; gap: 9px; }
+          .ty-step { min-height: 0; padding: 15px 16px; }
+          .ty-step-number { float: left; margin: 0 12px 18px 0; }
+          .ty-step h3 { padding-top: 2px; }
+          .ty-offer { margin-top: 32px; padding: 22px 18px; }
+          .ty-offer-layout { grid-template-columns: 1fr; gap: 20px; }
+          .ty-product-art { min-height: 150px; max-width: 100%; }
+          .ty-feature-list { grid-template-columns: 1fr; gap: 10px; }
+          .ty-help { align-items: flex-start; }
         }
       `}</style>
 
-      <div className="thankyou-wrap">
-        <div className="thankyou-brand">
-          <span className="thankyou-brand-mark">✓</span>
-          <span>BLINDA BOLSA FAMÍLIA</span>
-        </div>
+      <div className="ty-shell">
+        <header className="ty-topbar">
+          <span className="ty-logo" aria-hidden="true">✓</span>
+          <span className="ty-brand">BLINDA BOLSA FAMÍLIA</span>
+        </header>
 
-        <section className="thankyou-confirmation" aria-labelledby="thankyou-title">
-          <div className="thankyou-check" aria-hidden="true">✓</div>
-          <p className="thankyou-eyebrow">COMPRA CONFIRMADA</p>
-          <h1 id="thankyou-title">Você acabou de adquirir o Blinda Bolsa Família! 🎉</h1>
-          <p className="thankyou-next">Agora é só acessar seu material e conferir tudo com calma.</p>
+        <section className="ty-hero" aria-labelledby="ty-title">
+          <div className="ty-status"><span className="ty-status-dot" /> COMPRA CONFIRMADA</div>
+          <div className="ty-check" aria-hidden="true">✓</div>
+          <h1 id="ty-title">Sua compra foi confirmada.<br /><span>Agora começa sua jornada.</span></h1>
+          <p className="ty-hero-copy">
+            Obrigado por confiar no Blinda Bolsa Família. Preparamos este espaço para
+            orientar você sobre os próximos passos e ajudar a aproveitar melhor seu material.
+          </p>
+          <div className="ty-reassurance"><span>✓</span> Esta é a página oficial de confirmação da sua compra.</div>
         </section>
 
-        <section className="thankyou-offer" aria-labelledby="thankyou-offer-title">
-          <span className="thankyou-offer-label">CONTEÚDO COMPLEMENTAR</span>
-          <h2 id="thankyou-offer-title">Aumenta Score <span>+ BÔNUS</span></h2>
-          <p className="thankyou-offer-intro">
-            Aprenda a entender melhor seu score e conhecer hábitos que podem contribuir
-            para organizar seu perfil de crédito ao longo do tempo.
-          </p>
-          <ul className="thankyou-benefits">
-            <li>Entenda o que é o score e quais fatores podem influenciá-lo.</li>
-            <li>Conheça práticas de organização financeira e cuidados com o crédito.</li>
-            <li>Saiba o que avaliar antes de solicitar cartão ou crédito.</li>
-          </ul>
-          <div className="thankyou-bonus">
-            <strong>🎁 BÔNUS EXCLUSIVO</strong>
-            <p>
-              Um guia informativo sobre alternativas de crédito para quem está com
-              restrição no CPF, incluindo cuidados para identificar propostas arriscadas.
-            </p>
+        <section aria-labelledby="ty-start-title">
+          <div className="ty-section-heading">
+            <p className="ty-kicker">PRÓXIMOS PASSOS</p>
+            <h2 id="ty-start-title">Veja o que fazer agora</h2>
+            <p>Reserve alguns minutos para localizar seu acesso e começar com tranquilidade.</p>
           </div>
-          <p className="thankyou-disclaimer">
-            O score pode variar e a concessão de cartão, limite ou crédito depende dos
-            critérios de cada instituição. Não há garantia de aprovação ou aumento de limite.
+          <div className="ty-steps">
+            <article className="ty-step">
+              <span className="ty-step-number">01</span>
+              <h3>Localize a confirmação</h3>
+              <p>Confira o e-mail informado na compra e procure a mensagem de confirmação e as instruções da plataforma.</p>
+            </article>
+            <article className="ty-step">
+              <span className="ty-step-number">02</span>
+              <h3>Encontre seu material</h3>
+              <p>Se não encontrar a mensagem, verifique também as pastas de spam, lixo eletrônico e promoções.</p>
+            </article>
+            <article className="ty-step">
+              <span className="ty-step-number">03</span>
+              <h3>Comece com atenção</h3>
+              <p>Leia ou assista ao conteúdo com calma e siga as orientações na ordem apresentada no material.</p>
+            </article>
+          </div>
+        </section>
+
+        <section className="ty-offer" aria-labelledby="ty-offer-title">
+          <div className="ty-offer-layout">
+            <div className="ty-product-art" aria-label="Apresentação visual do conteúdo Aumenta Score mais bônus">
+              <span className="ty-art-label">GUIA COMPLEMENTAR</span>
+              <span className="ty-art-title">AUMENTA<br />SCORE <span>+</span><br /><span>BÔNUS</span></span>
+              <span className="ty-art-footer">EDUCAÇÃO FINANCEIRA</span>
+            </div>
+            <div className="ty-offer-copy">
+              <span className="ty-offer-label">CONTEÚDO COMPLEMENTAR</span>
+              <h2 id="ty-offer-title">Aumenta Score <span>+ BÔNUS</span></h2>
+              <p className="ty-offer-intro">
+                Um material educativo para entender melhor o funcionamento do score,
+                conhecer hábitos de organização financeira e avaliar opções de crédito com mais informação.
+              </p>
+              <ul className="ty-feature-list">
+                <li>O que é score e quais fatores podem influenciá-lo.</li>
+                <li>Hábitos que ajudam na organização financeira.</li>
+                <li>Cuidados antes de solicitar cartão ou crédito.</li>
+                <li>Como analisar propostas e evitar armadilhas.</li>
+              </ul>
+            </div>
+          </div>
+          <div className="ty-bonus">
+            <span className="ty-bonus-icon" aria-hidden="true">✦</span>
+            <div>
+              <strong>BÔNUS INFORMATIVO</strong>
+              <p>Um guia sobre alternativas de crédito para quem tem restrição no CPF e pontos de atenção para reconhecer ofertas arriscadas.</p>
+            </div>
+          </div>
+          <p className="ty-disclaimer">
+            Conteúdo educativo. O score pode variar conforme os critérios dos birôs de crédito.
+            Aprovação de cartão, concessão de crédito e definição de limite dependem exclusivamente
+            da análise de cada instituição. Não há promessa ou garantia de aumento de score, aprovação ou limite.
           </p>
         </section>
 
-        <p className="thankyou-footer">Obrigado pela confiança. Leia as informações com atenção.</p>
+        <aside className="ty-help">
+          <div>
+            <strong>Não encontrou as instruções de acesso?</strong>
+            <p>Confira o e-mail utilizado na compra e as pastas de spam ou promoções. Se necessário, consulte o histórico do pedido na plataforma de pagamento.</p>
+          </div>
+          <span className="ty-help-mark" aria-hidden="true">?</span>
+        </aside>
+
+        <footer className="ty-footer">
+          BLINDA BOLSA FAMÍLIA · Obrigado pela confiança.<br />
+          Utilize as informações do material como orientação e consulte sempre os canais oficiais para questões sobre seu benefício.
+        </footer>
       </div>
     </main>
   );
