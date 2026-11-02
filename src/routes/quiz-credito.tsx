@@ -16,6 +16,7 @@ function CreditQuiz() {
   const [answers, setAnswers] = useState<string[]>([]);
   const [busy, setBusy] = useState(false);
   const q = questions[step];
+  if (!q) return null;
 
   function choose(value: string) {
     const next = [...answers.slice(0, step), value];
