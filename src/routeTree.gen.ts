@@ -14,7 +14,8 @@ import { Route as AnalyticsRouteImport } from './routes/analytics'
 import { Route as QuizRouteImport } from './routes/quiz'
 import { Route as ResultadoRouteImport } from './routes/resultado'
 import { Route as ObrigadoRouteImport } from './routes/obrigado'
-import { Route as OfertaEspecialRouteImport } from './routes/oferta-especial'\nimport { Route as QuizCreditoRouteImport } from './routes/quiz-credito'
+import { Route as OfertaEspecialRouteImport } from './routes/oferta-especial'
+import { Route as QuizCreditoRouteImport } from './routes/quiz-credito'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
