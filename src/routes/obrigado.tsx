@@ -286,6 +286,11 @@ function ThankYouPage() {
           <p className="ty-disclaimer">
             Resultados variam de pessoa para pessoa. Não há garantia de aumento do score, ampliação de limite ou aprovação de crédito; a decisão é sempre da instituição financeira.
           </p>
+          <p style={{ margin: "13px 0 0", textAlign: "center", fontSize: "11px" }}>
+            <a href="/oferta-especial" style={{ color: "#aebdca", textDecoration: "underline", textUnderlineOffset: "4px" }}>
+              Não quero essa oferta agora
+            </a>
+          </p>
         </section>
 
         <aside className="ty-help">
