@@ -17,7 +17,10 @@ export const Route = createFileRoute("/oferta-especial")({
 function SpecialOfferPage() {
   return (
     <main className="ds-page">
-      <style>{`
+      <style>
+        @keyframes ds-gentle-pulse{0%,100%{transform:scale(1);box-shadow:0 10px 28px rgba(211,166,40,.2),inset 0 1px rgba(255,255,255,.45)}50%{transform:scale(1.018);box-shadow:0 13px 32px rgba(211,166,40,.32),inset 0 1px rgba(255,255,255,.45)}}
+        @media(prefers-reduced-motion:reduce){.ds-cta{animation:none}}
+{`
         html:has(.ds-page), body:has(.ds-page) { margin:0!important; min-height:100%; background:#071321!important; }
         .ds-page,.ds-page *{box-sizing:border-box}
         .ds-page{min-height:100vh;min-height:100svh;padding:24px 15px 42px;color:#f7f9fc;background:radial-gradient(ellipse at 50% -8%,rgba(25,112,121,.32),transparent 48%),radial-gradient(ellipse at 100% 70%,rgba(230,190,83,.09),transparent 38%),#071321;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
@@ -41,7 +44,7 @@ function SpecialOfferPage() {
         .ds-price-label{margin:25px 0 3px;color:#c1d0d8;font-size:12px;text-align:center}
         .ds-price{color:#ffe05a;font-size:clamp(48px,9vw,62px);font-weight:950;letter-spacing:-.06em;line-height:1.05;text-align:center}
         .ds-payment{margin:7px 0 19px;color:#b8c8d1;font-size:11px;text-align:center}
-        .ds-cta{display:flex;align-items:center;justify-content:center;gap:9px;width:100%;max-width:500px;min-height:59px;margin:0 auto;padding:15px 18px;border:1px solid rgba(255,245,190,.7);border-radius:13px;color:#152432;background:linear-gradient(135deg,#ffe05a,#e9b900);box-shadow:0 10px 28px rgba(211,166,40,.2),inset 0 1px rgba(255,255,255,.45);font-size:14px;font-weight:950;text-align:center;text-decoration:none}
+        .ds-cta{display:flex;align-items:center;justify-content:center;gap:9px;width:100%;max-width:500px;min-height:59px;margin:0 auto;padding:15px 18px;border:1px solid rgba(255,245,190,.7);border-radius:13px;color:#152432;background:linear-gradient(135deg,#ffe05a,#e9b900);box-shadow:0 10px 28px rgba(211,166,40,.2),inset 0 1px rgba(255,255,255,.45);font-size:14px;font-weight:950;text-align:center;text-decoration:none;transform-origin:center;animation:ds-gentle-pulse 2.4s ease-in-out infinite}
         .ds-cta:hover{filter:brightness(1.06)}
         .ds-note{max-width:550px;margin:12px auto 0;color:#9aabb6;font-size:10px;line-height:1.65;text-align:center}
         .ds-decline{display:block;width:fit-content;margin:23px auto 0;color:#b8c5d0;font-size:12px;text-align:center;text-decoration:underline;text-underline-offset:4px}
