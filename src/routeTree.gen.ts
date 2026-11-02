@@ -14,6 +14,7 @@ import { Route as AnalyticsRouteImport } from './routes/analytics'
 import { Route as QuizRouteImport } from './routes/quiz'
 import { Route as ResultadoRouteImport } from './routes/resultado'
 import { Route as ObrigadoRouteImport } from './routes/obrigado'
+import { Route as OfertaEspecialRouteImport } from './routes/oferta-especial'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -40,6 +41,11 @@ const ObrigadoRoute = ObrigadoRouteImport.update({
   path: '/obrigado',
   getParentRoute: () => rootRouteImport,
 } as any)
+const OfertaEspecialRoute = OfertaEspecialRouteImport.update({
+  id: '/oferta-especial',
+  path: '/oferta-especial',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -47,6 +53,7 @@ export interface FileRoutesByFullPath {
   '/quiz': typeof QuizRoute
   '/resultado': typeof ResultadoRoute
   '/obrigado': typeof ObrigadoRoute
+  '/oferta-especial': typeof OfertaEspecialRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -75,6 +82,7 @@ export interface RootRouteChildren {
   QuizRoute: typeof QuizRoute
   ResultadoRoute: typeof ResultadoRoute
   ObrigadoRoute: typeof ObrigadoRoute
+  OfertaEspecialRoute: typeof OfertaEspecialRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -114,6 +122,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ObrigadoRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/oferta-especial': {
+      id: '/oferta-especial'
+      path: '/oferta-especial'
+      fullPath: '/oferta-especial'
+      preLoaderRoute: typeof OfertaEspecialRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -123,6 +138,7 @@ const rootRouteChildren: RootRouteChildren = {
   QuizRoute: QuizRoute,
   ResultadoRoute: ResultadoRoute,
   ObrigadoRoute: ObrigadoRoute,
+  OfertaEspecialRoute: OfertaEspecialRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
