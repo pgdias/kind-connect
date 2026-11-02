@@ -65,17 +65,21 @@ function SpecialOfferPage() {
         </header>
         <section className="ds-card">
           <span className="ds-tag">UMA CONDIÇÃO ESPECIAL</span>
-          <h1>Você ainda pode conhecer o <span>pacote completo</span>.</h1>
+          <h1>AINDA QUER APRENDER SOBRE CARTÃO E LIMITE? <span>VEJA ESTA CONDIÇÃO.</span></h1>
           <p className="ds-lead">
-            Se o valor da oferta anterior não coube no seu momento, disponibilizamos uma alternativa:
-            o Aumenta Score + Bônus completo por R$ 9,90.
+            Antes de sair, você ainda pode levar o pacote completo por um valor menor.
+            Entenda o que é score, o que pode influenciar essa pontuação e conheça o bônus sobre uma alternativa de crédito.
+          </p>
+          <p className="ds-lead" style={{ marginTop: "14px", fontSize: "13px" }}>
+            Score é uma pontuação que as empresas podem consultar ao avaliar um pedido de crédito.
+            Ela pode influenciar a análise, mas não garante aprovação: cada instituição tem seus próprios critérios.
           </p>
           <div className="ds-product">
-            <h2>Aumenta Score + Bônus</h2>
+            <h2>O QUE VOCÊ RECEBE NO AUMENTA SCORE + BÔNUS</h2>
             <ul className="ds-list">
-              <li>Curso completo em videoaulas.</li>
-              <li>Todos os bônus incluídos no pacote.</li>
-              <li>Acesso vitalício ao conteúdo.</li>
+              <li>Curso em videoaulas: entenda o que é score e o que pode influenciar essa pontuação.</li>
+              <li>Conteúdo bônus sobre uma instituição que divulga opções de crédito para pessoas negativadas.</li>
+              <li>Pacote completo com todos os bônus e acesso vitalício.</li>
             </ul>
           </div>
           <p className="ds-price">Oferta especial · pagamento único</p>
@@ -85,7 +89,7 @@ function SpecialOfferPage() {
             QUERO O PACOTE COMPLETO <span aria-hidden="true">→</span>
           </a>
           <p className="ds-note">
-            O conteúdo é informativo. Não há garantia de aumento do score, ampliação de limite ou aprovação de crédito; a decisão é sempre da instituição financeira.
+            O conteúdo é educativo e informativo. Não garante aumento de score, aprovação de cartão, concessão de crédito ou aumento de limite. Cada instituição possui seus próprios critérios de análise.
           </p>
           <a className="ds-decline" href="/">Não quero adicionar essa oferta</a>
         </section>
