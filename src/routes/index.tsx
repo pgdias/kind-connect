@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect } from "react";
 import { startQuizSession, trackEvent } from "../lib/api";
+import { trackKwaiEvent } from "../lib/kwai-pixel";
 
 export const Route = createFileRoute("/")({ component: Index });
 
@@ -19,7 +20,10 @@ function Arrow() {
 
 function CTA() {
   return (
-    <Link className="primary-button landing-cta landing-main-cta pulse-cta" to="/quiz" onClick={() => void trackEvent("cta_click", { location: "landing" })}>
+    <Link className="primary-button landing-cta landing-main-cta pulse-cta" to="/quiz" onClick={() => {
+      void trackEvent("cta_click", { location: "landing" });
+      trackKwaiEvent("buttonClick");
+    }}>
       DESCOBRIR SE ESTOU COMETENDO ERROS QUE PODEM CAUSAR O CANCELAMENTO DO MEU BOLSA FAMÍLIA
       <Arrow />
     </Link>
