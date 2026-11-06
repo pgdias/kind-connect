@@ -5,7 +5,7 @@ import appCss from "../styles.css?url";
 import professionalCss from "../professional-theme.css?url";
 import analyticsPremiumCss from "../analytics-premium.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
-import { trackEvent } from "../lib/api";
+import { getStoredUtmParams, trackEvent } from "../lib/api";
 import { trackKwaiEvent, trackKwaiPageView } from "../lib/kwai-pixel";
 
 function NotFoundComponent(){return <div className="placeholder"><div><span>404</span><h1>Página não encontrada</h1><p>A página que você procura não existe.</p><Link className="secondary-button" to="/">Voltar para o início</Link></div></div>}
@@ -109,6 +109,15 @@ function RootComponent(){
       }
 
       if (destination.hostname !== "pay.cakto.com.br") return;
+
+      // Keep campaign attribution on Cakto checkout links even after quiz URLs change.
+      const utmParams = getStoredUtmParams();
+      for (const [key, value] of Object.entries(utmParams)) {
+        if (value && !destination.searchParams.has(key)) {
+          destination.searchParams.set(key, value);
+        }
+      }
+      anchor.href = destination.toString();
 
       const now = Date.now();
       if (now - lastCheckoutClickAt < 800) return;
