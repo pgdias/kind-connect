@@ -20,13 +20,18 @@ function Arrow() {
 
 function CTA() {
   return (
-    <Link className="primary-button landing-cta landing-main-cta pulse-cta" to="/quiz" onClick={() => {
-      void trackEvent("cta_click", { location: "landing" });
-      trackKwaiEvent("buttonClick");
-    }}>
-      DESCOBRIR SE ESTOU COMETENDO ERROS QUE PODEM CAUSAR O CANCELAMENTO DO MEU BOLSA FAMÍLIA
-      <Arrow />
-    </Link>
+    <>
+      <Link className="primary-button landing-cta landing-main-cta pulse-cta" to="/quiz" onClick={() => {
+        void trackEvent("cta_click", { location: "landing" });
+        trackKwaiEvent("buttonClick");
+      }}>
+        COMEÇAR MEU TESTE GRATUITO
+        <Arrow />
+      </Link>
+      <span className="landing-cta-helper">
+        Clique para iniciar seu teste e responder às perguntas.
+      </span>
+    </>
   );
 }
 
