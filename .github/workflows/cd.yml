@@ -15,7 +15,7 @@ jobs:
     name: Deploy to Proxmox CT via Tailscale
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 35
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -39,7 +39,7 @@ jobs:
 
       - name: Pull Docker images directly on deploy host
         shell: bash
-        timeout-minutes: 8
+        timeout-minutes: 25
         env:
           TAILSCALE_IP: ${{ secrets.TAILSCALE_IP }}
           SSH_USER: ${{ secrets.SSH_USER }}
