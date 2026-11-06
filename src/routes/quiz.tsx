@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { recordQuizCompletion, saveQuizAnswer, saveQuizSummary, startQuizSession, trackEvent } from "../lib/api";
+import { trackKwaiEvent } from "../lib/kwai-pixel";
 
 type Answer = { questionId: number; value: string };
 type Question = { id: number; tag: string; title: string; subtitle?: string; options: string[] };
@@ -143,6 +144,8 @@ function QuizPage() {
       }
 
       await saveQuizSummary(next, []);
+      // Fire the standard Kwai form-submit event only after the final quiz answer is saved.
+      trackKwaiEvent("formSubmit");
       await new Promise((resolve) => setTimeout(resolve, 4500));
     } else {
       void saveQuizAnswer(question.id, value, false);
