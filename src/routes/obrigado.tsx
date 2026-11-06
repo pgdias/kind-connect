@@ -1,4 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { trackEvent } from "../lib/api";
+import { trackKwaiEvent } from "../lib/kwai-pixel";
 
 export const Route = createFileRoute("/obrigado")({
   head: () => ({
@@ -269,7 +271,16 @@ function ThankYouPage() {
               <p><strong>É gratuito. Não pediremos CPF, senha nem dados bancários.</strong></p>
             </div>
             <div className="ty-buy-wrap">
-              <a className="ty-buy-button" href="/quiz-credito">QUERO VER COMO BUSCAR UM LIMITE MAIOR →</a>
+              <a
+                className="ty-buy-button"
+                href="/quiz-credito"
+                onClick={() => {
+                  void trackEvent("cta_click", { location: "thank_you", destination: "credit_quiz" });
+                  trackKwaiEvent("buttonClick");
+                }}
+              >
+                QUERO VER COMO BUSCAR UM LIMITE MAIOR →
+              </a>
             </div>
           </div>
         </section>
