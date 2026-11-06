@@ -68,17 +68,51 @@ function getDeviceType() {
   return "desktop";
 }
 
-function getUtmParams() {
-  if (typeof window === "undefined") return {};
-  const params = new URLSearchParams(window.location.search);
+const UTM_STORAGE_KEY = "blindaUtmAttribution";
+const UTM_KEYS = ["utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term"] as const;
+type UtmKey = (typeof UTM_KEYS)[number];
+type StoredUtmData = { capturedAt: number; values: Record<UtmKey, string | null> };
 
-  return {
-    utm_source: params.get("utm_source"),
-    utm_medium: params.get("utm_medium"),
-    utm_campaign: params.get("utm_campaign"),
-    utm_content: params.get("utm_content"),
-    utm_term: params.get("utm_term"),
-  };
+function getUtmParams(): Record<UtmKey, string | null> {
+  if (typeof window === "undefined") {
+    return { utm_source: null, utm_medium: null, utm_campaign: null, utm_content: null, utm_term: null };
+  }
+
+  const params = new URLSearchParams(window.location.search);
+  const incoming = Object.fromEntries(
+    UTM_KEYS.map((key) => [key, params.get(key)?.trim() || null]),
+  ) as Record<UtmKey, string | null>;
+  const hasIncomingUtm = UTM_KEYS.some((key) => incoming[key] !== null);
+
+  if (hasIncomingUtm) {
+    const stored: StoredUtmData = { capturedAt: Date.now(), values: incoming };
+    window.localStorage.setItem(UTM_STORAGE_KEY, JSON.stringify(stored));
+    return incoming;
+  }
+
+  try {
+    const raw = window.localStorage.getItem(UTM_STORAGE_KEY);
+    if (raw) {
+      const stored = JSON.parse(raw) as StoredUtmData;
+      if (stored?.capturedAt && Date.now() - stored.capturedAt <= 30 * 24 * 60 * 60 * 1000) {
+        return Object.fromEntries(
+          UTM_KEYS.map((key) => [key, stored.values?.[key] || null]),
+        ) as Record<UtmKey, string | null>;
+      }
+      window.localStorage.removeItem(UTM_STORAGE_KEY);
+    }
+  } catch {
+    window.localStorage.removeItem(UTM_STORAGE_KEY);
+  }
+
+  return incoming;
+}
+
+export function getStoredUtmParams(): Partial<Record<UtmKey, string>> {
+  const values = getUtmParams();
+  return Object.fromEntries(
+    UTM_KEYS.filter((key) => values[key]).map((key) => [key, values[key] as string]),
+  ) as Partial<Record<UtmKey, string>>;
 }
 
 async function apiRequest(path: string, init: RequestInit = {}) {
