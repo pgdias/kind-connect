@@ -188,13 +188,13 @@ function ResultPage() {
     const points: string[] = [];
     const get = (id: number) => answers.find((a) => a.questionId === id)?.value;
 
-    if (["Não tenho certeza", "Mudou alguma coisa", "Nunca conferi"].includes(get(1) || "")) {
+    if (["Não sei quando foi", "Faz mais de 24 meses", "Preciso conferir"].includes(get(1) || "")) {
       points.push("Vale conferir se o Cadastro Único ainda retrata a realidade atual da sua família.");
     }
-    if (["Não conferi", "Não tenho certeza"].includes(get(2) || "")) {
+    if (["Sim, e ainda não conferi", "Não tenho certeza"].includes(get(2) || "")) {
       points.push("Vale conferir se mudanças de trabalho ou renda foram refletidas corretamente no cadastro.");
     }
-    if (["Não sei se foi informado", "Nunca conferi"].includes(get(3) || "")) {
+    if (["Sim, e ainda não atualizei", "Não tenho certeza"].includes(get(3) || "")) {
       points.push("Vale conferir se a composição atual da família está corretamente registrada.");
     }
     if (["Não tenho certeza", "Mudei e não conferi"].includes(get(4) || "")) {
