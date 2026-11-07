@@ -6,62 +6,31 @@ import { trackKwaiEvent } from "../lib/kwai-pixel";
 type Answer = { questionId: number; value: string };
 type Question = { id: number; tag: string; title: string; subtitle?: string; options: string[] };
 
+const QUIZ_VERSION_KEY = "blindaQuizVersion";
+const QUIZ_VERSION = "2";
+const ANSWERS_KEY = "blindaQuizAnswers";
+
 const questions: Question[] = [
   {
     id: 1,
-    tag: "SITUAÇÃO 01",
-    title: "Você tem certeza de que o seu cadastro ainda retrata exatamente a realidade da sua família?",
-    subtitle: "Pense no que mudou desde a última atualização: renda, trabalho, endereço ou quem mora com você.",
-    options: ["Não tenho certeza", "Mudou alguma coisa", "Sim, está exatamente igual", "Nunca conferi"],
+    tag: "PERGUNTA 01",
+    title: "Você sabe se o seu Cadastro Único foi atualizado nos últimos 24 meses?",
+    subtitle: "Também é importante atualizar os dados quando houver mudanças relevantes na família.",
+    options: ["Sim, tenho certeza", "Não sei quando foi", "Faz mais de 24 meses", "Preciso conferir"],
   },
   {
     id: 2,
-    tag: "SITUAÇÃO 02",
-    title: "Alguém da família começou ou parou de trabalhar — ou a renda mudou — e você conferiu isso no cadastro?",
-    subtitle: 'Se a resposta não for um "sim" com certeza, vale prestar atenção neste ponto.',
-    options: ["Não conferi", "Não tenho certeza", "Sim, conferi", "Não aconteceu"],
+    tag: "PERGUNTA 02",
+    title: "A renda ou a situação de trabalho de alguém da família mudou recentemente?",
+    subtitle: "Por exemplo: alguém começou ou parou de trabalhar, ou a renda aumentou ou diminuiu.",
+    options: ["Sim, e ainda não conferi", "Sim, e já conferi", "Não mudou", "Não tenho certeza"],
   },
   {
     id: 3,
-    tag: "SITUAÇÃO 03",
-    title: "Entrou ou saiu alguém da família e você sabe se essa mudança foi informada corretamente?",
-    subtitle: "Composição familiar também faz parte das informações registradas no Cadastro Único.",
-    options: ["Não sei se foi informado", "Sim, foi informado", "Não aconteceu", "Nunca conferi"],
-  },
-  {
-    id: 4,
-    tag: "SITUAÇÃO 04",
-    title: "Seu endereço ou telefone mudou e você tem certeza de que o cadastro continua com os dados certos?",
-    subtitle: "Uma mudança pode acontecer no dia a dia e o cadastro continuar com a informação anterior.",
-    options: ["Não tenho certeza", "Mudei e não conferi", "Sim, está atualizado", "Não mudou"],
-  },
-  {
-    id: 5,
-    tag: "SITUAÇÃO 05",
-    title: "Você sabe quando foi a última vez que o seu Cadastro Único foi atualizado?",
-    subtitle: "A atualização deve ocorrer a cada 24 meses e também quando há mudanças relevantes na família.",
-    options: ["Não lembro", "Acho que faz mais de 2 anos", "Sei a data e está dentro do prazo", "Não sei"],
-  },
-  {
-    id: 6,
-    tag: "SITUAÇÃO 06",
-    title: "Você saberia se existe alguma diferença entre o que foi declarado no cadastro e uma informação em outra base oficial?",
-    subtitle: "O Governo realiza cruzamentos de informações para identificar possíveis divergências cadastrais.",
-    options: ["Não saberia", "Nunca conferi", "Sim, saberia", "Não tenho certeza"],
-  },
-  {
-    id: 7,
-    tag: "SITUAÇÃO 07",
-    title: "Se você recebesse uma convocação para atualizar ou verificar o cadastro, saberia exatamente o que fazer?",
-    subtitle: "Famílias podem ser chamadas quando é necessário atualizar dados ou tratar possíveis inconsistências.",
-    options: ["Não saberia", "Não tenho certeza", "Sim, saberia", "Nunca passei por isso"],
-  },
-  {
-    id: 8,
-    tag: "ÚLTIMA PERGUNTA",
-    title: "Agora seja sincero: você consegue apontar algum ponto do seu cadastro que merece ser conferido?",
-    subtitle: "Suas respostas vão mostrar quais situações merecem mais atenção na sua avaliação.",
-    options: ["Não faço ideia", "Tenho algumas dúvidas", "Sim, sei qual é", "Acho que está tudo certo"],
+    tag: "PERGUNTA 03",
+    title: "Mudou quem mora com você, seu endereço ou telefone desde a última atualização?",
+    subtitle: "Mudanças na composição familiar e nos dados de contato também merecem ser conferidas.",
+    options: ["Sim, e ainda não atualizei", "Sim, e já atualizei", "Não houve mudanças", "Não tenho certeza"],
   },
 ];
 
@@ -76,8 +45,16 @@ function readStep() {
 function readAnswers(): Answer[] {
   if (typeof window === "undefined") return [];
   try {
-    const parsed = JSON.parse(sessionStorage.getItem("blindaQuizAnswers") || "[]");
-    return Array.isArray(parsed) ? parsed : [];
+    if (window.sessionStorage.getItem(QUIZ_VERSION_KEY) !== QUIZ_VERSION) {
+      window.sessionStorage.removeItem(ANSWERS_KEY);
+      window.sessionStorage.setItem(QUIZ_VERSION_KEY, QUIZ_VERSION);
+      return [];
+    }
+    const parsed = JSON.parse(window.sessionStorage.getItem(ANSWERS_KEY) || "[]");
+    return Array.isArray(parsed)
+      ? parsed.filter((answer): answer is Answer =>
+          answer && [1, 2, 3].includes(answer.questionId) && typeof answer.value === "string")
+      : [];
   } catch {
     return [];
   }
@@ -128,7 +105,7 @@ function QuizPage() {
     ];
 
     setAnswers(next);
-    sessionStorage.setItem("blindaQuizAnswers", JSON.stringify(next));
+    window.sessionStorage.setItem(ANSWERS_KEY, JSON.stringify(next));
 
     const isLastQuestion = current === questions.length - 1;
     if (isLastQuestion) {
@@ -144,7 +121,6 @@ function QuizPage() {
       }
 
       await saveQuizSummary(next, []);
-      // Fire the standard Kwai form-submit event only after the final quiz answer is saved.
       trackKwaiEvent("formSubmit");
       await new Promise((resolve) => setTimeout(resolve, 4500));
     } else {
@@ -192,9 +168,9 @@ function QuizPage() {
           <div className="quiz-v3-progress"><span style={{ width: `${progress}%` }} /></div>
 
           <div className="quiz-v3-intro">
-            <span>ATENÇÃO: RESPONDA SEM CHUTAR</span>
-            <h1>Você pode descobrir pontos que nunca parou para conferir.</h1>
-            <p>Responda com o que você realmente sabe. Quando você não tiver certeza, marque isso.</p>
+            <span>AVALIAÇÃO RÁPIDA</span>
+            <h1>São apenas 3 perguntas rápidas.</h1>
+            <p>Responda com sinceridade para identificar quais informações do seu cadastro vale a pena conferir.</p>
           </div>
 
           <div className="quiz-v3-card">
