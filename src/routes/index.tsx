@@ -25,7 +25,7 @@ function DirectVslPage() {
         <div className="result-container vsl-sales-container">
           <section className="vsl-headline direct-vsl-headline">
             <h1>
-              10 ERROS IMPORTANTES QUE PODEM <em>COLOCAR SEU BENEFÍCIO EM RISCO</em> E VOCÊ NEM IMAGINA.
+              10 ERROS IMPORTANTES QUE PODEM <em>COLOCAR SEU BOLSA FAMÍLIA EM RISCO</em> E VOCÊ NEM IMAGINA.
             </h1>
           </section>
 
