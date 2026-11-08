@@ -39,3 +39,42 @@
     margin: 0 auto;
   }
 }
+
+/* Keep the direct VSL page aligned after removing the header. */
+.direct-vsl-page .result-main {
+  min-height: 100vh;
+}
+
+@media (max-width: 600px) {
+  .direct-vsl-page .result-main {
+    min-height: 100vh;
+    padding: 18px 12px 40px;
+  }
+
+  .direct-vsl-page .vsl-sales-container {
+    width: 100%;
+    max-width: 100%;
+    margin: 0 auto;
+    align-items: center;
+    text-align: center;
+  }
+
+  .direct-vsl-page .vsl-headline {
+    width: 100%;
+    padding: 18px 2px 18px;
+    text-align: center;
+  }
+
+  .direct-vsl-page .vsl-headline h1 {
+    width: 100%;
+    max-width: 100%;
+    margin: 0 auto;
+    text-align: center;
+    overflow-wrap: anywhere;
+  }
+
+  .direct-vsl-page .vsl-video-wrap {
+    width: 100%;
+    margin: 0 auto;
+  }
+}
