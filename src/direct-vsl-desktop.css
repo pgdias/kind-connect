@@ -1,0 +1,41 @@
+/* Desktop-only alignment for the direct VSL landing page. Mobile styles remain in styles.css. */
+@media (min-width: 601px) {
+  .direct-vsl-page .result-header {
+    justify-content: center;
+    gap: 18px;
+  }
+
+  .direct-vsl-page .result-main {
+    display: flex;
+    justify-content: center;
+    padding: 48px 28px 72px;
+  }
+
+  .direct-vsl-page .vsl-sales-container {
+    width: min(900px, 100%);
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .direct-vsl-page .vsl-headline {
+    width: 100%;
+    padding: 34px 12px 30px;
+    text-align: center;
+  }
+
+  .direct-vsl-page .vsl-headline h1 {
+    width: 100%;
+    max-width: 820px;
+    margin: 0 auto 15px;
+    text-align: center;
+  }
+
+  .direct-vsl-page .vsl-video-wrap {
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+}
