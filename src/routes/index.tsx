@@ -21,14 +21,6 @@ function DirectVslPage() {
 
   return (
     <main className="result-page vsl-sales-page direct-vsl-page">
-      <header className="quiz-header result-header">
-        <div className="quiz-brand">
-          <span className="quiz-brand-mark">✓</span>
-          <strong>BLINDA BOLSA FAMÍLIA</strong>
-        </div>
-        <span className="quiz-safe">CONTEÚDO INFORMATIVO</span>
-      </header>
-
       <section className="result-main">
         <div className="result-container vsl-sales-container">
           <section className="vsl-headline direct-vsl-headline">
