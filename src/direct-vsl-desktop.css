@@ -78,3 +78,28 @@
     margin: 0 auto;
   }
 }
+
+
+/* Subtitle directly below the direct VSL headline */
+.direct-vsl-page .direct-vsl-subtitle {
+  max-width: 720px;
+  margin: 14px auto 0;
+  color: #b8c0bc;
+  font-size: 15px;
+  line-height: 1.5;
+  font-weight: 600;
+  letter-spacing: .015em;
+  text-align: center;
+}
+
+@media (max-width: 600px) {
+  .direct-vsl-page .direct-vsl-subtitle {
+    width: 100%;
+    max-width: 100%;
+    margin: 12px auto 0;
+    padding: 0 3px;
+    font-size: 12px;
+    line-height: 1.45;
+    text-align: center;
+  }
+}
