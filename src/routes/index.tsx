@@ -27,6 +27,9 @@ function DirectVslPage() {
             <h1>
               10 ERROS IMPORTANTES QUE PODEM <em>COLOCAR SEU BOLSA FAMÍLIA EM RISCO</em> E VOCÊ NEM IMAGINA.
             </h1>
+            <p className="direct-vsl-subtitle">
+              ASSISTA AO VÍDEO ABAIXO PARA DESCOBRIR QUAIS SÃO ESSES ERROS.
+            </p>
           </section>
 
           <section className="vsl-video-wrap">
