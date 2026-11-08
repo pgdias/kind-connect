@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect } from "react";
 import { trackEvent } from "../lib/api";
+import "../direct-vsl-desktop.css";
 
 export const Route = createFileRoute("/")({ component: DirectVslPage });
 
