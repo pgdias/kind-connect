@@ -19,7 +19,7 @@ function DirectVslPage() {
   }, []);
 
   return (
-    <main className="result-page vsl-sales-page">
+    <main className="result-page vsl-sales-page direct-vsl-page">
       <header className="quiz-header result-header">
         <div className="quiz-brand">
           <span className="quiz-brand-mark">✓</span>
@@ -30,9 +30,9 @@ function DirectVslPage() {
 
       <section className="result-main">
         <div className="result-container vsl-sales-container">
-          <section className="vsl-headline">
+          <section className="vsl-headline direct-vsl-headline">
             <h1>
-              10 erros importantes que podem <em>colocar seu benefício em risco</em> — e você nem imagina.
+              10 ERROS IMPORTANTES QUE PODEM <em>COLOCAR SEU BENEFÍCIO EM RISCO</em> E VOCÊ NEM IMAGINA.
             </h1>
           </section>
 
