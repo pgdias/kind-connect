@@ -24,9 +24,8 @@ export function trackKwaiEvent(eventName: string) {
   window.kwaiq?.instance?.(KWAI_PIXEL_ID)?.track?.(eventName);
 }
 
-/** Records a page view and its corresponding content-view conversion. */
+/** Records a page view using the Kwai base-code page event. */
 export function trackKwaiPageView() {
   if (typeof window === "undefined") return;
   window.kwaiq?.page?.();
-  trackKwaiEvent("contentView");
 }
