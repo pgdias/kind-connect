@@ -1187,3 +1187,43 @@ html:has(.vsl-sales-page), body:has(.vsl-sales-page), body:has(.vsl-sales-page) 
   .activity-notification p{font-size:13px}
   .activity-notification small{font-size:12px}
 }
+
+
+/* Direct VSL test: centered mobile layout and red headline emphasis */
+@media(max-width:600px){
+  .direct-vsl-page .result-header{
+    justify-content:center;
+    flex-direction:column;
+    gap:5px;
+    height:auto;
+    min-height:72px;
+    padding:8px 12px;
+  }
+  .direct-vsl-page .quiz-brand{justify-content:center}
+  .direct-vsl-page .quiz-safe{align-self:center}
+  .direct-vsl-page .result-main{padding-left:12px;padding-right:12px}
+  .direct-vsl-page .vsl-sales-container{
+    width:100%;
+    margin:0 auto;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    text-align:center;
+  }
+  .direct-vsl-page .vsl-headline{
+    width:100%;
+    padding:24px 4px 20px;
+    text-align:center;
+  }
+  .direct-vsl-page .vsl-headline h1{
+    width:100%;
+    margin-left:auto;
+    margin-right:auto;
+    text-align:center;
+    font-size:clamp(25px,7.2vw,34px);
+    line-height:1.08;
+    overflow-wrap:break-word;
+  }
+  .direct-vsl-page .vsl-headline h1 em{color:#f0242e}
+  .direct-vsl-page .vsl-video-wrap{width:100%;margin-inline:auto}
+}
