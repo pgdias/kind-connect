@@ -54,9 +54,6 @@ function DirectVslPage() {
             <h1>
               10 ERROS IMPORTANTES QUE PODEM <em>COLOCAR SEU BOLSA FAMÍLIA EM RISCO</em> E VOCÊ NEM IMAGINA.
             </h1>
-            <p className="direct-vsl-subtitle">
-              ASSISTA AO VÍDEO ABAIXO PARA DESCOBRIR QUAIS SÃO ESSES ERROS.
-            </p>
           </section>
 
           <section
@@ -71,6 +68,10 @@ function DirectVslPage() {
               style={{ display: "block", width: "100%", height: "auto", borderRadius: "16px" }}
             />
           </section>
+
+          <p className="direct-vsl-subtitle direct-vsl-image-caption">
+            ASSISTA AO VÍDEO COMPLETO PARA DESCOBRIR OS ERROS QUE EU ESTAVA COMETENDO TODOS OS DIAS E NEM IMAGINAVA QUE PODERIAM CAUSAR O BLOQUEIO DO BOLSA FAMÍLIA.
+          </p>
 
           <section className="vsl-video-wrap">
             <div

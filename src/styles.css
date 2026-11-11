@@ -1570,3 +1570,18 @@ html:has(.vsl-sales-page), body:has(.vsl-sales-page), body:has(.vsl-sales-page) 
     max-height: 420px;
   }
 }
+
+
+/* Chamada de atenção abaixo da imagem da história */
+.direct-vsl-page .direct-vsl-image-caption {
+  max-width: 42rem;
+  margin: 14px auto 18px;
+  padding: 0 12px;
+  color: #e53935;
+  font-weight: 800;
+  font-size: clamp(15px, 3.8vw, 19px);
+  line-height: 1.45;
+  text-align: center;
+  text-wrap: balance;
+  text-transform: none;
+}
