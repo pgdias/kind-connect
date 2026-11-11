@@ -59,6 +59,19 @@ function DirectVslPage() {
             </p>
           </section>
 
+          <section
+            className="direct-vsl-story-image"
+            style={{ width: "100%", maxWidth: "900px", margin: "0 auto 22px", padding: "0 2px" }}
+          >
+            <img
+              src="https://i.postimg.cc/d3sPsMhJ/Bolsa-Familia-Bloqueado-Historia-Real.png"
+              alt="História real sobre bloqueio do Bolsa Família"
+              loading="eager"
+              fetchPriority="high"
+              style={{ display: "block", width: "100%", height: "auto", borderRadius: "16px" }}
+            />
+          </section>
+
           <section className="vsl-video-wrap">
             <div
               data-vplay="6fce00a3-efeb-4f89-9b49-dc3bcf3d7845"
