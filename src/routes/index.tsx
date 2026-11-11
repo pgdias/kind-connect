@@ -69,6 +69,15 @@ function DirectVslPage() {
             />
           </section>
 
+          <section className="direct-vsl-scroll-guide" aria-label="Orientação para encontrar o vídeo">
+            <p className="direct-vsl-scroll-alert">⬇️ ATENÇÃO! NÃO SAIA DA PÁGINA!</p>
+            <h2>DESLIZE A TELA PARA BAIXO</h2>
+            <p className="direct-vsl-scroll-description">
+              O VÍDEO COMPLETO ESTÁ MAIS ABAIXO. ASSISTA PARA DESCOBRIR OS ERROS!
+            </p>
+            <span className="direct-vsl-scroll-arrow" aria-hidden="true">↓</span>
+          </section>
+
           <p className="direct-vsl-subtitle direct-vsl-image-caption">
             ASSISTA AO VÍDEO COMPLETO PARA DESCOBRIR OS ERROS QUE EU ESTAVA COMETENDO TODOS OS DIAS E NEM IMAGINAVA QUE PODERIAM CAUSAR O BLOQUEIO DO BOLSA FAMÍLIA.
           </p>
