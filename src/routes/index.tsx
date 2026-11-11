@@ -9,9 +9,36 @@ function DirectVslPage() {
   useEffect(() => {
     void trackEvent("direct_vsl_landing_viewed");
 
+    const w = window as Window & { _vpt?: number };
+    const p = performance;
+    w._vpt = w._vpt || (p && p.timeOrigin ? p.timeOrigin + p.now() : Date.now());
+
+    const addLink = (rel: string, href: string, as?: string, crossOrigin?: boolean) => {
+      const link = document.createElement("link");
+      link.rel = rel;
+      link.href = href;
+      if (as) link.as = as;
+      if (crossOrigin) link.crossOrigin = "anonymous";
+      if (rel === "preload" && as === "image") {
+        link.setAttribute("fetchpriority", "high");
+      }
+      document.head.appendChild(link);
+    };
+
+    addLink("preconnect", "https://player.vplay.com.br");
+    addLink("preconnect", "https://video.vplay.com.br", undefined, true);
+    addLink("dns-prefetch", "https://player.vplay.com.br");
+    addLink("dns-prefetch", "https://video.vplay.com.br");
+    addLink("preload", "https://player.vplay.com.br/embed.min.js", "script");
+    addLink(
+      "preload",
+      "https://api.vplay.com.br/uploads/u151-img-44b3621d-f3ba-4b3b-a673-20ebb0e2f2ea.png",
+      "image",
+    );
+
     const script = document.createElement("script");
     script.src = "https://player.vplay.com.br/embed.min.js";
-    script.async = true;
+    script.defer = true;
     document.body.appendChild(script);
 
     return () => {
@@ -37,7 +64,7 @@ function DirectVslPage() {
               data-vplay="6fce00a3-efeb-4f89-9b49-dc3bcf3d7845"
               data-aspect-ratio="9/16"
               data-border-radius="26"
-              data-poster="https://video.vplay.com.br/users/151/media/4a1e7906-ce29-4de6-bdaf-bb8baced0306/poster/v1792525841179/poster.jpg"
+              data-poster="https://api.vplay.com.br/uploads/u151-img-44b3621d-f3ba-4b3b-a673-20ebb0e2f2ea.png"
               data-loading="eager"
             />
           </section>
