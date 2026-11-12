@@ -146,6 +146,7 @@ function VPlayPlayerEmbed() {
     <iframe
       src="https://player.vplay.com.br/player/6fce00a3-efeb-4f89-9b49-dc3bcf3d7845/embed"
       title="Vídeo Blinda Bolsa Família"
+      className="vplay-iframe"
       style={{
         display: "block",
         width: "100%",
