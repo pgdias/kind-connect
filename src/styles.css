@@ -1306,9 +1306,9 @@ html:has(.vsl-sales-page), body:has(.vsl-sales-page), body:has(.vsl-sales-page) 
     border-radius: 13px;
   }
 
-  .direct-vsl-page .vsl-video-wrap [data-vplay],
+  .direct-vsl-page .vsl-video-wrap vplay-player,
   .direct-vsl-page .vsl-video-wrap iframe,
-  .vsl-sales-page .vsl-video-wrap [data-vplay],
+  .vsl-sales-page .vsl-video-wrap vplay-player,
   .vsl-sales-page .vsl-video-wrap iframe {
     display: block;
     width: 100% !important;
