@@ -153,6 +153,8 @@ function VPlayPlayerEmbed() {
 export const Route = createFileRoute("/")({ component: DirectVslPage });
 
 function DirectVslPage() {
+  const [playerReady, setPlayerReady] = useState(false);
+  const [playerLoadError, setPlayerLoadError] = useState(false);
 
   useEffect(() => {
     void trackEvent("direct_vsl_landing_viewed");
@@ -188,7 +190,9 @@ function DirectVslPage() {
 
     const playerScript = document.createElement("script");
     playerScript.src = "https://player.vplay.com.br/vplay.min.js";
-    playerScript.defer = true;
+    playerScript.async = true;
+    playerScript.onload = () => setPlayerReady(true);
+    playerScript.onerror = () => setPlayerLoadError(true);
     document.head.appendChild(playerScript);
 
     return () => {
@@ -235,7 +239,15 @@ function DirectVslPage() {
           </p>
 
           <section className="vsl-video-wrap">
-            <VPlayPlayerEmbed />
+            {playerReady ? (
+              <VPlayPlayerEmbed />
+            ) : playerLoadError ? (
+              <p role="status" style={{ color: "#fff", textAlign: "center", padding: "24px 12px" }}>
+                Não foi possível carregar o player. Atualize a página para tentar novamente.
+              </p>
+            ) : (
+              <div aria-live="polite" style={{ width: "100%", aspectRatio: "9 / 16", background: "#080b0a" }} />
+            )}
           </section>
         </div>
       </section>
