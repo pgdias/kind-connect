@@ -111,7 +111,7 @@ function ActivityNotifications() {
           setVisible(true);
           playNotificationSound();
         }, 120);
-      }, 5000);
+      }, 10000);
     }, 119000);
 
     return () => {
