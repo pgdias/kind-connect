@@ -111,7 +111,7 @@ function ActivityNotifications() {
           playNotificationSound();
         }, 120);
       }, 5000);
-    }, 230000);
+    }, 119000);
 
     return () => {
       window.clearTimeout(firstNotification);
