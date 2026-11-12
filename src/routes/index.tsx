@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { createElement, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { trackEvent } from "../lib/api";
 import "../direct-vsl-desktop.css";
 
@@ -143,11 +143,19 @@ function ActivityNotifications() {
 
 function VPlayPlayerEmbed() {
   return (
-    <div
-      data-vplay="6fce00a3-efeb-4f89-9b49-dc3bcf3d7845"
-      data-aspect-ratio="9/16"
-      data-poster="https://api.vplay.com.br/uploads/u151-img-a4e07aee-90fd-41d3-8787-8cdb43d8ce37.png"
-      data-loading="eager"
+    <iframe
+      src="https://player.vplay.com.br/player/6fce00a3-efeb-4f89-9b49-dc3bcf3d7845/embed"
+      title="Vídeo Blinda Bolsa Família"
+      style={{
+        display: "block",
+        width: "100%",
+        aspectRatio: "9 / 16",
+        border: 0,
+        borderRadius: 0,
+        background: "#000",
+      }}
+      allow="autoplay; fullscreen; picture-in-picture; encrypted-media"
+      allowFullScreen
     />
   );
 }
@@ -163,14 +171,6 @@ function DirectVslPage() {
       ? performance.timeOrigin + performance.now()
       : Date.now());
 
-    // Carrega o Embed.js somente depois que o React monta o elemento data-vplay.
-    // Isso evita que o script procure o player antes de ele existir no DOM.
-    if (!document.querySelector('script[src="https://player.vplay.com.br/embed.min.js"]')) {
-      const playerScript = document.createElement("script");
-      playerScript.src = "https://player.vplay.com.br/embed.min.js";
-      playerScript.async = false;
-      document.head.appendChild(playerScript);
-    }
   }, []);
 
   return (
