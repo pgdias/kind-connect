@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { createElement, useEffect, useRef, useState } from "react";
+import { createElement, useEffect, useState } from "react";
 import { trackEvent } from "../lib/api";
 import "../direct-vsl-desktop.css";
 
@@ -141,80 +141,78 @@ function ActivityNotifications() {
 }
 
 
-function WhatsAppCta() {
-  const [visible, setVisible] = useState(false);
+let vplayScriptPromise: Promise<void> | null = null;
 
+function loadVPlayWebComponent() {
+  if (typeof window === "undefined" || !window.customElements) {
+    return Promise.resolve();
+  }
+
+  if (window.customElements.get("vplay-player")) {
+    return Promise.resolve();
+  }
+
+  if (vplayScriptPromise) return vplayScriptPromise;
+
+  vplayScriptPromise = new Promise<void>((resolve, reject) => {
+    const scriptUrl = "https://player.vplay.com.br/vplay.min.js";
+    const existingScript = Array.from(document.scripts).find(
+      (script) =>
+        script.src && script.src.replace(/\\?.*$/, "") === scriptUrl
+    );
+    const script = existingScript ?? document.createElement("script");
+
+    const handleLoad = () => {
+      window.customElements
+        .whenDefined("vplay-player")
+        .then(() => resolve())
+        .catch(reject);
+    };
+    const handleError = () => {
+      vplayScriptPromise = null;
+      reject(new Error("Não foi possível carregar o componente do VPlay."));
+    };
+
+    if (window.customElements.get("vplay-player")) {
+      resolve();
+      return;
+    }
+
+    script.addEventListener("load", handleLoad, { once: true });
+    script.addEventListener("error", handleError, { once: true });
+
+    if (!existingScript) {
+      script.src = scriptUrl;
+      script.async = true;
+      script.setAttribute("data-vplay-sdk", "true");
+      document.head.appendChild(script);
+    }
+  });
+
+  return vplayScriptPromise;
+}
+
+function VPlayPlayerEmbed() {
   useEffect(() => {
-    const timeout = window.setTimeout(() => setVisible(true), 260000);
-    return () => window.clearTimeout(timeout);
+    void loadVPlayWebComponent().catch((error: unknown) => {
+      console.error("Falha ao inicializar o player VPlay:", error);
+    });
   }, []);
 
-  if (!visible) return null;
-
-  return (
-    <div style={{ width: "100%", display: "flex", justifyContent: "center", padding: "18px 12px 28px" }}>
-      <a
-        href="https://wa.me/5588999024968?text=Quero%20Blinda%20Meu%20Bolsa%20Familia"
-        target="_blank"
-        rel="noopener noreferrer"
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          width: "100%",
-          maxWidth: "404px",
-          minHeight: "49px",
-          padding: "12px 18px",
-          borderRadius: "8px",
-          background: "#ED3939",
-          color: "#FFFFFF",
-          fontSize: "16px",
-          fontWeight: 800,
-          textAlign: "center",
-          textDecoration: "none",
-          boxSizing: "border-box"
-        }}
-      >
-        Fale Comigo No Whatssap AGORA
-      </a>
-    </div>
-  );
+  return createElement("vplay-player", {
+    id: "6fce00a3-efeb-4f89-9b49-dc3bcf3d7845",
+    "aspect-ratio": "9/16",
+    style: {
+      display: "block",
+      width: "100%",
+      maxWidth: "100%",
+    },
+  });
 }
 
 export const Route = createFileRoute("/")({ component: DirectVslPage });
 
 function DirectVslPage() {
-  const playerRef = useRef<HTMLIFrameElement | null>(null);
-  const [vplayMessages, setVplayMessages] = useState<string[]>([]);
-  const vplayDebugEnabled =
-    typeof window !== "undefined" &&
-    new URLSearchParams(window.location.search).get("vplaydebug") === "1";
-
-  useEffect(() => {
-    if (!vplayDebugEnabled) return;
-
-    const handlePlayerMessage = (event: MessageEvent) => {
-      if (event.origin !== "https://player.vplay.com.br") return;
-      if (event.source !== playerRef.current?.contentWindow) return;
-
-      let payload = "";
-      try {
-        payload =
-          typeof event.data === "string"
-            ? event.data
-            : JSON.stringify(event.data);
-      } catch {
-        payload = String(event.data);
-      }
-
-      setVplayMessages((current) =>
-        [payload.slice(0, 500), ...current].slice(0, 8)
-      );
-    };
-
-    window.addEventListener("message", handlePlayerMessage);
-    return () => window.removeEventListener("message", handlePlayerMessage);
-  }, [vplayDebugEnabled]);
 
   useEffect(() => {
     void trackEvent("direct_vsl_landing_viewed");
@@ -258,45 +256,8 @@ function DirectVslPage() {
           </p>
 
           <section className="vsl-video-wrap">
-            <iframe
-              ref={playerRef}
-              src="https://player.vplay.com.br/player/6fce00a3-efeb-4f89-9b49-dc3bcf3d7845/embed"
-              title="Vídeo Blinda Bolsa Família"
-              style={{ display: "block", width: "100%", aspectRatio: "9 / 16", border: 0, borderRadius: 0, background: "#000" }}
-              allow="autoplay; fullscreen; picture-in-picture; encrypted-media"
-              allowFullScreen
-              loading="eager"
-            />
+            <VPlayPlayerEmbed />
           </section>
-          {vplayDebugEnabled && (
-            <section
-              aria-live="polite"
-              style={{
-                margin: "12px 0",
-                padding: "12px",
-                border: "1px solid #d97706",
-                borderRadius: "8px",
-                background: "#111827",
-                color: "#fff",
-                fontSize: "12px",
-                overflowWrap: "anywhere",
-              }}
-            >
-              <strong>Diagnóstico VPlay — mensagens recebidas</strong>
-              {vplayMessages.length === 0 ? (
-                <p>Nenhuma mensagem recebida do player até agora. Inicie o vídeo e aguarde alguns segundos.</p>
-              ) : (
-                <ol style={{ paddingLeft: "20px", marginBottom: 0 }}>
-                  {vplayMessages.map((message, index) => (
-                    <li key={index} style={{ marginTop: "8px", whiteSpace: "pre-wrap" }}>
-                      {message}
-                    </li>
-                  ))}
-                </ol>
-              )}
-            </section>
-          )}
-          <WhatsAppCta />
         </div>
       </section>
     </main>
