@@ -153,7 +153,8 @@ function DirectVslPage() {
   }, []);
 
   return (
-    <main className="result-page vsl-sales-page direct-vsl-page">\n      <ActivityNotifications />
+    <main className="result-page vsl-sales-page direct-vsl-page">
+      <ActivityNotifications />
       <section className="result-main">
         <div className="result-container vsl-sales-container">
           <section className="vsl-headline direct-vsl-headline">
