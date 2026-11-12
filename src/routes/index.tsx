@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { createElement, useEffect, useState } from "react";
+import { createElement, useEffect, useRef, useState } from "react";
 import { trackEvent } from "../lib/api";
 import "../direct-vsl-desktop.css";
 
@@ -184,6 +184,38 @@ function WhatsAppCta() {
 export const Route = createFileRoute("/")({ component: DirectVslPage });
 
 function DirectVslPage() {
+  const playerRef = useRef<HTMLIFrameElement | null>(null);
+  const [vplayMessages, setVplayMessages] = useState<string[]>([]);
+  const vplayDebugEnabled =
+    typeof window !== "undefined" &&
+    new URLSearchParams(window.location.search).get("vplaydebug") === "1";
+
+  useEffect(() => {
+    if (!vplayDebugEnabled) return;
+
+    const handlePlayerMessage = (event: MessageEvent) => {
+      if (event.origin !== "https://player.vplay.com.br") return;
+      if (event.source !== playerRef.current?.contentWindow) return;
+
+      let payload = "";
+      try {
+        payload =
+          typeof event.data === "string"
+            ? event.data
+            : JSON.stringify(event.data);
+      } catch {
+        payload = String(event.data);
+      }
+
+      setVplayMessages((current) =>
+        [payload.slice(0, 500), ...current].slice(0, 8)
+      );
+    };
+
+    window.addEventListener("message", handlePlayerMessage);
+    return () => window.removeEventListener("message", handlePlayerMessage);
+  }, [vplayDebugEnabled]);
+
   useEffect(() => {
     void trackEvent("direct_vsl_landing_viewed");
   }, []);
@@ -227,6 +259,7 @@ function DirectVslPage() {
 
           <section className="vsl-video-wrap">
             <iframe
+              ref={playerRef}
               src="https://player.vplay.com.br/player/6fce00a3-efeb-4f89-9b49-dc3bcf3d7845/embed"
               title="Vídeo Blinda Bolsa Família"
               style={{ display: "block", width: "100%", aspectRatio: "9 / 16", border: 0, borderRadius: 0, background: "#000" }}
@@ -235,6 +268,34 @@ function DirectVslPage() {
               loading="eager"
             />
           </section>
+          {vplayDebugEnabled && (
+            <section
+              aria-live="polite"
+              style={{
+                margin: "12px 0",
+                padding: "12px",
+                border: "1px solid #d97706",
+                borderRadius: "8px",
+                background: "#111827",
+                color: "#fff",
+                fontSize: "12px",
+                overflowWrap: "anywhere",
+              }}
+            >
+              <strong>Diagnóstico VPlay — mensagens recebidas</strong>
+              {vplayMessages.length === 0 ? (
+                <p>Nenhuma mensagem recebida do player até agora. Inicie o vídeo e aguarde alguns segundos.</p>
+              ) : (
+                <ol style={{ paddingLeft: "20px", marginBottom: 0 }}>
+                  {vplayMessages.map((message, index) => (
+                    <li key={index} style={{ marginTop: "8px", whiteSpace: "pre-wrap" }}>
+                      {message}
+                    </li>
+                  ))}
+                </ol>
+              )}
+            </section>
+          )}
           <WhatsAppCta />
         </div>
       </section>
