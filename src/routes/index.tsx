@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { createElement, useEffect, useState } from "react";
 import { trackEvent } from "../lib/api";
 import "../direct-vsl-desktop.css";
 
@@ -141,6 +141,17 @@ function ActivityNotifications() {
 }
 
 
+function VPlayPlayerEmbed() {
+  return createElement("vplay-player", {
+    id: "6fce00a3-efeb-4f89-9b49-dc3bcf3d7845",
+    "aspect-ratio": "9/16",
+    poster: "https://api.vplay.com.br/uploads/u151-img-a4e07aee-90fd-41d3-8787-8cdb43d8ce37.png",
+    loading: "eager",
+    playsinline: "",
+    "webkit-playsinline": "",
+  });
+}
+
 export const Route = createFileRoute("/")({ component: DirectVslPage });
 
 function DirectVslPage() {
@@ -166,7 +177,7 @@ function DirectVslPage() {
     addLink("preconnect", "https://video.vplay.com.br", true);
     addLink("dns-prefetch", "https://player.vplay.com.br");
     addLink("dns-prefetch", "https://video.vplay.com.br");
-    addLink("preload", "https://player.vplay.com.br/embed.min.js");
+    addLink("preload", "https://player.vplay.com.br/vplay.min.js");
 
     const posterPreload = document.createElement("link");
     posterPreload.rel = "preload";
@@ -176,14 +187,18 @@ function DirectVslPage() {
     document.head.appendChild(posterPreload);
     links.push(posterPreload);
 
-    const embedScript = document.createElement("script");
-    embedScript.src = "https://player.vplay.com.br/embed.min.js";
-    embedScript.async = true;
-    document.head.appendChild(embedScript);
+    let playerScript: HTMLScriptElement | null = null;
+    if (!window.customElements?.get("vplay-player")) {
+      playerScript = document.createElement("script");
+      playerScript.src = "https://player.vplay.com.br/vplay.min.js";
+      playerScript.async = true;
+      document.head.appendChild(playerScript);
+    }
 
     return () => {
       links.forEach((link) => link.remove());
-      embedScript.remove();
+      // Keep the VPlay custom-element loader alive; removing it can interrupt
+      // late player initialization on Safari.
     };
   }, []);
 
@@ -225,13 +240,7 @@ function DirectVslPage() {
           </p>
 
           <section className="vsl-video-wrap">
-            <div
-              data-vplay="6fce00a3-efeb-4f89-9b49-dc3bcf3d7845"
-              data-aspect-ratio="9/16"
-              data-poster="https://api.vplay.com.br/uploads/u151-img-a4e07aee-90fd-41d3-8787-8cdb43d8ce37.png"
-              data-loading="eager"
-              style={{ width: "100%", aspectRatio: "9 / 16", background: "#000" }}
-            />
+            <VPlayPlayerEmbed />
           </section>
         </div>
       </section>
