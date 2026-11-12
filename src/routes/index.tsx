@@ -142,49 +142,23 @@ function ActivityNotifications() {
 
 
 function VPlayPlayerEmbed() {
-  const [playerReady, setPlayerReady] = useState(false);
-
-  useEffect(() => {
-    if (typeof window === "undefined" || !window.customElements) return;
-
-    const registry = window.customElements;
-    if (registry.get("vplay-player")) {
-      setPlayerReady(true);
-      return;
-    }
-
-    let active = true;
-    void registry.whenDefined("vplay-player").then(() => {
-      if (active) setPlayerReady(true);
-    });
-
-    return () => {
-      active = false;
-    };
-  }, []);
-
-  if (!playerReady) {
-    return (
-      <div
-        aria-label="Carregando vídeo"
-        style={{
-          width: "100%",
-          aspectRatio: "9 / 16",
-          background: "#000",
-        }}
-      />
-    );
-  }
-
-  return createElement("vplay-player", {
-    id: "6fce00a3-efeb-4f89-9b49-dc3bcf3d7845",
-    "aspect-ratio": "9/16",
-    style: {
-      display: "block",
-      width: "100%",
-      maxWidth: "100%",
-    },
-  });
+  return (
+    <iframe
+      src="https://player.vplay.com.br/player/6fce00a3-efeb-4f89-9b49-dc3bcf3d7845/embed"
+      title="Vídeo Blinda Bolsa Família"
+      style={{
+        display: "block",
+        width: "100%",
+        aspectRatio: "9 / 16",
+        border: 0,
+        borderRadius: 0,
+        background: "#000",
+      }}
+      allow="autoplay; fullscreen; picture-in-picture; encrypted-media"
+      allowFullScreen
+      loading="eager"
+    />
+  );
 }
 
 export const Route = createFileRoute("/")({ component: DirectVslPage });
