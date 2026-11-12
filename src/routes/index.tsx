@@ -46,7 +46,7 @@ function TslSalesPage() {
       .bl-section.navy .bl-copy-block h2{color:#ffe06a}.bl-section.navy .bl-copy-block p{color:#eef4ff}.bl-section.navy .bl-copy-block li{border-color:#ffffff24}
       .bl-kicker{display:block;color:#d21c25;font-size:11px;font-weight:1000;letter-spacing:.13em;text-transform:uppercase;margin-bottom:9px}
       .bl-buy{display:flex;align-items:center;justify-content:center;gap:10px;background:linear-gradient(180deg,#25bd36,#087d20);border:2px solid #a8ff8d;color:#fff;text-align:center;text-decoration:none;border-radius:12px;min-height:62px;padding:14px 16px;font-size:clamp(14px,2vw,17px);line-height:1.2;font-weight:1000;text-transform:uppercase;box-shadow:0 7px 0 #075c1b,0 12px 22px #0002;transition:transform .15s ease;max-width:570px;margin:22px auto 16px}
-      .bl-buy:hover{transform:translateY(-2px)}.bl-buy span{font-size:22px;flex:none}
+      .bl-buy:hover{transform:translateY(-2px)}.bl-buy span{font-size:22px;flex:none}.bl-text-link{display:block;text-align:center;color:#0b4f9c;font-weight:900;text-decoration:underline;font-size:14px;margin:13px auto 6px}
       .bl-cta-note{text-align:center;font-size:12px!important;line-height:1.5!important;color:#64748b!important;margin:8px auto 0!important}
       .bl-section.navy .bl-cta-note{color:#dce7fb!important}
       .bl-video-slot{background:#071f4d;color:#fff;border:2px solid #fff;border-radius:16px;padding:16px;box-shadow:0 14px 30px #061f4f24;margin:0 auto 20px;max-width:780px}
@@ -68,7 +68,7 @@ function TslSalesPage() {
         .bl-section{padding:30px 0}.bl-copy-block p{font-size:16px;line-height:1.68;margin-bottom:15px}
         .bl-copy-block h2{font-size:28px;line-height:1.1;margin:18px 0 15px}.bl-copy-block h3{font-size:21px;margin:20px 0 12px}
         .bl-copy-block li{font-size:15px;line-height:1.5;padding:12px 0}
-        .bl-buy{min-height:58px;font-size:14px;padding:13px 12px;margin:20px auto 15px;border-radius:11px}
+        .bl-buy{min-height:58px;font-size:14px;padding:13px 12px;margin:20px auto 15px;border-radius:11px}.bl-text-link{font-size:13px}
         .bl-video-slot{padding:12px;border-radius:13px;margin-bottom:17px}.bl-video-copy h3{font-size:20px}.bl-video-screen{border-radius:8px}
         .bl-sticky{display:block;position:fixed;z-index:100;left:0;right:0;bottom:0;padding:8px 12px calc(9px + env(safe-area-inset-bottom));background:#ffffffed;border-top:1px solid #dce3ee;backdrop-filter:blur(12px)}
         .bl-sticky .bl-buy{max-width:560px;margin:0 auto;min-height:48px;font-size:12px;box-shadow:0 4px 0 #075c1b}
@@ -87,6 +87,7 @@ function TslSalesPage() {
         <p className="bl-hero-lead">A lista completa está trancada dentro do Blinda Bolsa Família. Enquanto você não conhece esses erros, eles continuam acontecendo.</p>
         <p className="bl-price-top">Acesso imediato por R$ 12,99 — pagamento único.</p>
         <BuyButton/>
+        <a className="bl-text-link" href={CHECKOUT_URL} target="_blank" rel="noopener noreferrer">👉 COMPRAR AGORA POR R$ 12,99</a>
         <p className="bl-cta-note">Compra segura. Acesso online. Produto independente, de caráter educativo. Não é produto do governo.</p>
       </div>
     </header>
@@ -226,6 +227,7 @@ function TslSalesPage() {
       <p>R$ 12,99 para finalmente descobrir quais são os 10 erros do dia a dia que podem passar despercebidos.</p>
       <p>R$ 12,99 para saber o que observar — antes que seja tarde.</p>
       <BuyButton/>
+      <a className="bl-text-link" href={CHECKOUT_URL} target="_blank" rel="noopener noreferrer">👉 COMPRAR AGORA POR R$ 12,99</a>
       <p className="bl-cta-note">Compra segura. Acesso online. Pagamento único.</p>
     </CopySection>
 
@@ -259,6 +261,7 @@ function TslSalesPage() {
       <p><strong>A lista está lá dentro. E enquanto você não conhece, ela continua escondida.</strong></p>
       <p>Não deixe para descobrir depois que já é tarde.</p>
       <BuyButton/>
+      <a className="bl-text-link" href={CHECKOUT_URL} target="_blank" rel="noopener noreferrer">👉 COMPRAR AGORA POR R$ 12,99</a>
       <p className="bl-cta-note">Compra segura. Acesso online. Pagamento único.</p>
     </CopySection>
 
