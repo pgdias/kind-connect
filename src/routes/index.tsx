@@ -166,13 +166,7 @@ function DirectVslPage() {
     addLink("dns-prefetch", "https://player.vplay.com.br");
     addLink("dns-prefetch", "https://video.vplay.com.br");
 
-    const script = document.createElement("script");
-    script.src = "https://player.vplay.com.br/embed.min.js";
-    script.async = true;
-    document.body.appendChild(script);
-
     return () => {
-      script.remove();
       links.forEach((link) => link.remove());
     };
   }, []);
@@ -215,11 +209,20 @@ function DirectVslPage() {
           </p>
 
           <section className="vsl-video-wrap">
-            <div
-              data-vplay="6fce00a3-efeb-4f89-9b49-dc3bcf3d7845"
-              data-aspect-ratio="9/16"
-              data-border-radius="26"
-              data-loading="eager"
+            <iframe
+              src="https://player.vplay.com.br/player/6fce00a3-efeb-4f89-9b49-dc3bcf3d7845/bridge"
+              title="Vídeo explicativo sobre o Bolsa Família"
+              allow="autoplay;fullscreen;picture-in-picture;encrypted-media"
+              allowFullScreen
+              loading="eager"
+              style={{
+                display: "block",
+                width: "100%",
+                aspectRatio: "9 / 16",
+                border: 0,
+                borderRadius: "0px",
+                background: "#000",
+              }}
             />
           </section>
         </div>
