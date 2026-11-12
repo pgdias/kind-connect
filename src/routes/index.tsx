@@ -35,7 +35,7 @@ const CSS = [
   ".bb-subtitle{font-size:clamp(18px,3.6vw,26px);line-height:1.35;font-weight:750;margin:0 auto 20px;max-width:660px}",
   ".bb-section p{font-size:17px;line-height:1.6;margin:0 0 14px}.bb-section p strong{font-weight:900}",
   ".bb-muted{color:#d5deee;font-size:13px!important;text-align:center;margin:8px 0 0!important}.bb-trust{font-size:13px!important;color:#e8eef9;text-align:center;margin:14px auto 0!important}",
-  ".bb-button{display:flex;align-items:center;justify-content:center;width:fit-content;max-width:100%;min-height:58px;padding:16px 22px;margin:23px auto 9px;border:0;border-radius:12px;background:var(--green);color:#fff;text-decoration:none;text-align:center;font-size:16px;font-weight:900;line-height:1.2;box-shadow:0 5px 0 #168b42;transition:background .15s ease,transform .15s ease;cursor:pointer}.bb-button:hover{background:#20bd5b;transform:translateY(-1px)}.bb-button:focus-visible{outline:3px solid var(--yellow);outline-offset:4px}.bb-full{width:100%}",
+  ".bb-button{display:flex;align-items:center;justify-content:center;width:fit-content;max-width:100%;min-height:58px;padding:16px 22px;margin:23px auto 9px;border:0;border-radius:12px;background:var(--green);color:#fff;text-decoration:none;text-align:center;font-size:16px;font-weight:900;line-height:1.2;box-shadow:0 5px 0 #168b42;transition:background .15s ease,transform .15s ease;cursor:pointer}.bb-button:hover{background:#20bd5b;filter:brightness(.9);transform:translateY(-1px)}.bb-button:focus-visible{outline:3px solid var(--yellow);outline-offset:4px}.bb-full{width:100%}",
   ".bb-band{background:var(--section)}.bb-section h2{color:var(--yellow);margin:0 0 20px}.bb-section .bb-white-title{color:#fff}",
   ".bb-story{font-size:18px!important;line-height:1.7!important}.bb-warning{border:2px solid var(--red);border-radius:12px;padding:17px 16px;margin:19px 0;color:#ff7772;font-size:21px;font-weight:950;text-align:center;background:#e5393510}",
   ".bb-callout{border:2px solid var(--yellow);border-radius:12px;padding:20px;margin:22px 0;background:#ffd4000b}.bb-callout p:last-child{margin-bottom:0}",
@@ -196,6 +196,7 @@ function TslSalesPage() {
           <p>Por R$ 12,99 você finalmente descobre quais são os 10 erros — <strong>antes que seja tarde.</strong></p>
           <p className="bb-muted">Você paga uma vez. Assiste quando quiser.</p>
           <BuyButton placement="oferta-final" full />
+          <p className="bb-muted">R$ 12,99 — pagamento único</p>
         </div>
       </div></section>
 
@@ -218,6 +219,7 @@ function TslSalesPage() {
         <div className="bb-choice bb-choice-green"><strong>2.</strong> Pagar R$ 12,99 e descobrir <strong>hoje</strong> o que pode estar colocando seu Bolsa Família em risco.</div>
         <p className="bb-question">A LISTA ESTÁ LÁ DENTRO. E ENQUANTO VOCÊ NÃO CONHECE, ELA CONTINUA ESCONDIDA.</p>
         <BuyButton placement="fechamento" />
+        <p className="bb-muted">R$ 12,99 — pagamento único</p>
         <p className="bb-muted">Acesso liberado na hora, direto no seu celular.</p>
       </div></section>
 
