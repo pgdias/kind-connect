@@ -161,7 +161,7 @@ function VPlayPlayerEmbed() {
       const script = document.createElement("script");
       script.src = "https://player.vplay.com.br/vplay.min.js";
       script.async = true;
-      script.dataset.vplayPlayerLoader = "true";
+      script.dataset["vplayPlayerLoader"] = "true";
       document.body.appendChild(script);
     }
   }, []);
