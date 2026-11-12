@@ -202,6 +202,7 @@ function TslSalesPage() {
       <h3>Depoimento 1 — Guilherme:</h3>
       <VideoSlot src={TESTIMONIAL_VIDEO_ONE} eyebrow="DEPOIMENTO 1 — GUILHERME" title="Depoimento do Guilherme" kind="testimonial"/>
       <p>[INSERIR VÍDEO DO DEPOIMENTO DO GUILHERME]</p>
+      <p>Guilherme relata que descobriu erros que estava cometendo sem perceber — e que agora entende melhor quais cuidados precisa tomar.</p>
       <h3>Depoimento 2:</h3>
       <VideoSlot src={TESTIMONIAL_VIDEO_TWO} eyebrow="DEPOIMENTO 2" title="Segundo depoimento" kind="testimonial"/>
       <p>[INSERIR VÍDEO DO SEGUNDO DEPOIMENTO]</p>
