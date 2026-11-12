@@ -142,12 +142,14 @@ function ActivityNotifications() {
 
 
 function VPlayPlayerEmbed() {
-  return createElement("vplay-player", {
-    id: "6fce00a3-efeb-4f89-9b49-dc3bcf3d7845",
-    "aspect-ratio": "9/16",
-    poster: "https://api.vplay.com.br/uploads/u151-img-a4e07aee-90fd-41d3-8787-8cdb43d8ce37.png",
-    loading: "eager",
-  });
+  return (
+    <div
+      data-vplay="6fce00a3-efeb-4f89-9b49-dc3bcf3d7845"
+      data-aspect-ratio="9/16"
+      data-poster="https://api.vplay.com.br/uploads/u151-img-a4e07aee-90fd-41d3-8787-8cdb43d8ce37.png"
+      data-loading="eager"
+    />
+  );
 }
 
 export const Route = createFileRoute("/")({ component: DirectVslPage });
@@ -161,8 +163,14 @@ function DirectVslPage() {
       ? performance.timeOrigin + performance.now()
       : Date.now());
 
-    // O Web Component oficial é carregado estaticamente no index.html.
-    // O elemento vplay-player já é montado pelo React e inicializado pelo vplay.min.js.
+    // Carrega o Embed.js somente depois que o React monta o elemento data-vplay.
+    // Isso evita que o script procure o player antes de ele existir no DOM.
+    if (!document.querySelector('script[src="https://player.vplay.com.br/embed.min.js"]')) {
+      const playerScript = document.createElement("script");
+      playerScript.src = "https://player.vplay.com.br/embed.min.js";
+      playerScript.async = false;
+      document.head.appendChild(playerScript);
+    }
   }, []);
 
   return (
