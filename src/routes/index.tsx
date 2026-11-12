@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { createElement, useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { trackEvent } from "../lib/api";
 import "../direct-vsl-desktop.css";
 
@@ -142,22 +142,43 @@ function ActivityNotifications() {
 
 
 function VPlayPlayerEmbed() {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [frameHeight, setFrameHeight] = useState<number>();
+
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    const updateHeight = () => {
+      // Reserve the video's 9:16 height plus room for VPlay's 49px
+      // native "below player" CTA and its spacing.
+      setFrameHeight(Math.ceil(container.clientWidth * (16 / 9) + 65));
+    };
+
+    updateHeight();
+    const observer = new ResizeObserver(updateHeight);
+    observer.observe(container);
+    return () => observer.disconnect();
+  }, []);
+
   return (
-    <iframe
-      src="https://player.vplay.com.br/player/6fce00a3-efeb-4f89-9b49-dc3bcf3d7845/embed"
-      title="Vídeo Blinda Bolsa Família"
-      style={{
-        display: "block",
-        width: "100%",
-        aspectRatio: "9 / 16",
-        border: 0,
-        borderRadius: 0,
-        background: "#000",
-      }}
-      allow="autoplay; fullscreen; picture-in-picture; encrypted-media"
-      allowFullScreen
-      loading="eager"
-    />
+    <div ref={containerRef} style={{ width: "100%" }}>
+      <iframe
+        src="https://player.vplay.com.br/player/6fce00a3-efeb-4f89-9b49-dc3bcf3d7845/embed"
+        title="Vídeo Blinda Bolsa Família"
+        style={{
+          display: "block",
+          width: "100%",
+          height: frameHeight ? `${frameHeight}px` : "calc(177.78vw + 65px)",
+          border: 0,
+          borderRadius: 0,
+          background: "#000",
+        }}
+        allow="autoplay; fullscreen; picture-in-picture; encrypted-media"
+        allowFullScreen
+        loading="eager"
+      />
+    </div>
   );
 }
 
