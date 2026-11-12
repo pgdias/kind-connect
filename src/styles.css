@@ -1577,7 +1577,7 @@ html:has(.vsl-sales-page), body:has(.vsl-sales-page), body:has(.vsl-sales-page) 
   max-width: 42rem;
   margin: 14px auto 18px;
   padding: 0 12px;
-  color: #e53935;
+  color: #ffffff;
   font-weight: 800;
   font-size: clamp(15px, 3.8vw, 19px);
   line-height: 1.45;
