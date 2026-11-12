@@ -140,6 +140,47 @@ function ActivityNotifications() {
   );
 }
 
+
+function WhatsAppCta() {
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    const timeout = window.setTimeout(() => setVisible(true), 260000);
+    return () => window.clearTimeout(timeout);
+  }, []);
+
+  if (!visible) return null;
+
+  return (
+    <div style={{ width: "100%", display: "flex", justifyContent: "center", padding: "18px 12px 28px" }}>
+      <a
+        href="https://wa.me/5588999024968?text=Quero%20Blinda%20Meu%20Bolsa%20Familia"
+        target="_blank"
+        rel="noopener noreferrer"
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          width: "100%",
+          maxWidth: "404px",
+          minHeight: "49px",
+          padding: "12px 18px",
+          borderRadius: "8px",
+          background: "#ED3939",
+          color: "#FFFFFF",
+          fontSize: "16px",
+          fontWeight: 800,
+          textAlign: "center",
+          textDecoration: "none",
+          boxSizing: "border-box"
+        }}
+      >
+        Fale Comigo No Whatssap AGORA
+      </a>
+    </div>
+  );
+}
+
 export const Route = createFileRoute("/")({ component: DirectVslPage });
 
 function DirectVslPage() {
@@ -194,6 +235,7 @@ function DirectVslPage() {
               loading="eager"
             />
           </section>
+          <WhatsAppCta />
         </div>
       </section>
     </main>
