@@ -141,63 +141,40 @@ function ActivityNotifications() {
 }
 
 
-let vplayScriptPromise: Promise<void> | null = null;
+function VPlayPlayerEmbed() {
+  const [playerReady, setPlayerReady] = useState(false);
 
-function loadVPlayWebComponent() {
-  if (typeof window === "undefined" || !window.customElements) {
-    return Promise.resolve();
-  }
+  useEffect(() => {
+    if (typeof window === "undefined" || !window.customElements) return;
 
-  if (window.customElements.get("vplay-player")) {
-    return Promise.resolve();
-  }
-
-  if (vplayScriptPromise) return vplayScriptPromise;
-
-  vplayScriptPromise = new Promise<void>((resolve, reject) => {
-    const scriptUrl = "https://player.vplay.com.br/vplay.min.js";
-    const existingScript = Array.from(document.scripts).find(
-      (script) =>
-        script.src && script.src.replace(/\\?.*$/, "") === scriptUrl
-    );
-    const script = existingScript ?? document.createElement("script");
-
-    const handleLoad = () => {
-      window.customElements
-        .whenDefined("vplay-player")
-        .then(() => resolve())
-        .catch(reject);
-    };
-    const handleError = () => {
-      vplayScriptPromise = null;
-      reject(new Error("Não foi possível carregar o componente do VPlay."));
-    };
-
-    if (window.customElements.get("vplay-player")) {
-      resolve();
+    const registry = window.customElements;
+    if (registry.get("vplay-player")) {
+      setPlayerReady(true);
       return;
     }
 
-    script.addEventListener("load", handleLoad, { once: true });
-    script.addEventListener("error", handleError, { once: true });
-
-    if (!existingScript) {
-      script.src = scriptUrl;
-      script.async = true;
-      script.setAttribute("data-vplay-sdk", "true");
-      document.head.appendChild(script);
-    }
-  });
-
-  return vplayScriptPromise;
-}
-
-function VPlayPlayerEmbed() {
-  useEffect(() => {
-    void loadVPlayWebComponent().catch((error: unknown) => {
-      console.error("Falha ao inicializar o player VPlay:", error);
+    let active = true;
+    void registry.whenDefined("vplay-player").then(() => {
+      if (active) setPlayerReady(true);
     });
+
+    return () => {
+      active = false;
+    };
   }, []);
+
+  if (!playerReady) {
+    return (
+      <div
+        aria-label="Carregando vídeo"
+        style={{
+          width: "100%",
+          aspectRatio: "9 / 16",
+          background: "#000",
+        }}
+      />
+    );
+  }
 
   return createElement("vplay-player", {
     id: "6fce00a3-efeb-4f89-9b49-dc3bcf3d7845",
