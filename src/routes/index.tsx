@@ -76,10 +76,7 @@ function playNotificationSound() {
     };
 
     if (context.state === "suspended") {
-      void context.resume().then(start).catch(() => {
-        void context.close();
-        notificationAudioContext = null;
-      });
+      void context.resume().then(start).catch(() => undefined);
     } else {
       start();
     }
