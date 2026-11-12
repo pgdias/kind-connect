@@ -55,9 +55,9 @@ function TslSalesPage() {
           <div className="bl-brand"><ShieldMark/><strong>BLINDA <span>BOLSA FAMÍLIA</span></strong></div>
           <div className="bl-hero-grid">
             <div>
-              <span className="bl-alert">ATENÇÃO: VOCÊ PODE ESTAR COMETENDO ESTES ERROS</span>
-              <h1>OS <em>10 ERROS</em> QUE MUITAS FAMÍLIAS COMETEM SEM PERCEBER — E QUE PODEM COLOCAR O <em>BOLSA FAMÍLIA</em> <span className="bl-red-swipe">EM RISCO!</span></h1>
-              <p className="bl-hero-lead">Você pode estar deixando passar detalhes importantes do seu cadastro. Conheça os 10 erros, entenda o que conferir e saiba onde buscar orientação para corrigir informações.</p>
+              <span className="bl-alert">SE VOCÊ RECEBE O BOLSA FAMÍLIA, LEIA ISTO!</span>
+              <h1>OS <em>10 ERROS</em> QUE VOCÊ PODE ESTAR COMETENDO TODOS OS DIAS — SEM SABER QUE ELES PODEM COLOCAR SEU <em>BOLSA FAMÍLIA</em> <span className="bl-red-swipe">EM RISCO!</span></h1>
+              <p className="bl-hero-lead">E se você só descobrisse que havia algo errado no seu cadastro quando fosse receber e o dinheiro não estivesse lá? Conheça os 10 erros que merecem sua atenção antes que uma pendência vire uma dor de cabeça.</p>
             </div>
             <div className="bl-hero-visual" aria-label="Ilustração conceitual de uma pessoa preocupada ao conferir o cartão do benefício">
               <div className="bl-family-art"><div className="bl-person-hair"/><div className="bl-person-head"/><div className="bl-card-art">Bolsa<br/>Família</div></div>
@@ -70,14 +70,14 @@ function TslSalesPage() {
       <section className="bl-section white">
         <div className="bl-shell bl-split">
           <article className="bl-panel">
-            <span className="bl-kicker">VOCÊ SABIA?</span>
-            <h3>UM DETALHE PODE FAZER VOCÊ TER UMA DOR DE CABEÇA. Você sabe se seus dados estão corretos e atualizados?</h3>
+            <span className="bl-kicker">IMAGINE ESTA SITUAÇÃO</span>
+            <h3>CHEGA O DIA DO PAGAMENTO. VOCÊ ABRE O CAIXA TEM… E O DINHEIRO NÃO ESTÁ LÁ.</h3><p>Você pensa que é uma falha no aplicativo. Espera. Vai até a lotérica para conferir. Mas recebe a notícia que ninguém quer ouvir: existe um cancelamento no benefício.</p><p>Na mesma hora vêm as perguntas: “O que aconteceu? O que eu fiz de errado? Será que foi alguma informação do meu cadastro?”</p><p>Foi a partir de uma situação assim que nasceu a ideia do Blinda: reunir erros e descuidos que podem passar despercebidos e explicar o que merece ser conferido.</p>
             <ul className="bl-list">
               <li><span className="bl-x">✕</span> Deixar de atualizar informações quando a situação da família muda</li>
               <li><span className="bl-x">✕</span> Informar dados incorretos ou deixar informações importantes de fora</li>
               <li><span className="bl-x">✕</span> Não saber quando e onde comunicar mudanças na composição familiar</li>
             </ul>
-            <p><strong>O problema é que muita gente só procura entender as regras quando aparece uma pendência. Não deixe para aprender apenas na hora da preocupação.</strong></p>
+            <p><strong>Muitas famílias só começam a procurar respostas quando aparece uma mensagem, convocação ou pendência. E nem sempre uma informação importante chega explicada de forma simples no dia a dia. Não espere ficar sem saber o que fazer. Conheça os 10 erros e saiba o que conferir.</strong></p>
           </article>
           <VideoSlot src={COURSE_PRESENTATION_VIDEO} eyebrow="VEJA O BLINDA POR DENTRO" title="Conheça o treinamento antes de comprar" />
         </div>
@@ -86,11 +86,11 @@ function TslSalesPage() {
       <section className="bl-section soft">
         <div className="bl-shell">
           <span className="bl-kicker" style={{textAlign:"center"}}>CONHEÇA O CONTEÚDO</span>
-          <h2>VOCÊ SABE QUAIS SÃO OS <em>10 ERROS</em> QUE MERECEM SUA ATENÇÃO?</h2>
-          <p className="bl-intro">O Blinda Bolsa Família reúne, em um só treinamento, 10 erros e descuidos que podem passar despercebidos no dia a dia. Você vai entender por que merecem atenção, o que conferir e como buscar a orientação correta. Em vez de depender de informações soltas, tenha um passo a passo para estudar no seu ritmo.</p>
+          <h2>OS <em>10 ERROS</em> QUE NINGUÉM TE EXPLICA DE UM JEITO SIMPLES</h2>
+          <p className="bl-intro">As regras, revisões e cruzamentos de informações podem deixar qualquer família preocupada. E um dos maiores problemas é não saber exatamente o que conferir. O Blinda Bolsa Família organiza 10 erros e descuidos que você precisa conhecer, com explicações diretas para entender o que observar, onde confirmar seus dados e como procurar orientação quando encontrar algo errado.</p>
           <div className="bl-proof-grid">
             <article className="bl-stack">
-              <div className="bl-stack-head">O QUE VOCÊ VAI RECEBER</div>
+              <div className="bl-stack-head">DENTRO DO BLINDA VOCÊ VAI ENCONTRAR</div>
               <ul>
                 <li><span className="bl-check">✓</span> Os 10 erros e descuidos que você precisa conhecer</li>
                 <li><span className="bl-check">✓</span> O que conferir nos dados do Cadastro Único</li>
@@ -99,11 +99,11 @@ function TslSalesPage() {
               </ul>
             </article>
             <article className="bl-stack green">
-              <div className="bl-stack-head">POR QUE CONHECER?</div>
+              <div className="bl-stack-head">O QUE MUDA QUANDO VOCÊ SABE O QUE CONFERIR?</div>
               <ul>
-                <li><span className="bl-check">✓</span> Pare de confiar apenas na memória: saiba o que merece ser conferido</li>
-                <li><span className="bl-check">✓</span> Reconheça sinais de informação desatualizada ou inconsistente</li>
-                <li><span className="bl-check">✓</span> Chegue ao atendimento sabendo quais dúvidas esclarecer</li>
+                <li><span className="bl-check">✓</span> Você deixa de ficar no “será que meus dados estão certos?”</li>
+                <li><span className="bl-check">✓</span> Aprende a identificar informações que precisam de atenção</li>
+                <li><span className="bl-check">✓</span> Sabe quais dúvidas levar ao CRAS ou canal oficial</li>
                 <li><span className="bl-check">✓</span> Assista às aulas quando e onde puder</li>
               </ul>
             </article>
@@ -125,8 +125,8 @@ function TslSalesPage() {
 
       <section className="bl-section soft">
         <div className="bl-shell">
-          <h2>NÃO ESPERE UMA PENDÊNCIA APARECER PARA COMEÇAR A SE INFORMAR.</h2>
-          <p className="bl-intro">Tenha acesso ao treinamento completo por um pagamento único. Veja o conteúdo, estude no seu ritmo e use as orientações para saber o que conferir nos canais oficiais.</p>
+          <h2>QUANTO VALE SABER O QUE PODE ESTAR PASSANDO DESPERCEBIDO?</h2>
+          <p className="bl-intro">Você pode continuar dependendo de informações soltas e só procurar entender quando surgir um problema. Ou pode conhecer agora os 10 erros reunidos no Blinda Bolsa Família, assistir às aulas e aprender o que conferir. O acesso custa R$ 12,99, em pagamento único.</p>
           <div className="bl-offer">
             <div><span className="bl-offer-tag">ACESSO AO TREINAMENTO</span><h3>BLINDA BOLSA FAMÍLIA</h3><div className="bl-price"><small>R$</small> 12,99</div><div className="bl-pay-note">Pagamento único • Acesso ao conteúdo digital</div></div>
             <div><BuyButton/><div className="bl-safe"><span>🔒 Compra pela Cakto</span><span>✓ Acesso conforme checkout</span></div></div>
@@ -137,7 +137,7 @@ function TslSalesPage() {
       <section className="bl-section white">
         <div className="bl-shell">
           <span className="bl-kicker" style={{textAlign:"center"}}>DÚVIDAS FREQUENTES</span>
-          <h2>Antes de comprar, <em>saiba mais.</em></h2>
+          <h2>VOCÊ VAI CONTINUAR SEM SABER QUAIS SÃO ESSES <em>10 ERROS?</em></h2>
           <div className="bl-faq">
             <details><summary>O Blinda Bolsa Família é um programa do Governo?</summary><p>Não. É um treinamento educativo independente, sem vínculo com o Governo Federal, Caixa Econômica Federal ou Cadastro Único.</p></details>
             <details><summary>O treinamento garante que meu benefício não será bloqueado?</summary><p>Não. O treinamento não garante manutenção, desbloqueio ou aprovação de benefício. A situação de cada família depende das regras e da análise dos órgãos responsáveis.</p></details>
