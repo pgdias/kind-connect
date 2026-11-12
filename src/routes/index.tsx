@@ -2,8 +2,6 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useEffect } from "react";
 import { trackEvent } from "../lib/api";
 
-// Vídeos reais podem ser adicionados aqui quando os arquivos/URLs forem fornecidos.
-// Não exibimos depoimentos fictícios nem reutilizamos a VSL antiga como demonstração do curso.
 const COURSE_PRESENTATION_VIDEO = "";
 const TESTIMONIAL_VIDEO_ONE = "";
 const TESTIMONIAL_VIDEO_TWO = "";
@@ -11,161 +9,147 @@ const CHECKOUT_URL = "https://pay.cakto.com.br/38xq22v_1131074";
 
 export const Route = createFileRoute("/")({ component: TslSalesPage });
 
-function VideoBlock({ src, title, eyebrow }: { src: string; title: string; eyebrow: string }) {
-  if (!src) return null;
+function ShieldMark() {
+  return <svg viewBox="0 0 100 112" aria-hidden="true"><path d="M50 4 91 19v31c0 28-16 47-41 58C25 97 9 78 9 50V19L50 4Z" fill="#07316a" stroke="#ffce19" strokeWidth="5"/><path d="M50 13 82 25v25c0 22-12 38-32 48C30 88 18 72 18 50V25l32-12Z" fill="none" stroke="#fff" strokeOpacity=".35"/><circle cx="50" cy="39" r="9" fill="#fff"/><path d="M34 68c1-11 7-17 16-17s15 6 16 17M25 61c0-7 4-11 9-11m41 11c0-7-4-11-9-11" fill="none" stroke="#ffce19" strokeWidth="5" strokeLinecap="round"/></svg>;
+}
+
+function PlayMark() {
+  return <span className="bl-play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7L8 5Z" fill="currentColor"/></svg></span>;
+}
+
+function VideoSlot({ src, title, eyebrow, kind = "main" }: { src: string; title: string; eyebrow: string; kind?: "main" | "testimonial" }) {
   return (
-    <section className="tsl-video-block">
-      <p className="tsl-eyebrow">{eyebrow}</p>
-      <h3>{title}</h3>
-      <div className="tsl-video-frame">
-        <iframe src={src} title={title} loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowFullScreen />
+    <section className={`bl-video-slot ${kind === "testimonial" ? "bl-video-testimonial" : ""}`}>
+      <div className="bl-video-copy"><span className="bl-kicker">{eyebrow}</span><h3>{title}</h3><p>{src ? "Assista ao vídeo abaixo." : "Vídeo será adicionado aqui."}</p></div>
+      <div className="bl-video-screen">
+        {src ? <iframe src={src} title={title} loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowFullScreen /> : <div className="bl-video-placeholder"><PlayMark/><b>{kind === "main" ? "CONHEÇA O BLINDA POR DENTRO" : "RELATO EM VÍDEO"}</b><small>Espaço reservado para o vídeo</small></div>}
       </div>
     </section>
   );
 }
 
-function BuyButton({ label = "QUERO ACESSAR O BLINDA BOLSA FAMÍLIA" }: { label?: string }) {
-  return (
-    <a className="tsl-buy-button" href={CHECKOUT_URL} target="_blank" rel="noopener noreferrer" onClick={() => { void trackEvent("checkout_click", { page: "/", checkout_provider: "cakto", funnel: "tsl" }); }}>
-      {label}<span aria-hidden="true"> →</span>
-    </a>
-  );
-}
-
-function ShieldIllustration() {
-  return (
-    <div className="tsl-visual" role="img" aria-label="Ilustração de proteção e organização de informações do Cadastro Único">
-      <div className="tsl-visual-orbit tsl-orbit-one" />
-      <div className="tsl-visual-orbit tsl-orbit-two" />
-      <div className="tsl-visual-card tsl-visual-left"><span className="tsl-visual-icon">✓</span><b>Dados conferidos</b><small>Informações em dia</small></div>
-      <div className="tsl-shield">
-        <svg viewBox="0 0 180 200" role="presentation" aria-hidden="true">
-          <defs><linearGradient id="shieldGold" x1="0" x2="1" y1="0" y2="1"><stop offset="0" stopColor="#f4d98b"/><stop offset="1" stopColor="#c69b42"/></linearGradient></defs>
-          <path d="M90 8 157 34v52c0 47-28 82-67 105C51 168 23 133 23 86V34L90 8Z" fill="#0e5a39" stroke="url(#shieldGold)" strokeWidth="5"/>
-          <path d="m57 99 22 22 46-49" fill="none" stroke="#fff" strokeWidth="11" strokeLinecap="round" strokeLinejoin="round"/>
-          <path d="M90 24 143 44v41c0 36-20 65-53 86-33-21-53-50-53-86V44l53-20Z" fill="none" stroke="#ffffff" strokeOpacity=".18" strokeWidth="2"/>
-        </svg>
-      </div>
-      <div className="tsl-visual-card tsl-visual-right"><span className="tsl-visual-icon">i</span><b>Informação clara</b><small>Orientação educativa</small></div>
-      <div className="tsl-visual-caption">BLINDA BOLSA FAMÍLIA <span>•</span> CONHECIMENTO E PREVENÇÃO</div>
-    </div>
-  );
+function BuyButton({ label = "QUERO GARANTIR MEU ACESSO AGORA" }: { label?: string }) {
+  return <a className="bl-buy" href={CHECKOUT_URL} target="_blank" rel="noopener noreferrer" onClick={() => { void trackEvent("checkout_click", { page: "/", checkout_provider: "cakto", funnel: "tsl" }); }}>{label}<span>➜</span></a>;
 }
 
 function TslSalesPage() {
-  useEffect(() => {
-    void trackEvent("tsl_landing_viewed");
-  }, []);
-
+  useEffect(() => { void trackEvent("tsl_landing_viewed"); }, []);
   return (
-    <main className="tsl-page">
+    <main className="bl-page">
       <style>{`
-        .tsl-page{--ink:#14251d;--green:#145b3b;--deep:#092d1e;--gold:#d5b66b;--muted:#64736b;background:#f7f8f5;color:var(--ink);font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;overflow:hidden}
-        .tsl-page *{box-sizing:border-box}.tsl-shell{width:min(100% - 36px,880px);margin:0 auto}.tsl-top{background:#092d1e;color:#fff;text-align:center;padding:11px 14px;font-size:11px;font-weight:800;letter-spacing:.07em}.tsl-hero{padding:38px 0 30px;text-align:center;background:radial-gradient(ellipse at 50% 0%,#e7efe7 0%,#f7f8f5 70%)}
-        .tsl-label{display:inline-flex;align-items:center;gap:8px;border:1px solid #d9e4db;background:#fff;border-radius:99px;padding:8px 13px;color:#236044;font-size:10px;font-weight:900;letter-spacing:.1em}.tsl-label:before{content:"";width:7px;height:7px;background:#2d9861;border-radius:50%}
-        .tsl-hero h1{max-width:820px;margin:20px auto 15px;font-size:clamp(32px,6vw,55px);line-height:1.03;letter-spacing:-.045em;color:#102d20;font-weight:950}.tsl-hero h1 em{font-style:normal;color:#b3262e}.tsl-lead{max-width:710px;margin:0 auto;color:#52635a;font-size:clamp(15px,2.4vw,18px);line-height:1.65}.tsl-visual{position:relative;isolation:isolate;width:min(100%,700px);height:330px;margin:30px auto 0;border-radius:24px;overflow:hidden;background:radial-gradient(ellipse at 50% 44%,#1c6a46 0%,#0c3c28 48%,#08291c 100%);box-shadow:0 22px 55px #0a35251f;display:flex;align-items:center;justify-content:center}.tsl-visual:before{content:"";position:absolute;inset:0;background-image:linear-gradient(#ffffff0b 1px,transparent 1px),linear-gradient(90deg,#ffffff0b 1px,transparent 1px);background-size:28px 28px;mask-image:linear-gradient(transparent,#000,transparent)}.tsl-visual-orbit{position:absolute;border:1px solid #e4c87945;border-radius:50%;width:280px;height:280px}.tsl-orbit-one{transform:rotate(28deg) scaleX(1.55)}.tsl-orbit-two{transform:rotate(-28deg) scaleX(1.55)}.tsl-shield{position:relative;z-index:2;width:155px;filter:drop-shadow(0 12px 20px #00190f88);animation:tsl-float 4s ease-in-out infinite}.tsl-shield svg{display:block;width:100%;height:auto}.tsl-visual-card{position:absolute;z-index:3;display:flex;flex-direction:column;gap:4px;text-align:left;padding:13px 16px;border:1px solid #f0d99566;border-radius:12px;background:#ffffffed;box-shadow:0 12px 25px #00190f35;min-width:150px}.tsl-visual-card b{font-size:12px;color:#143d29}.tsl-visual-card small{font-size:10px;color:#617168}.tsl-visual-icon{display:grid;place-items:center;width:22px;height:22px;border-radius:7px;background:#e3f2e8;color:#17623d;font-size:14px;font-weight:950}.tsl-visual-left{left:7%;top:23%}.tsl-visual-right{right:6%;bottom:22%}.tsl-visual-caption{position:absolute;bottom:17px;left:0;right:0;text-align:center;color:#f3dfad;font-size:9px;font-weight:900;letter-spacing:.17em}.tsl-visual-caption span{padding:0 8px;color:#fff}.tsl-hero-image{display:none}@keyframes tsl-float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
-        .tsl-section{padding:48px 0}.tsl-section.white{background:#fff}.tsl-section.dark{background:#092d1e;color:#fff}.tsl-section h2{font-size:clamp(26px,4.5vw,39px);line-height:1.12;letter-spacing:-.035em;text-align:center;margin:0 auto 16px;max-width:760px}.tsl-section p{font-size:15px;line-height:1.8;color:#58675f}.tsl-section.dark p{color:#d0ddd5}.tsl-center{text-align:center}.tsl-eyebrow{text-align:center!important;color:#ad3035!important;font-size:10px!important;font-weight:950;letter-spacing:.15em;text-transform:uppercase;margin:0 0 10px!important}.tsl-callout{background:#fff;border:1px solid #e1e8e2;border-left:4px solid #b62c32;border-radius:12px;padding:19px 21px;margin:24px 0;color:#31463a;font-size:15px;line-height:1.7;box-shadow:0 8px 24px #173a2809}
-        .tsl-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px;margin:27px 0}.tsl-card{background:linear-gradient(145deg,#fff,#f8fbf8);border:1px solid #e1e8e2;border-radius:13px;padding:19px;box-shadow:0 8px 22px #173a2808}.tsl-card b{display:block;color:#143c28;font-size:15px;margin-bottom:7px}.tsl-card p{font-size:13px;margin:0;line-height:1.65}.tsl-num{display:grid;place-items:center;width:35px;height:35px;border-radius:11px;background:linear-gradient(145deg,#e8f3eb,#d7e9dc);color:#1b6a43;font-weight:950;font-size:12px;margin-bottom:13px;box-shadow:inset 0 0 0 1px #c9dfd0}
-        .tsl-video-block{margin:28px auto 0;max-width:700px;text-align:center}.tsl-video-block h3{font-size:22px;line-height:1.2;margin:0 0 16px}.tsl-video-frame{position:relative;aspect-ratio:16/9;background:#071b12;border-radius:14px;overflow:hidden;box-shadow:0 16px 38px #0002}.tsl-video-frame iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
-        .tsl-buy-button{display:flex;align-items:center;justify-content:center;gap:10px;width:min(100%,570px);min-height:60px;margin:24px auto 0;padding:16px 22px;border-radius:10px;background:linear-gradient(135deg,#18824e,#0b5733);color:#fff;text-align:center;font-size:14px;font-weight:950;letter-spacing:.025em;box-shadow:0 12px 28px #0c613b35;transition:transform .18s ease,filter .18s ease}.tsl-buy-button:hover{transform:translateY(-2px);filter:brightness(1.06)}.tsl-buy-button span{font-size:21px;font-weight:500}.tsl-note{text-align:center;font-size:11px!important;color:#738078!important;margin:10px auto 0!important}
-        .tsl-checks{list-style:none;padding:0;margin:22px auto;max-width:700px}.tsl-checks li{position:relative;padding:12px 12px 12px 38px;border-bottom:1px solid #e7ece8;color:#34483c;font-size:14px;line-height:1.6}.tsl-checks li:before{content:"✓";position:absolute;left:9px;top:12px;color:#1b8050;font-weight:950}
-        .tsl-product{background:#fff;border:1px solid #dfe8e1;border-radius:17px;padding:28px;max-width:700px;margin:26px auto;box-shadow:0 15px 45px #173a2810}.tsl-product h3{text-align:center;font-size:24px;margin:0 0 9px;color:#123d28}.tsl-price{text-align:center;font-size:42px;font-weight:950;letter-spacing:-.04em;color:#123d28;margin:13px 0 4px}.tsl-price-sub{text-align:center;color:#68766e;font-size:12px}.tsl-faq{max-width:740px;margin:25px auto}.tsl-faq details{background:#fff;border:1px solid #e1e8e2;border-radius:10px;padding:16px 18px;margin:10px 0}.tsl-faq summary{font-weight:850;color:#173b29;cursor:pointer;line-height:1.5}.tsl-faq details p{font-size:13px;margin:12px 0 0}.tsl-footer{background:#061b11;color:#bdc9c1;padding:27px 0;text-align:center}.tsl-footer p{font-size:10px;line-height:1.7;max-width:850px;margin:0 auto;color:#bdc9c1}.tsl-sticky{display:none}
-        @media(max-width:600px){.tsl-visual{height:270px;margin-top:22px;border-radius:17px}.tsl-shield{width:126px}.tsl-visual-card{min-width:120px;padding:10px 11px}.tsl-visual-card b{font-size:10px}.tsl-visual-card small{font-size:9px}.tsl-visual-left{left:3%;top:17%}.tsl-visual-right{right:3%;bottom:18%}.tsl-visual-caption{font-size:7px;letter-spacing:.12em}.tsl-shell{width:min(100% - 28px,880px)}.tsl-top{font-size:9px;padding:10px}.tsl-hero{padding:25px 0 24px}.tsl-hero h1{font-size:clamp(29px,9vw,39px);margin:16px auto 12px}.tsl-lead{font-size:14px;line-height:1.6}.tsl-hero-image{margin-top:19px;border-radius:11px}.tsl-section{padding:36px 0}.tsl-section h2{font-size:27px}.tsl-section p{font-size:14px}.tsl-grid{grid-template-columns:1fr;gap:10px;margin:20px 0}.tsl-card{padding:16px}.tsl-buy-button{font-size:12px;min-height:58px;padding:14px}.tsl-product{padding:21px 16px}.tsl-price{font-size:34px}.tsl-sticky{display:block;position:fixed;z-index:50;left:0;right:0;bottom:0;padding:9px 12px calc(9px + env(safe-area-inset-bottom));background:#ffffffed;border-top:1px solid #dfe8e1;backdrop-filter:blur(12px)}.tsl-sticky .tsl-buy-button{margin:0 auto;min-height:48px;font-size:11px}.tsl-footer{padding-bottom:95px}}
-        @media(prefers-reduced-motion:reduce){.tsl-buy-button{transition:none}}
+        .bl-page{--navy:#061f4f;--navy2:#092d68;--yellow:#ffd21a;--red:#e21b23;--green:#159b28;--ink:#071c43;--paper:#f4f6fa;background:#f4f6fa;color:var(--ink);font-family:Arial,Helvetica,sans-serif;overflow:hidden;padding-bottom:0}
+        .bl-page *{box-sizing:border-box}.bl-shell{width:min(100% - 36px,1040px);margin:0 auto}.bl-top{background:var(--navy);color:#fff;text-align:center;padding:10px 14px;font-size:11px;font-weight:900;letter-spacing:.1em}
+        .bl-hero{background:linear-gradient(115deg,#041b45 0%,#082d65 52%,#0a4d45 100%);color:#fff;position:relative;padding:34px 0 44px;isolation:isolate}.bl-hero:before{content:"";position:absolute;z-index:-1;inset:0;background:radial-gradient(circle at 82% 22%,#76c65b55,transparent 28%),linear-gradient(135deg,transparent 58%,#ffcf1930 58.2%,transparent 59%)}.bl-brand{display:flex;align-items:center;gap:12px;margin-bottom:25px}.bl-brand svg{width:60px;flex:none}.bl-brand strong{font-size:clamp(22px,4vw,36px);line-height:.9;font-weight:1000;letter-spacing:-1px}.bl-brand strong span{display:block;color:var(--yellow);font-style:italic;font-size:.78em;margin-top:5px}.bl-hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:28px;align-items:center}.bl-alert{display:inline-block;background:var(--yellow);color:#071b3d;border-radius:8px;padding:8px 13px;font-size:11px;font-weight:1000;letter-spacing:.06em;transform:rotate(-1deg)}.bl-hero h1{font-size:clamp(38px,6.2vw,68px);line-height:.94;letter-spacing:-2px;text-transform:uppercase;font-weight:1000;margin:17px 0 14px}.bl-hero h1 em{color:var(--yellow);font-style:normal}.bl-red-swipe{display:inline-block;background:var(--red);padding:7px 13px 10px;transform:rotate(-1.5deg);box-shadow:5px 5px 0 #9d1118;margin-top:5px}.bl-hero-lead{font-size:17px;line-height:1.45;font-weight:700;max-width:480px;color:#eef4ff}.bl-hero-visual{min-height:300px;border:2px solid #ffffff55;border-radius:22px;background:linear-gradient(145deg,#fff4d3,#f5b14c 45%,#174c48 46%,#061f4f);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;box-shadow:0 20px 45px #0004}.bl-family-art{width:78%;height:260px;border-radius:46% 46% 12px 12px;background:linear-gradient(150deg,#f6bd8b,#d8794c 58%,#164d47 59%);position:relative;display:flex;align-items:center;justify-content:center}.bl-person-head{position:absolute;top:24px;width:112px;height:125px;border-radius:48% 48% 43% 43%;background:linear-gradient(135deg,#a85d3c,#e9a477);box-shadow:inset -15px -8px 0 #81432f}.bl-person-hair{position:absolute;top:6px;width:132px;height:70px;border-radius:60% 55% 20% 20%;background:#211a18}.bl-card-art{position:absolute;bottom:25px;left:18%;width:150px;height:90px;background:#0870d6;border:3px solid #fff;border-radius:10px;transform:rotate(-8deg);box-shadow:0 10px 20px #0004;display:grid;place-items:center;color:#fff;text-align:center;font-weight:1000;font-size:18px}.bl-warning{position:absolute;right:15px;top:16px;background:#e21b23;color:white;border:3px solid white;border-radius:14px;padding:13px;font-size:12px;font-weight:1000;text-align:center;box-shadow:0 8px 18px #0004}.bl-hero-stamp{position:absolute;left:14px;bottom:13px;background:var(--yellow);color:#071b3d;padding:10px 13px;border-radius:9px;font-weight:1000;font-size:12px;transform:rotate(-3deg)}
+        .bl-section{padding:48px 0}.bl-section.white{background:#fff}.bl-section.soft{background:linear-gradient(180deg,#eaf0f8,#f7f8fb)}.bl-section.navy{background:var(--navy);color:#fff}.bl-section h2{font-size:clamp(27px,4.3vw,43px);line-height:1.04;letter-spacing:-1px;text-align:center;text-transform:uppercase;font-weight:1000;margin:0 auto 15px;max-width:850px}.bl-section h2 em{color:#e4b900;font-style:normal}.bl-intro{max-width:790px;margin:0 auto 25px;text-align:center;color:#52627a;font-size:16px;line-height:1.65}.bl-section.navy .bl-intro{color:#dce7fb}.bl-kicker{display:block;color:#d21c25;font-size:11px;font-weight:1000;letter-spacing:.13em;text-transform:uppercase;margin-bottom:10px}.bl-section.navy .bl-kicker{color:var(--yellow)}
+        .bl-split{display:grid;grid-template-columns:1fr 1fr;gap:18px;align-items:stretch}.bl-panel{background:#fff;border:1px solid #dce3ee;border-radius:17px;padding:24px;box-shadow:0 12px 28px #061f4f12}.bl-panel h3{font-size:24px;line-height:1.1;margin:0 0 12px;color:var(--navy)}.bl-panel p{font-size:15px;line-height:1.65;color:#43536c}.bl-list{list-style:none;padding:0;margin:15px 0 0}.bl-list li{display:flex;align-items:flex-start;gap:10px;padding:9px 0;border-bottom:1px solid #edf0f4;font-weight:800;font-size:14px;line-height:1.4;color:#102a55}.bl-x{color:var(--red);font-size:19px;font-weight:1000;line-height:1}.bl-check{color:var(--green);font-size:19px;font-weight:1000;line-height:1}
+        .bl-video-slot{background:#071f4d;color:#fff;border:3px solid #fff;border-radius:18px;padding:17px;box-shadow:0 14px 30px #061f4f24}.bl-video-copy h3{font-size:24px;line-height:1.05;margin:0 0 7px}.bl-video-copy p{font-size:12px;color:#d5e2f6;margin:0 0 13px}.bl-video-slot .bl-kicker{color:var(--yellow)}.bl-video-screen{aspect-ratio:16/9;background:linear-gradient(145deg,#123d79,#061735);border:1px solid #ffffff30;border-radius:12px;overflow:hidden;position:relative}.bl-video-screen iframe{position:absolute;inset:0;width:100%;height:100%;border:0}.bl-video-placeholder{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;text-align:center;padding:15px;color:#fff}.bl-video-placeholder b{font-size:clamp(13px,2vw,20px);color:var(--yellow);font-weight:1000}.bl-video-placeholder small{font-size:11px;color:#d5e2f6}.bl-play{display:grid;place-items:center;width:62px;height:62px;border-radius:50%;background:var(--yellow);color:var(--navy);box-shadow:0 0 0 9px #ffffff25}.bl-play svg{width:28px;height:28px;margin-left:3px}.bl-video-testimonial{background:linear-gradient(145deg,#0a3977,#061b43);padding:14px}.bl-video-testimonial .bl-video-copy h3{font-size:18px}.bl-video-testimonial .bl-play{width:48px;height:48px}.bl-video-testimonial .bl-play svg{width:22px}
+        .bl-proof-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px}.bl-stack{background:#fff;border:2px solid #dbe5f0;border-radius:16px;padding:21px;box-shadow:0 10px 24px #061f4f10}.bl-stack.green{border-color:#b6dcb8}.bl-stack-head{margin:-21px -21px 16px;padding:13px 18px;background:var(--navy);color:#fff;border-radius:13px 13px 0 0;font-size:18px;font-weight:1000;text-transform:uppercase}.bl-stack.green .bl-stack-head{background:#16952b}.bl-stack ul{list-style:none;padding:0;margin:0}.bl-stack li{display:flex;gap:10px;align-items:flex-start;padding:9px 0;color:#112c56;font-size:14px;font-weight:800;line-height:1.4;border-bottom:1px solid #edf0f4}
+        .bl-offer{background:linear-gradient(135deg,#061f4f,#0b3978);border:3px solid var(--yellow);border-radius:22px;color:#fff;padding:28px;max-width:820px;margin:25px auto 0;display:grid;grid-template-columns:1fr 1fr;gap:22px;align-items:center;box-shadow:0 18px 38px #061f4f2b}.bl-offer-tag{color:var(--yellow);font-size:12px;font-weight:1000;letter-spacing:.1em}.bl-offer h3{font-size:26px;margin:7px 0}.bl-price{font-size:clamp(44px,7vw,70px);font-weight:1000;letter-spacing:-2px;color:var(--yellow);line-height:1}.bl-price small{font-size:20px;vertical-align:top}.bl-pay-note{font-size:12px;color:#dbe6f7;margin-top:8px}.bl-buy{display:flex;align-items:center;justify-content:center;gap:10px;background:linear-gradient(180deg,#25bd36,#087d20);border:2px solid #a8ff8d;color:#fff;text-align:center;border-radius:13px;min-height:64px;padding:14px 17px;font-size:16px;line-height:1.1;font-weight:1000;text-transform:uppercase;box-shadow:0 9px 0 #075c1b,0 14px 22px #0003;transition:transform .15s ease}.bl-buy:hover{transform:translateY(-2px)}.bl-buy span{font-size:22px}.bl-safe{display:flex;justify-content:center;gap:22px;flex-wrap:wrap;color:#dce7f6;font-size:11px;font-weight:800;margin-top:19px}.bl-faq{max-width:790px;margin:25px auto}.bl-faq details{background:#fff;border:1px solid #dce3ee;border-radius:12px;padding:16px 18px;margin:10px 0}.bl-faq summary{font-size:14px;font-weight:900;color:var(--navy);cursor:pointer;line-height:1.4}.bl-faq details p{font-size:13px;color:#53627a;line-height:1.6;margin:10px 0 0}.bl-footer{background:#041638;color:#dbe5f4;padding:27px 0;text-align:center}.bl-footer p{font-size:10px;line-height:1.65;margin:0 auto;max-width:900px}.bl-sticky{display:none}
+        @media(max-width:700px){.bl-shell{width:min(100% - 26px,1040px)}.bl-top{font-size:9px;padding:9px 8px}.bl-hero{padding:22px 0 30px}.bl-brand{gap:9px;margin-bottom:20px}.bl-brand svg{width:48px}.bl-brand strong{font-size:25px}.bl-hero-grid{grid-template-columns:1fr;gap:19px}.bl-alert{font-size:9px}.bl-hero h1{font-size:clamp(37px,11vw,53px);letter-spacing:-1.5px;margin:14px 0 12px}.bl-hero-lead{font-size:14px}.bl-hero-visual{min-height:230px;border-radius:15px}.bl-family-art{height:205px;width:74%}.bl-person-head{width:88px;height:103px;top:20px}.bl-person-hair{width:104px;height:58px}.bl-card-art{width:125px;height:73px;font-size:15px;bottom:17px}.bl-warning{font-size:9px;padding:9px;right:9px;top:9px}.bl-hero-stamp{font-size:10px;left:9px;bottom:9px}.bl-section{padding:34px 0}.bl-section h2{font-size:clamp(25px,8vw,34px)}.bl-intro{font-size:14px;line-height:1.55}.bl-split,.bl-proof-grid{grid-template-columns:1fr;gap:13px}.bl-panel{padding:18px}.bl-panel h3{font-size:21px}.bl-panel p{font-size:14px}.bl-video-slot{padding:13px;border-radius:14px}.bl-video-copy h3{font-size:21px}.bl-stack{padding:17px}.bl-stack-head{margin:-17px -17px 12px;padding:12px 15px;font-size:16px}.bl-stack li{font-size:13px}.bl-offer{grid-template-columns:1fr;gap:18px;padding:21px 17px;border-radius:17px}.bl-offer h3{font-size:23px}.bl-price{font-size:58px}.bl-buy{min-height:59px;font-size:14px}.bl-safe{gap:12px;font-size:10px}.bl-sticky{display:block;position:fixed;z-index:100;left:0;right:0;bottom:0;padding:9px 12px calc(9px + env(safe-area-inset-bottom));background:#ffffffed;border-top:1px solid #dce3ee;backdrop-filter:blur(12px)}.bl-sticky .bl-buy{max-width:560px;margin:auto;min-height:48px;font-size:12px;box-shadow:0 5px 0 #075c1b}.bl-footer{padding-bottom:92px}}
+        @media(max-width:360px){.bl-hero h1{font-size:35px}.bl-brand strong{font-size:22px}.bl-warning{font-size:8px}.bl-card-art{width:110px}.bl-buy{font-size:12px}}
+        @media(prefers-reduced-motion:reduce){.bl-buy{transition:none}}
       `}</style>
-      <div className="tsl-top">CONTEÚDO EDUCATIVO • INFORMAÇÃO PARA CUIDAR MELHOR DO SEU CADASTRO</div>
-      <header className="tsl-hero">
-        <div className="tsl-shell">
-          <span className="tsl-label">ATENÇÃO PARA QUEM RECEBE O BOLSA FAMÍLIA</span>
-          <h1>10 ERROS QUE PODEM <em>COLOCAR SEU BOLSA FAMÍLIA EM RISCO</em> — E QUE VOCÊ PRECISA CONHECER</h1>
-          <p className="tsl-lead"><strong>Você sabe se está tomando todos os cuidados com seu Cadastro Único?</strong> Pequenos descuidos e informações desatualizadas podem gerar problemas. Conheça orientações importantes para acompanhar sua situação com mais atenção.</p>
-          <ShieldIllustration />
-          <p className="tsl-note">Leia a apresentação abaixo e conheça o treinamento.</p>
+      <div className="bl-top">TREINAMENTO EDUCATIVO • CUIDE DO SEU CADASTRO COM INFORMAÇÃO</div>
+      <header className="bl-hero">
+        <div className="bl-shell">
+          <div className="bl-brand"><ShieldMark/><strong>BLINDA <span>BOLSA FAMÍLIA</span></strong></div>
+          <div className="bl-hero-grid">
+            <div>
+              <span className="bl-alert">ATENÇÃO: QUEM RECEBE O BENEFÍCIO</span>
+              <h1>OS <em>10 ERROS</em> QUE VOCÊ PODE ESTAR COMETENDO E QUE PODEM COLOCAR SEU <em>BOLSA FAMÍLIA</em> <span className="bl-red-swipe">EM RISCO!</span></h1>
+              <p className="bl-hero-lead">Descubra cuidados importantes com informações simples e diretas sobre o Cadastro Único.</p>
+            </div>
+            <div className="bl-hero-visual" aria-label="Ilustração conceitual de uma pessoa preocupada ao conferir o cartão do benefício">
+              <div className="bl-family-art"><div className="bl-person-hair"/><div className="bl-person-head"/><div className="bl-card-art">Bolsa<br/>Família</div></div>
+              <div className="bl-warning">⚠<br/>EVITE<br/>SURPRESAS</div><div className="bl-hero-stamp">INFORMAÇÃO É PROTEÇÃO</div>
+            </div>
+          </div>
         </div>
       </header>
 
-      <section className="tsl-section white">
-        <div className="tsl-shell">
-          <p className="tsl-eyebrow">VOCÊ JÁ PAROU PARA CONFERIR?</p>
-          <h2>Às vezes, a preocupação só aparece quando surge uma mensagem, uma pendência ou uma dúvida sobre o benefício.</h2>
-          <p>É comum ter dúvidas sobre atualização cadastral, composição familiar, renda, endereço e outras informações do Cadastro Único. E quando a rotina é corrida, alguns cuidados importantes podem acabar ficando para depois.</p>
-          <div className="tsl-callout"><strong>Informação não substitui o acompanhamento oficial, mas ajuda você a saber o que observar, quais dúvidas esclarecer e quando procurar o atendimento responsável.</strong></div>
-          <div className="tsl-grid">
-            <article className="tsl-card"><div className="tsl-num">01</div><b>Dados que mudaram</b><p>Você sabe quando uma mudança na família precisa ser informada no cadastro?</p></article>
-            <article className="tsl-card"><div className="tsl-num">02</div><b>Informações desatualizadas</b><p>Você confere se endereço, renda e composição familiar continuam corretos?</p></article>
-            <article className="tsl-card"><div className="tsl-num">03</div><b>Mensagens e avisos</b><p>Você sabe onde buscar orientação quando recebe um aviso sobre o benefício?</p></article>
-            <article className="tsl-card"><div className="tsl-num">04</div><b>Dúvidas sem resposta</b><p>Você sabe quais canais oficiais consultar antes de tomar uma decisão?</p></article>
+      <section className="bl-section white">
+        <div className="bl-shell bl-split">
+          <article className="bl-panel">
+            <span className="bl-kicker">VOCÊ SABIA?</span>
+            <h3>Muitas dúvidas começam com pequenos descuidos no Cadastro Único.</h3>
+            <ul className="bl-list">
+              <li><span className="bl-x">✕</span> Informações desatualizadas</li>
+              <li><span className="bl-x">✕</span> Dados incorretos ou incompletos</li>
+              <li><span className="bl-x">✕</span> Mudanças na família não informadas</li>
+            </ul>
+            <p><strong>Não espere surgir uma dúvida para procurar informação.</strong></p>
+          </article>
+          <VideoSlot src={COURSE_PRESENTATION_VIDEO} eyebrow="VEJA O BLINDA POR DENTRO" title="Conheça o treinamento antes de comprar" />
+        </div>
+      </section>
+
+      <section className="bl-section soft">
+        <div className="bl-shell">
+          <span className="bl-kicker" style={{textAlign:"center"}}>CONHEÇA O CONTEÚDO</span>
+          <h2>O que você vai aprender com o <em>Blinda?</em></h2>
+          <p className="bl-intro">Um treinamento educativo, em linguagem simples, para entender erros comuns e cuidados importantes relacionados ao Bolsa Família e ao Cadastro Único.</p>
+          <div className="bl-proof-grid">
+            <article className="bl-stack">
+              <div className="bl-stack-head">O QUE VOCÊ VAI RECEBER</div>
+              <ul>
+                <li><span className="bl-check">✓</span> Treinamento com os 10 erros que merecem sua atenção</li>
+                <li><span className="bl-check">✓</span> Cuidados importantes com o Cadastro Único</li>
+                <li><span className="bl-check">✓</span> Vídeos explicativos passo a passo</li>
+                <li><span className="bl-check">✓</span> Orientações para saber quando buscar os canais oficiais</li>
+              </ul>
+            </article>
+            <article className="bl-stack green">
+              <div className="bl-stack-head">POR QUE CONHECER?</div>
+              <ul>
+                <li><span className="bl-check">✓</span> Organize as informações mais importantes</li>
+                <li><span className="bl-check">✓</span> Entenda quais dados merecem atenção</li>
+                <li><span className="bl-check">✓</span> Saiba quais dúvidas levar ao atendimento oficial</li>
+                <li><span className="bl-check">✓</span> Aprenda no seu ritmo, pelo conteúdo digital</li>
+              </ul>
+            </article>
           </div>
         </div>
       </section>
 
-      <section className="tsl-section">
-        <div className="tsl-shell">
-          <p className="tsl-eyebrow">CONHEÇA O TREINAMENTO</p>
-          <h2>Foi para organizar essas informações que criamos o Blinda Bolsa Família.</h2>
-          <p className="tsl-center">Um treinamento educativo, com linguagem simples e conteúdo direto, que apresenta 10 erros comuns e cuidados importantes relacionados ao Bolsa Família e ao Cadastro Único.</p>
-          <VideoBlock src={COURSE_PRESENTATION_VIDEO} eyebrow="POR DENTRO DO TREINAMENTO" title="Veja como o Blinda Bolsa Família funciona" />
-          <div className="tsl-callout"><strong>Você não precisa decorar regras nem tentar descobrir tudo sozinha. O treinamento reúne os assuntos em uma sequência organizada para facilitar o entendimento.</strong></div>
-          <h2>O que você vai encontrar no Blinda?</h2>
-          <ul className="tsl-checks">
-            <li>Explicações sobre 10 erros e descuidos que merecem atenção.</li>
-            <li>Orientações educativas sobre informações do Cadastro Único.</li>
-            <li>Conteúdo em vídeo, com linguagem acessível e objetiva.</li>
-            <li>Cuidados para acompanhar melhor sua situação e buscar os canais oficiais quando necessário.</li>
-          </ul>
-        </div>
-      </section>
-
-      <section className="tsl-section white">
-        <div className="tsl-shell">
-          <p className="tsl-eyebrow">UMA DECISÃO INFORMADA</p>
-          <h2>Entender o que observar é melhor do que continuar com dúvidas.</h2>
-          <p>O Blinda foi pensado para quem quer aprender, revisar informações e ter mais clareza sobre cuidados com o cadastro. O conteúdo é educativo: cada família deve confirmar sua situação e as orientações aplicáveis nos canais oficiais do Governo Federal ou no CRAS responsável.</p>
-          <VideoBlock src={TESTIMONIAL_VIDEO_ONE} eyebrow="RELATO DE ALUNO" title="Veja a experiência de quem conheceu o treinamento" />
-          <VideoBlock src={TESTIMONIAL_VIDEO_TWO} eyebrow="OUTRA EXPERIÊNCIA" title="Conheça mais um relato sobre o conteúdo" />
-        </div>
-      </section>
-
-      <section className="tsl-section dark">
-        <div className="tsl-shell">
-          <p className="tsl-eyebrow" style={{ color: "#f0c9a0" }}>SUA PRÓXIMA ETAPA</p>
-          <h2>Tenha as informações organizadas para cuidar melhor do seu cadastro.</h2>
-          <p className="tsl-center">Ao adquirir o Blinda Bolsa Família, você recebe acesso ao treinamento educativo com os 10 erros, explicações e orientações apresentadas nesta página.</p>
-          <div className="tsl-product">
-            <p className="tsl-eyebrow">ACESSO AO TREINAMENTO</p>
-            <h3>BLINDA BOLSA FAMÍLIA</h3>
-            <p className="tsl-center">Conteúdo digital • Pagamento único</p>
-            <div className="tsl-price">R$ 12,49</div>
-            <p className="tsl-price-sub">Acesso conforme as condições apresentadas no checkout.</p>
-            <BuyButton />
-            <p className="tsl-note">Pagamento processado em ambiente seguro da Cakto.</p>
+      <section className="bl-section navy">
+        <div className="bl-shell">
+          <span className="bl-kicker" style={{textAlign:"center"}}>QUEM JÁ CONHECEU O BLINDA</span>
+          <h2>Relatos em vídeo</h2>
+          <p className="bl-intro">Assista aos relatos reais de quem conheceu o treinamento. Os vídeos serão inseridos nesta página.</p>
+          <div className="bl-proof-grid">
+            <VideoSlot src={TESTIMONIAL_VIDEO_ONE} eyebrow="RELATO 1" title="Experiência de uma aluna" kind="testimonial"/>
+            <VideoSlot src={TESTIMONIAL_VIDEO_TWO} eyebrow="RELATO 2" title="Mais uma experiência" kind="testimonial"/>
           </div>
         </div>
       </section>
 
-      <section className="tsl-section white">
-        <div className="tsl-shell">
-          <p className="tsl-eyebrow">DÚVIDAS FREQUENTES</p>
-          <h2>Antes de acessar, veja estas respostas.</h2>
-          <div className="tsl-faq">
-            <details><summary>O Blinda Bolsa Família é um programa do Governo?</summary><p>Não. É um treinamento educativo independente. Não representa o Governo Federal, a Caixa Econômica Federal ou o Cadastro Único.</p></details>
-            <details><summary>O treinamento garante que meu benefício não será bloqueado ou cancelado?</summary><p>Não. Nenhum treinamento pode garantir manutenção, desbloqueio ou aprovação de benefício. A situação de cada família depende das regras oficiais e da análise dos órgãos responsáveis.</p></details>
-            <details><summary>O conteúdo substitui o atendimento do CRAS?</summary><p>Não. O material é educativo e não substitui orientações oficiais. Para atualizar dados ou resolver pendências, procure o CRAS ou canal oficial indicado para seu município.</p></details>
-            <details><summary>Como faço para comprar?</summary><p>Clique em qualquer botão de acesso desta página. Você será direcionada ao checkout da Cakto para conferir as condições e concluir o pagamento.</p></details>
-            <details><summary>Como recebo o treinamento?</summary><p>As instruções de acesso são apresentadas após a confirmação do pagamento, conforme as informações do checkout.</p></details>
+      <section className="bl-section soft">
+        <div className="bl-shell">
+          <h2>Cuide das informações do seu cadastro com mais clareza.</h2>
+          <p className="bl-intro">Conheça o conteúdo do Blinda Bolsa Família e veja se o treinamento atende ao que você procura.</p>
+          <div className="bl-offer">
+            <div><span className="bl-offer-tag">ACESSO AO TREINAMENTO</span><h3>BLINDA BOLSA FAMÍLIA</h3><div className="bl-price"><small>R$</small> 12,49</div><div className="bl-pay-note">Pagamento único • Conteúdo digital</div></div>
+            <div><BuyButton/><div className="bl-safe"><span>🔒 Compra pela Cakto</span><span>✓ Acesso conforme checkout</span></div></div>
           </div>
-          <h2>Não deixe suas dúvidas para depois. Conheça o conteúdo do Blinda.</h2>
-          <BuyButton label="QUERO ACESSAR O TREINAMENTO" />
-          <p className="tsl-note">Confira todos os detalhes antes de finalizar sua compra.</p>
         </div>
       </section>
 
-      <footer className="tsl-footer">
-        <div className="tsl-shell">
-          <p>Blinda Bolsa Família — treinamento educativo independente. Não somos órgão governamental e não temos vínculo com o Governo Federal, Ministério do Desenvolvimento e Assistência Social, Família e Combate à Fome, Caixa Econômica Federal ou Cadastro Único. O conteúdo não garante manutenção, desbloqueio ou aprovação de benefícios e não substitui os canais oficiais.</p>
+      <section className="bl-section white">
+        <div className="bl-shell">
+          <span className="bl-kicker" style={{textAlign:"center"}}>DÚVIDAS FREQUENTES</span>
+          <h2>Antes de comprar, <em>saiba mais.</em></h2>
+          <div className="bl-faq">
+            <details><summary>O Blinda Bolsa Família é um programa do Governo?</summary><p>Não. É um treinamento educativo independente, sem vínculo com o Governo Federal, Caixa Econômica Federal ou Cadastro Único.</p></details>
+            <details><summary>O treinamento garante que meu benefício não será bloqueado?</summary><p>Não. O treinamento não garante manutenção, desbloqueio ou aprovação de benefício. A situação de cada família depende das regras e da análise dos órgãos responsáveis.</p></details>
+            <details><summary>O conteúdo substitui o atendimento do CRAS?</summary><p>Não. O material é educativo. Para atualizar dados ou resolver pendências, procure o CRAS ou os canais oficiais indicados para seu município.</p></details>
+            <details><summary>Como recebo o treinamento?</summary><p>Após a confirmação do pagamento, siga as instruções de acesso apresentadas no checkout e enviadas pela plataforma.</p></details>
+            <details><summary>O pagamento é único?</summary><p>O valor apresentado nesta página é de R$ 12,49 em pagamento único. Confira as condições finais no checkout antes de concluir a compra.</p></details>
+          </div>
+          <BuyButton label="QUERO CONHECER O BLINDA AGORA"/>
         </div>
-      </footer>
-      <div className="tsl-sticky"><BuyButton label="ACESSAR O BLINDA BOLSA FAMÍLIA →" /></div>
+      </section>
+      <footer className="bl-footer"><div className="bl-shell"><p>Blinda Bolsa Família — treinamento educativo independente. Não somos órgão governamental e não temos vínculo com o Governo Federal, Ministério do Desenvolvimento e Assistência Social, Família e Combate à Fome, Caixa Econômica Federal ou Cadastro Único. O conteúdo não garante manutenção, desbloqueio ou aprovação de benefícios e não substitui os canais oficiais.</p></div></footer>
+      <div className="bl-sticky"><BuyButton label="GARANTIR MEU ACESSO • R$ 12,49"/></div>
     </main>
   );
 }
