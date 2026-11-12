@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useRef, useState } from "react";
+import { createElement, useEffect, useState } from "react";
 import { trackEvent } from "../lib/api";
 import "../direct-vsl-desktop.css";
 
@@ -142,80 +142,12 @@ function ActivityNotifications() {
 
 
 function VPlayPlayerEmbed() {
-  const containerRef = useRef<HTMLDivElement | null>(null);
-  const [useFallback, setUseFallback] = useState(false);
-
-  useEffect(() => {
-    const container = containerRef.current;
-    if (!container) return;
-
-    let initialized = false;
-    const fallbackTimer = window.setTimeout(() => {
-      if (!initialized) setUseFallback(true);
-    }, 15000);
-
-    const observer = new MutationObserver(() => {
-      if (container.childElementCount > 0) {
-        initialized = true;
-        window.clearTimeout(fallbackTimer);
-        observer.disconnect();
-      }
-    });
-    observer.observe(container, { childList: true, subtree: true });
-
-    const script = document.createElement("script");
-    script.src = "https://player.vplay.com.br/embed.min.js";
-    script.async = true;
-    script.onload = () => {
-      if (container.childElementCount > 0) {
-        initialized = true;
-        window.clearTimeout(fallbackTimer);
-        observer.disconnect();
-      }
-    };
-    script.onerror = () => {
-      window.clearTimeout(fallbackTimer);
-      observer.disconnect();
-      setUseFallback(true);
-    };
-    document.head.appendChild(script);
-
-    return () => {
-      window.clearTimeout(fallbackTimer);
-      observer.disconnect();
-    };
-  }, []);
-
-  if (useFallback) {
-    return (
-      <iframe
-        src="https://player.vplay.com.br/player/6fce00a3-efeb-4f89-9b49-dc3bcf3d7845/embed"
-        title="Vídeo Blinda Bolsa Família"
-        style={{
-          display: "block",
-          width: "100%",
-          aspectRatio: "9 / 16",
-          border: 0,
-          borderRadius: 0,
-          background: "#000",
-        }}
-        allow="autoplay; fullscreen; picture-in-picture; encrypted-media"
-        allowFullScreen
-        loading="eager"
-      />
-    );
-  }
-
-  return (
-    <div
-      ref={containerRef}
-      data-vplay="6fce00a3-efeb-4f89-9b49-dc3bcf3d7845"
-      data-aspect-ratio="9/16"
-      data-poster="https://api.vplay.com.br/uploads/u151-img-a4e07aee-90fd-41d3-8787-8cdb43d8ce37.png"
-      data-loading="eager"
-      style={{ width: "100%", aspectRatio: "9 / 16", background: "#000" }}
-    />
-  );
+  return createElement("vplay-player", {
+    id: "6fce00a3-efeb-4f89-9b49-dc3bcf3d7845",
+    "aspect-ratio": "9/16",
+    poster: "https://api.vplay.com.br/uploads/u151-img-a4e07aee-90fd-41d3-8787-8cdb43d8ce37.png",
+    loading: "eager",
+  });
 }
 
 export const Route = createFileRoute("/")({ component: DirectVslPage });
@@ -224,6 +156,45 @@ function DirectVslPage() {
 
   useEffect(() => {
     void trackEvent("direct_vsl_landing_viewed");
+
+    const w = window as Window & { _vpt?: number };
+    w._vpt = w._vpt || (performance.timeOrigin
+      ? performance.timeOrigin + performance.now()
+      : Date.now());
+
+    const links: HTMLLinkElement[] = [];
+    const addLink = (rel: string, href: string, crossOrigin = false) => {
+      const link = document.createElement("link");
+      link.rel = rel;
+      link.href = href;
+      if (crossOrigin) link.crossOrigin = "anonymous";
+      document.head.appendChild(link);
+      links.push(link);
+    };
+
+    addLink("preconnect", "https://player.vplay.com.br");
+    addLink("preconnect", "https://video.vplay.com.br", true);
+    addLink("dns-prefetch", "https://player.vplay.com.br");
+    addLink("dns-prefetch", "https://video.vplay.com.br");
+    addLink("preload", "https://player.vplay.com.br/vplay.min.js");
+
+    const posterPreload = document.createElement("link");
+    posterPreload.rel = "preload";
+    posterPreload.href = "https://api.vplay.com.br/uploads/u151-img-a4e07aee-90fd-41d3-8787-8cdb43d8ce37.png";
+    posterPreload.as = "image";
+    posterPreload.setAttribute("fetchpriority", "high");
+    document.head.appendChild(posterPreload);
+    links.push(posterPreload);
+
+    const playerScript = document.createElement("script");
+    playerScript.src = "https://player.vplay.com.br/vplay.min.js";
+    playerScript.defer = true;
+    document.head.appendChild(playerScript);
+
+    return () => {
+      links.forEach((link) => link.remove());
+      playerScript.remove();
+    };
   }, []);
 
   return (
