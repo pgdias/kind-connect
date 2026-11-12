@@ -185,12 +185,14 @@ function DirectVslPage() {
           </p>
 
           <section className="vsl-video-wrap">
-            {createElement("vplay-player", {
-              id: "6fce00a3-efeb-4f89-9b49-dc3bcf3d7845",
-              "aspect-ratio": "9/16",
-              poster: "https://api.vplay.com.br/uploads/u151-img-a4e07aee-90fd-41d3-8787-8cdb43d8ce37.png",
-              loading: "eager",
-            })}
+            <iframe
+              src="https://player.vplay.com.br/player/6fce00a3-efeb-4f89-9b49-dc3bcf3d7845/embed"
+              title="Vídeo Blinda Bolsa Família"
+              style={{ display: "block", width: "100%", aspectRatio: "9 / 16", border: 0, borderRadius: 0, background: "#000" }}
+              allow="autoplay; fullscreen; picture-in-picture; encrypted-media"
+              allowFullScreen
+              loading="eager"
+            />
           </section>
         </div>
       </section>
