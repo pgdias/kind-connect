@@ -184,7 +184,7 @@ function loadVPlayWebComponent() {
     if (!existingScript) {
       script.src = scriptUrl;
       script.async = true;
-      script.dataset.vplaySdk = "true";
+      script.setAttribute("data-vplay-sdk", "true");
       document.head.appendChild(script);
     }
   });
