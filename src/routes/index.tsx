@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { createElement, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { trackEvent } from "../lib/api";
 import "../direct-vsl-desktop.css";
 
@@ -141,21 +141,9 @@ function ActivityNotifications() {
 }
 
 
-function VPlayPlayerEmbed() {
-  return createElement("vplay-player", {
-    id: "6fce00a3-efeb-4f89-9b49-dc3bcf3d7845",
-    "aspect-ratio": "9/16",
-    poster: "https://api.vplay.com.br/uploads/u151-img-a4e07aee-90fd-41d3-8787-8cdb43d8ce37.png",
-    loading: "eager",
-  });
-}
-
 export const Route = createFileRoute("/")({ component: DirectVslPage });
 
 function DirectVslPage() {
-  const [playerReady, setPlayerReady] = useState(false);
-  const [playerLoadError, setPlayerLoadError] = useState(false);
-
   useEffect(() => {
     void trackEvent("direct_vsl_landing_viewed");
 
@@ -178,7 +166,7 @@ function DirectVslPage() {
     addLink("preconnect", "https://video.vplay.com.br", true);
     addLink("dns-prefetch", "https://player.vplay.com.br");
     addLink("dns-prefetch", "https://video.vplay.com.br");
-    addLink("preload", "https://player.vplay.com.br/vplay.min.js");
+    addLink("preload", "https://player.vplay.com.br/embed.min.js");
 
     const posterPreload = document.createElement("link");
     posterPreload.rel = "preload";
@@ -188,16 +176,14 @@ function DirectVslPage() {
     document.head.appendChild(posterPreload);
     links.push(posterPreload);
 
-    const playerScript = document.createElement("script");
-    playerScript.src = "https://player.vplay.com.br/vplay.min.js";
-    playerScript.async = true;
-    playerScript.onload = () => setPlayerReady(true);
-    playerScript.onerror = () => setPlayerLoadError(true);
-    document.head.appendChild(playerScript);
+    const embedScript = document.createElement("script");
+    embedScript.src = "https://player.vplay.com.br/embed.min.js";
+    embedScript.async = true;
+    document.head.appendChild(embedScript);
 
     return () => {
       links.forEach((link) => link.remove());
-      playerScript.remove();
+      embedScript.remove();
     };
   }, []);
 
@@ -239,15 +225,13 @@ function DirectVslPage() {
           </p>
 
           <section className="vsl-video-wrap">
-            {playerReady ? (
-              <VPlayPlayerEmbed />
-            ) : playerLoadError ? (
-              <p role="status" style={{ color: "#fff", textAlign: "center", padding: "24px 12px" }}>
-                Não foi possível carregar o player. Atualize a página para tentar novamente.
-              </p>
-            ) : (
-              <div aria-live="polite" style={{ width: "100%", aspectRatio: "9 / 16", background: "#080b0a" }} />
-            )}
+            <div
+              data-vplay="6fce00a3-efeb-4f89-9b49-dc3bcf3d7845"
+              data-aspect-ratio="9/16"
+              data-poster="https://api.vplay.com.br/uploads/u151-img-a4e07aee-90fd-41d3-8787-8cdb43d8ce37.png"
+              data-loading="eager"
+              style={{ width: "100%", aspectRatio: "9 / 16", background: "#000" }}
+            />
           </section>
         </div>
       </section>
