@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { createElement, useEffect, useState } from "react";
+import { createElement, useEffect, useRef, useState } from "react";
 import { trackEvent } from "../lib/api";
 import "../direct-vsl-desktop.css";
 
@@ -142,14 +142,125 @@ function ActivityNotifications() {
 
 
 function VPlayPlayerEmbed() {
-  return createElement("vplay-player", {
-    id: "6fce00a3-efeb-4f89-9b49-dc3bcf3d7845",
-    "aspect-ratio": "9/16",
-    poster: "https://api.vplay.com.br/uploads/u151-img-a4e07aee-90fd-41d3-8787-8cdb43d8ce37.png",
-    loading: "eager",
-    playsinline: "",
-    "webkit-playsinline": "",
-  });
+  const hostRef = useRef<HTMLElement | null>(null);
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+  const [showIosPlayFallback, setShowIosPlayFallback] = useState(false);
+
+  useEffect(() => {
+    const isIOS =
+      /iPad|iPhone|iPod/.test(navigator.userAgent) ||
+      (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+    if (!isIOS) return;
+
+    const host = hostRef.current;
+    if (!host) return;
+
+    let observer: MutationObserver | null = null;
+    let attachedVideo: HTMLVideoElement | null = null;
+
+    const onPlay = () => setShowIosPlayFallback(false);
+    const onPause = () => {
+      const video = videoRef.current;
+      if (video && video.currentTime < 0.5) setShowIosPlayFallback(true);
+    };
+    const onTimeUpdate = () => {
+      const video = videoRef.current;
+      if (video && video.currentTime >= 0.5) setShowIosPlayFallback(false);
+    };
+
+    const connectVideo = () => {
+      const video =
+        host.shadowRoot?.querySelector("video") ??
+        host.querySelector("video");
+
+      if (!(video instanceof HTMLVideoElement)) return false;
+      if (attachedVideo === video) return true;
+
+      attachedVideo = video;
+      videoRef.current = video;
+
+      // Apply iOS playback requirements to the actual media element,
+      // not only to the outer custom element.
+      video.playsInline = true;
+      video.setAttribute("playsinline", "");
+      video.setAttribute("webkit-playsinline", "");
+      video.controls = true;
+
+      video.addEventListener("play", onPlay);
+      video.addEventListener("pause", onPause);
+      video.addEventListener("timeupdate", onTimeUpdate);
+
+      if (video.paused && video.currentTime < 0.5) {
+        setShowIosPlayFallback(true);
+      }
+      return true;
+    };
+
+    const startObserving = async () => {
+      try {
+        await window.customElements.whenDefined("vplay-player");
+      } catch {
+        return;
+      }
+      if (!host.isConnected) return;
+
+      connectVideo();
+      observer = new MutationObserver(() => connectVideo());
+      observer.observe(host, { childList: true, subtree: true });
+
+      // A Web Component may render its video inside an open shadow root.
+      if (host.shadowRoot) {
+        observer.observe(host.shadowRoot, { childList: true, subtree: true });
+      }
+    };
+
+    void startObserving();
+
+    return () => {
+      observer?.disconnect();
+      if (attachedVideo) {
+        attachedVideo.removeEventListener("play", onPlay);
+        attachedVideo.removeEventListener("pause", onPause);
+        attachedVideo.removeEventListener("timeupdate", onTimeUpdate);
+      }
+      videoRef.current = null;
+    };
+  }, []);
+
+  const startVideoFromFallback = () => {
+    const video = videoRef.current;
+    if (!video) return;
+    video.playsInline = true;
+    video.controls = true;
+    void video.play().then(
+      () => setShowIosPlayFallback(false),
+      () => setShowIosPlayFallback(true),
+    );
+  };
+
+  return (
+    <div className="vplay-ios-player-shell">
+      {createElement("vplay-player", {
+        ref: hostRef,
+        id: "6fce00a3-efeb-4f89-9b49-dc3bcf3d7845",
+        "aspect-ratio": "9/16",
+        poster: "https://api.vplay.com.br/uploads/u151-img-a4e07aee-90fd-41d3-8787-8cdb43d8ce37.png",
+        loading: "eager",
+        playsinline: "",
+        "webkit-playsinline": "",
+      })}
+      {showIosPlayFallback && (
+        <button
+          type="button"
+          className="vplay-ios-play-fallback"
+          aria-label="Reproduzir vídeo"
+          onClick={startVideoFromFallback}
+        >
+          <span aria-hidden="true" />
+        </button>
+      )}
+    </div>
+  );
 }
 
 export const Route = createFileRoute("/")({ component: DirectVslPage });
