@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { createElement, useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { trackEvent } from "../lib/api";
 import "../direct-vsl-desktop.css";
 
@@ -142,21 +142,78 @@ function ActivityNotifications() {
 
 
 function VPlayPlayerEmbed() {
+  const containerRef = useRef<HTMLDivElement | null>(null);
+  const [useFallback, setUseFallback] = useState(false);
+
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    let initialized = false;
+    const fallbackTimer = window.setTimeout(() => {
+      if (!initialized) setUseFallback(true);
+    }, 15000);
+
+    const observer = new MutationObserver(() => {
+      if (container.childElementCount > 0) {
+        initialized = true;
+        window.clearTimeout(fallbackTimer);
+        observer.disconnect();
+      }
+    });
+    observer.observe(container, { childList: true, subtree: true });
+
+    const script = document.createElement("script");
+    script.src = "https://player.vplay.com.br/embed.min.js";
+    script.async = true;
+    script.onload = () => {
+      if (container.childElementCount > 0) {
+        initialized = true;
+        window.clearTimeout(fallbackTimer);
+        observer.disconnect();
+      }
+    };
+    script.onerror = () => {
+      window.clearTimeout(fallbackTimer);
+      observer.disconnect();
+      setUseFallback(true);
+    };
+    document.head.appendChild(script);
+
+    return () => {
+      window.clearTimeout(fallbackTimer);
+      observer.disconnect();
+    };
+  }, []);
+
+  if (useFallback) {
+    return (
+      <iframe
+        src="https://player.vplay.com.br/player/6fce00a3-efeb-4f89-9b49-dc3bcf3d7845/embed"
+        title="Vídeo Blinda Bolsa Família"
+        style={{
+          display: "block",
+          width: "100%",
+          aspectRatio: "9 / 16",
+          border: 0,
+          borderRadius: 0,
+          background: "#000",
+        }}
+        allow="autoplay; fullscreen; picture-in-picture; encrypted-media"
+        allowFullScreen
+        loading="eager"
+      />
+    );
+  }
+
   return (
-    <iframe
-      src="https://player.vplay.com.br/player/6fce00a3-efeb-4f89-9b49-dc3bcf3d7845/embed"
-      title="Vídeo Blinda Bolsa Família"
-      style={{
-        display: "block",
-        width: "100%",
-        aspectRatio: "9 / 16",
-        border: 0,
-        borderRadius: 0,
-        background: "#000",
-      }}
-      allow="autoplay; fullscreen; picture-in-picture; encrypted-media"
-      allowFullScreen
-      loading="eager"
+    <div
+      ref={containerRef}
+      data-vplay="6fce00a3-efeb-4f89-9b49-dc3bcf3d7845"
+      data-aspect-ratio="9/16"
+      data-poster="https://api.vplay.com.br/uploads/u151-img-a4e07aee-90fd-41d3-8787-8cdb43d8ce37.png"
+      data-loading="eager"
+      style={{ width: "100%", aspectRatio: "9 / 16", background: "#000" }}
     />
   );
 }
