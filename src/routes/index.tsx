@@ -113,7 +113,7 @@ function ActivityNotifications() {
   }, []);
 
   if (!visible) return null;
-  const buyer = ACTIVITY_BUYERS[index];
+  const buyer = ACTIVITY_BUYERS[index]!;
 
   return (
     <div className="activity-notification" role="status" aria-live="polite">
