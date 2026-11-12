@@ -1585,3 +1585,21 @@ html:has(.vsl-sales-page), body:has(.vsl-sales-page), body:has(.vsl-sales-page) 
   text-wrap: balance;
   text-transform: none;
 }
+
+
+/* VPlay: não recortar a área interativa do player no Safari/iOS. */
+@media (max-width: 600px) {
+  .direct-vsl-page .vsl-video-wrap,
+  .vsl-sales-page .vsl-video-wrap {
+    overflow: visible !important;
+    isolation: auto;
+  }
+  .direct-vsl-page .vsl-video-wrap vplay-player,
+  .vsl-sales-page .vsl-video-wrap vplay-player {
+    display: block;
+    position: relative;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0;
+  }
+}
