@@ -146,7 +146,6 @@ function VPlayPlayerEmbed() {
     <div
       data-vplay="6fce00a3-efeb-4f89-9b49-dc3bcf3d7845"
       data-aspect-ratio="9/16"
-      data-border-radius="26"
       data-poster="https://api.vplay.com.br/uploads/u151-img-a4e07aee-90fd-41d3-8787-8cdb43d8ce37.png"
       data-loading="eager"
     />
@@ -164,43 +163,14 @@ function DirectVslPage() {
       ? performance.timeOrigin + performance.now()
       : Date.now());
 
-    const links: HTMLLinkElement[] = [];
-    const addLink = (rel: string, href: string, crossOrigin = false) => {
-      const link = document.createElement("link");
-      link.rel = rel;
-      link.href = href;
-      if (crossOrigin) link.crossOrigin = "anonymous";
-      document.head.appendChild(link);
-      links.push(link);
-    };
-
-    addLink("preconnect", "https://player.vplay.com.br");
-    addLink("preconnect", "https://video.vplay.com.br", true);
-    addLink("dns-prefetch", "https://player.vplay.com.br");
-    addLink("dns-prefetch", "https://video.vplay.com.br");
-    addLink("preload", "https://player.vplay.com.br/embed.min.js");
-
-    const posterPreload = document.createElement("link");
-    posterPreload.rel = "preload";
-    posterPreload.href = "https://api.vplay.com.br/uploads/u151-img-a4e07aee-90fd-41d3-8787-8cdb43d8ce37.png";
-    posterPreload.as = "image";
-    posterPreload.setAttribute("fetchpriority", "high");
-    document.head.appendChild(posterPreload);
-    links.push(posterPreload);
-
-    let playerScript: HTMLScriptElement | null = null;
+    // Load the VPlay embed only after React has mounted the data-vplay element.
+    // The connection hints and preloads are declared statically in index.html.
     if (!document.querySelector('script[src="https://player.vplay.com.br/embed.min.js"]')) {
-      playerScript = document.createElement("script");
+      const playerScript = document.createElement("script");
       playerScript.src = "https://player.vplay.com.br/embed.min.js";
-      playerScript.defer = true;
+      playerScript.async = false;
       document.head.appendChild(playerScript);
     }
-
-    return () => {
-      links.forEach((link) => link.remove());
-      // Keep the VPlay custom-element loader alive; removing it can interrupt
-      // late player initialization on Safari.
-    };
   }, []);
 
   return (
