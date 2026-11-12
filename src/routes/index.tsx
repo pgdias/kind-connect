@@ -143,12 +143,30 @@ function ActivityNotifications() {
 
 
 function VPlayPlayerEmbed() {
-  return createElement("vplay-player", {
-    id: "6fce00a3-efeb-4f89-9b49-dc3bcf3d7845",
-    "aspect-ratio": "9/16",
-    poster: "https://api.vplay.com.br/uploads/u151-img-a4e07aee-90fd-41d3-8787-8cdb43d8ce37.png",
-    loading: "eager",
-  });
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    // O elemento precisa existir no DOM antes de carregar o script da VPlay.
+    container.innerHTML = `<vplay-player
+      id="6fce00a3-efeb-4f89-9b49-dc3bcf3d7845"
+      aspect-ratio="9/16"
+      poster="https://api.vplay.com.br/uploads/u151-img-a4e07aee-90fd-41d3-8787-8cdb43d8ce37.png"
+      loading="eager"
+    ></vplay-player>`;
+
+    if (!document.querySelector('script[data-vplay-player-loader="true"]')) {
+      const script = document.createElement("script");
+      script.src = "https://player.vplay.com.br/vplay.min.js";
+      script.async = true;
+      script.dataset.vplayPlayerLoader = "true";
+      document.body.appendChild(script);
+    }
+  }, []);
+
+  return <div ref={containerRef} className="vplay-player-mount" />;
 }
 
 export const Route = createFileRoute("/")({ component: DirectVslPage });
