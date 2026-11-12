@@ -155,6 +155,11 @@ function VPlayPlayerEmbed() {
     const host = hostRef.current;
     if (!host) return;
 
+    // Always show an iPhone-specific start control while the VPlay video
+    // is still at its initial paused state, even if its media node is
+    // encapsulated by the custom element.
+    setShowIosPlayFallback(true);
+
     let observer: MutationObserver | null = null;
     let attachedVideo: HTMLVideoElement | null = null;
 
@@ -214,9 +219,13 @@ function VPlayPlayerEmbed() {
       }
     };
 
+    host.addEventListener("play", onPlay);
+    host.addEventListener("playing", onPlay);
     void startObserving();
 
     return () => {
+      host.removeEventListener("play", onPlay);
+      host.removeEventListener("playing", onPlay);
       observer?.disconnect();
       if (attachedVideo) {
         attachedVideo.removeEventListener("play", onPlay);
@@ -229,13 +238,21 @@ function VPlayPlayerEmbed() {
 
   const startVideoFromFallback = () => {
     const video = videoRef.current;
-    if (!video) return;
-    video.playsInline = true;
-    video.controls = true;
-    void video.play().then(
-      () => setShowIosPlayFallback(false),
-      () => setShowIosPlayFallback(true),
-    );
+    if (video) {
+      video.playsInline = true;
+      video.setAttribute("playsinline", "");
+      video.setAttribute("webkit-playsinline", "");
+      video.controls = true;
+      void video.play().then(
+        () => setShowIosPlayFallback(false),
+        () => setShowIosPlayFallback(true),
+      );
+      return;
+    }
+
+    // If VPlay encapsulates its media node, forward the user's real tap
+    // to the player host rather than inventing a second playback source.
+    hostRef.current?.click();
   };
 
   return (
