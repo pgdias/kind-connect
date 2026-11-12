@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { createElement, useEffect, useState } from "react";
 import { trackEvent } from "../lib/api";
 import "../direct-vsl-desktop.css";
 
@@ -223,12 +223,12 @@ function DirectVslPage() {
           </p>
 
           <section className="vsl-video-wrap">
-            <vplay-player
-              id="6fce00a3-efeb-4f89-9b49-dc3bcf3d7845"
-              aspect-ratio="9/16"
-              poster="https://api.vplay.com.br/uploads/u151-img-a4e07aee-90fd-41d3-8787-8cdb43d8ce37.png"
-              loading="eager"
-            ></vplay-player>
+            {createElement("vplay-player", {
+              id: "6fce00a3-efeb-4f89-9b49-dc3bcf3d7845",
+              "aspect-ratio": "9/16",
+              poster: "https://api.vplay.com.br/uploads/u151-img-a4e07aee-90fd-41d3-8787-8cdb43d8ce37.png",
+              loading: "eager",
+            })}
           </section>
         </div>
       </section>
