@@ -29,12 +29,23 @@ const ACTIVITY_BUYERS = [
 
 let notificationAudioContext: AudioContext | null = null;
 
-function playNotificationSound() {
+function unlockNotificationAudio() {
   try {
     const AudioContextClass = window.AudioContext;
     if (!AudioContextClass) return;
     if (!notificationAudioContext) notificationAudioContext = new AudioContextClass();
+    if (notificationAudioContext.state === "suspended") {
+      void notificationAudioContext.resume().catch(() => undefined);
+    }
+  } catch {
+    // Audio remains optional if the browser does not support it.
+  }
+}
+
+function playNotificationSound() {
+  try {
     const context = notificationAudioContext;
+    if (!context) return;
 
     const start = () => {
       const now = context.currentTime;
@@ -62,19 +73,10 @@ function playNotificationSound() {
         oscillator.stop(now + offset + duration + 0.02);
       });
 
-      window.setTimeout(() => {
-        if (notificationAudioContext === context) {
-          void context.close();
-          notificationAudioContext = null;
-        }
-      }, 900);
     };
 
     if (context.state === "suspended") {
-      void context.resume().then(start).catch(() => {
-        void context.close();
-        notificationAudioContext = null;
-      });
+      void context.resume().then(start).catch(() => undefined);
     } else {
       start();
     }
@@ -91,6 +93,12 @@ function ActivityNotifications() {
     let rotation: number | undefined;
     let transition: number | undefined;
 
+    // Browsers require a user gesture before allowing notification audio.
+    const unlockAudio = () => unlockNotificationAudio();
+    window.addEventListener("pointerdown", unlockAudio, { once: true });
+    window.addEventListener("touchstart", unlockAudio, { once: true });
+    window.addEventListener("keydown", unlockAudio, { once: true });
+
     const firstNotification = window.setTimeout(() => {
       setVisible(true);
       playNotificationSound();
@@ -102,11 +110,14 @@ function ActivityNotifications() {
           setVisible(true);
           playNotificationSound();
         }, 120);
-      }, 25000);
-    }, 230000);
+      }, 5000);
+    }, 119000);
 
     return () => {
       window.clearTimeout(firstNotification);
+      window.removeEventListener("pointerdown", unlockAudio);
+      window.removeEventListener("touchstart", unlockAudio);
+      window.removeEventListener("keydown", unlockAudio);
       if (rotation !== undefined) window.clearInterval(rotation);
       if (transition !== undefined) window.clearTimeout(transition);
     };
