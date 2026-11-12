@@ -177,3 +177,18 @@
     font-size: 13px;
   }
 }
+
+
+/* Reserve extra iframe viewport for VPlay's native CTA configured below the video.
+   The 9:16 video area remains intact; the additional 64px prevents the CTA from
+   being clipped by the iframe viewport. Browsers without container units keep
+   the original 9:16 aspect-ratio fallback. */
+.direct-vsl-page .vsl-video-wrap {
+  container-type: inline-size;
+}
+
+@supports (height: 1cqw) {
+  .direct-vsl-page .vsl-video-wrap .vplay-iframe {
+    height: calc(177.7778cqw + 64px) !important;
+  }
+}
