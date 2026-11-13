@@ -46,9 +46,11 @@ const CSS = [
   ".bb-video-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin:22px 0}.bb-video-card{min-width:0}.bb-video-poster{width:100%;aspect-ratio:16/9;border:1px solid var(--border);border-radius:12px;background:var(--section);display:grid;place-items:center;color:var(--yellow);overflow:hidden}.bb-play{display:grid;place-items:center;width:64px;height:64px;border:2px solid var(--yellow);border-radius:50%;font-size:27px;padding-left:4px;background:#ffd40012}.bb-video-poster button{border:0;background:transparent;color:inherit;cursor:pointer}.bb-video-poster button:disabled{cursor:default;opacity:.9}.bb-video-frame{position:relative;aspect-ratio:16/9;border-radius:12px;overflow:hidden;background:#000}.bb-video-frame iframe,.bb-video-frame video{position:absolute;inset:0;width:100%;height:100%;border:0}.bb-video-caption{font-size:14px!important;font-weight:800;text-align:center;margin:9px 0 0!important}",
   ".bb-offer{border:3px solid var(--yellow);border-radius:14px;padding:25px 20px;background:var(--navy);text-align:center}.bb-offer h2{margin:0 0 17px}.bb-offer .bb-checklist{list-style:none;text-align:left;padding:0;margin:18px 0}.bb-offer .bb-checklist li{padding:9px 0;font-size:17px;line-height:1.5}.bb-divider{height:1px;background:#ffffff35;margin:21px 0}.bb-price{font-size:clamp(32px,7vw,42px);font-weight:950;margin:13px 0!important}.bb-price strong{color:var(--yellow)}",
   ".bb-faq{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.bb-faq .bb-card{padding:17px}.bb-faq .bb-card b{color:var(--yellow)}",
+  ".bb-about{display:flex;align-items:center;gap:25px;margin:0 auto;max-width:680px}.bb-about-photo{width:120px;height:120px;flex:none;border:3px solid var(--yellow);border-radius:50%;background:var(--section);display:grid;place-items:center;color:var(--yellow)}.bb-about-copy{min-width:0}.bb-about-copy h2{font-size:clamp(25px,4vw,34px);margin:0 0 15px}.bb-about-copy p{margin:0 0 12px}.bb-about-sign{color:var(--yellow);font-weight:900;font-size:17px;margin:16px 0 8px}.bb-instagram{display:inline-flex;align-items:center;gap:8px;color:#fff;text-decoration:none;font-size:14px;transition:color .15s ease}.bb-instagram:hover{color:var(--yellow)}.bb-instagram svg{width:24px;height:24px;color:var(--yellow);flex:none}.bb-about-note{color:#B0B8C8!important;font-size:13px!important;margin:14px 0 0!important}.bb-guarantee-wrap{text-align:center}.bb-guarantee{max-width:650px;margin:0 auto;background:var(--navy);border:3px solid var(--green);border-radius:12px;padding:48px 40px}.bb-shield{width:48px;height:48px;color:var(--green);margin:0 auto 16px}.bb-guarantee h2{font-size:24px;color:#fff;letter-spacing:0;margin:0 0 18px}.bb-guarantee p{max-width:520px;margin:0 auto 14px}.bb-guarantee .bb-guarantee-note{color:#B0B8C8;font-size:13px;margin:17px auto 0}",
   ".bb-choice{border:1px solid var(--red);border-radius:12px;padding:17px;margin:12px 0;font-size:16px;line-height:1.6}.bb-choice-green{border-color:var(--green)}.bb-bottomline{padding-bottom:48px;text-align:center}",
   ".bb-sticky{display:none}",
   "@media(max-width:600px){.bb-wrap{width:calc(100% - 34px)}.bb-section{padding:42px 0}.bb-hero{padding:30px 0 38px}.bb-topband{font-size:10px}.bb-hero h1,.bb-section h2{font-size:32px;line-height:1.08}.bb-subtitle{font-size:18px}.bb-section p{font-size:17px;line-height:1.6}.bb-story{font-size:17px!important}.bb-grid,.bb-faq,.bb-video-grid{grid-template-columns:1fr}.bb-card{padding:16px}.bb-button{width:100%;font-size:14px;min-height:56px;padding:15px 12px}.bb-offer{padding:23px 16px}.bb-sticky{display:none;position:fixed;z-index:1100;left:0;right:0;bottom:0;padding:9px 12px calc(9px + env(safe-area-inset-bottom));background:var(--navy);border-top:2px solid var(--yellow)}.bb-sticky.bb-sticky-show{display:block}.bb-sticky-inner{display:flex;align-items:center;gap:9px;max-width:720px;margin:0 auto}.bb-sticky .bb-button{flex:1;margin:0;min-height:46px;font-size:12px;padding:11px 8px;box-shadow:0 3px 0 #168b42}.bb-sticky-price{flex:none;color:#fff;font-size:12px;font-weight:900;white-space:nowrap}.bb-page{padding-bottom:68px}}",
+  "@media(max-width:600px){.bb-about{flex-direction:column;align-items:center;gap:18px}.bb-about-copy{width:100%;text-align:left}.bb-about-copy h2{text-align:center}.bb-guarantee{padding:32px 20px}}",
   "@media(prefers-reduced-motion:reduce){.bb-section{transition:none;transform:none}.bb-button{transition:none}}"
 ].join("\n");
 
@@ -158,6 +160,34 @@ function TslSalesPage() {
         <p className="bb-muted">R$ 12,99 — pagamento único</p>
       </div></section>
 
+      <section className="bb-section"><div className="bb-wrap">
+        <div className="bb-about">
+          <div className="bb-about-photo" role="img" aria-label="Espaço reservado para a foto de Pedro Dias">
+            <svg viewBox="0 0 48 48" width="58" height="58" fill="none" aria-hidden="true">
+              <circle cx="24" cy="16" r="9" stroke="currentColor" strokeWidth="2.8" />
+              <path d="M7 41c1.8-8.2 8.1-12.5 17-12.5S39.2 32.8 41 41" stroke="currentColor" strokeWidth="2.8" strokeLinecap="round" />
+            </svg>
+          </div>
+          <div className="bb-about-copy">
+            <h2>QUEM ESTÁ POR TRÁS DO BLINDA</h2>
+            <p>Eu também recebo o Bolsa Família.</p>
+            <p>E eu também já tive o benefício cancelado — sem entender o motivo.</p>
+            <p>Foi quando comecei a conversar com outras pessoas na mesma situação que descobri: quase todas cometiam os mesmos erros do dia a dia, sem perceber.</p>
+            <p>Foi por isso que criei o Blinda Bolsa Família: para reunir os 10 erros que ninguém te explica, em um lugar só.</p>
+            <div className="bb-about-sign">— Pedro Dias</div>
+            <a className="bb-instagram" href="https://www.instagram.com/blindabolsafamilia/" target="_blank" rel="noopener noreferrer" aria-label="Instagram Blinda Bolsa Família">
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <rect x="3" y="3" width="18" height="18" rx="5" stroke="currentColor" strokeWidth="2" />
+                <circle cx="12" cy="12" r="4" stroke="currentColor" strokeWidth="2" />
+                <circle cx="17.5" cy="6.8" r="1.2" fill="currentColor" />
+              </svg>
+              <span>@blindabolsafamilia</span>
+            </a>
+            <p className="bb-about-note">Sem promessa milagrosa. Sem fórmula mágica. Só o que eu gostaria que alguém tivesse me mostrado antes.</p>
+          </div>
+        </div>
+      </div></section>
+
       <section className="bb-section bb-band" id="produto"><div className="bb-wrap">
         <h2>BLINDA BOLSA FAMÍLIA</h2>
         <p className="bb-subtitle">Treinamento em vídeo que revela os <strong>10 erros do dia a dia</strong> e mostra o que fazer com cada um.</p>
@@ -197,6 +227,20 @@ function TslSalesPage() {
           <p className="bb-muted">Você paga uma vez. Assiste quando quiser.</p>
           <BuyButton placement="oferta-final" full />
           <p className="bb-muted">R$ 12,99 — pagamento único</p>
+        </div>
+      </div></section>
+
+      <section className="bb-section bb-band"><div className="bb-wrap bb-guarantee-wrap">
+        <div className="bb-guarantee">
+          <svg className="bb-shield" viewBox="0 0 48 48" fill="none" aria-hidden="true">
+            <path d="M24 4 40 10v12c0 10.5-6.8 18-16 22C14.8 40 8 32.5 8 22V10L24 4Z" stroke="currentColor" strokeWidth="3" strokeLinejoin="round" />
+            <path d="m16 24 5.2 5.2L32.5 18" stroke="currentColor" strokeWidth="3.4" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+          <h2>GARANTIA DE 7 DIAS</h2>
+          <p>Compre sem risco.</p>
+          <p>Você tem 7 dias para acessar o treinamento e ver se faz sentido para você.</p>
+          <p>Se não fizer, basta pedir o reembolso dentro desse prazo. Devolvemos os R$ 12,99 sem burocracia, sem perguntas e sem letras miúdas.</p>
+          <p className="bb-guarantee-note">Reembolso integral. Sem discussão. Sem enrolação.</p>
         </div>
       </div></section>
 
