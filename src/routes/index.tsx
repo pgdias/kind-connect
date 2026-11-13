@@ -201,7 +201,7 @@ function TslSalesPage() {
       <section className="bb-section"><div className="bb-wrap">
         <div className="bb-about">
           <div className="bb-about-photo">
-            <img src="https://i.postimg.cc/NsVnGZSg/Whats-App-Image-2026-11-11-at-21-39-13.jpg" alt="Pedro Dias, criador do Blinda Bolsa Família" />
+            <img src="https://i.postimg.cc/cCjW91ZY/high-level-description-a-casual-iphone-s-6df-V1zj-CU3a-Qc-HKf1d-Vj-MA-Ce-YOYJh-KQIm-Ihbf2y-Y7mo-A.jpg" alt="Pedro Dias, criador do Blinda Bolsa Família" />
           </div>
           <div className="bb-about-copy">
             <h2>QUEM ESTÁ POR TRÁS DO BLINDA</h2>
@@ -209,7 +209,7 @@ function TslSalesPage() {
             <p>E eu também já tive o benefício cancelado — sem entender o motivo.</p>
             <p>Foi quando comecei a conversar com outras pessoas na mesma situação que descobri: quase todas cometiam os mesmos erros do dia a dia, sem perceber.</p>
             <p>Foi por isso que criei o Blinda Bolsa Família: para reunir os 10 erros que ninguém te explica, em um lugar só.</p>
-            <div className="bb-about-sign">— Pedro Dias</div>
+            <div className="bb-about-sign">— PEDRO</div>
             <a className="bb-instagram" href="https://www.instagram.com/blindabolsafamilia/" target="_blank" rel="noopener noreferrer" aria-label="Instagram Blinda Bolsa Família">
               <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
                 <rect x="3" y="3" width="18" height="18" rx="5" stroke="currentColor" strokeWidth="2" />
