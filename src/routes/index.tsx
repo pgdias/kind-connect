@@ -201,7 +201,7 @@ function TslSalesPage() {
       <section className="bb-section"><div className="bb-wrap">
         <div className="bb-about">
           <div className="bb-about-photo">
-            <img src="https://i.postimg.cc/cCjW91ZY/high-level-description-a-casual-iphone-s-6df-V1zj-CU3a-Qc-HKf1d-Vj-MA-Ce-YOYJh-KQIm-Ihbf2y-Y7mo-A.jpg" alt="Pedro Dias, criador do Blinda Bolsa Família" />
+            <img src="https://i.postimg.cc/cHYW6GND/O-homem-aparece-sentado-no-banco-do-motorista-no-i.png" alt="Pedro Dias, criador do Blinda Bolsa Família" />
           </div>
           <div className="bb-about-copy">
             <h2>QUEM ESTÁ POR TRÁS DO BLINDA</h2>
