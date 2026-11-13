@@ -160,6 +160,23 @@ function TslSalesPage() {
         <p className="bb-muted">R$ 12,99 — pagamento único</p>
       </div></section>
 
+
+
+      <section className="bb-section bb-band" id="produto"><div className="bb-wrap">
+        <h2>BLINDA BOLSA FAMÍLIA</h2>
+        <p className="bb-subtitle">Treinamento em vídeo que revela os <strong>10 erros do dia a dia</strong> e mostra o que fazer com cada um.</p>
+        <div className="bb-grid">
+          <div className="bb-card"><b><span className="bb-check">✓</span>A revelação dos 10 erros</b></div>
+          <div className="bb-card"><b><span className="bb-check">✓</span>Por que cada um é perigoso</b></div>
+          <div className="bb-card"><b><span className="bb-check">✓</span>Como identificar se você comete algum</b></div>
+          <div className="bb-card"><b><span className="bb-check">✓</span>O que evitar na rotina</b></div>
+        </div>
+        {COURSE_VIDEO_URL ? <VideoCard src={COURSE_VIDEO_URL} title="Demonstração do Blinda Bolsa Família" caption="Assista: por dentro do Blinda Bolsa Família" /> : <div className="bb-video-card"><div className="bb-video-poster"><span className="bb-play">▶</span></div><p className="bb-video-caption">Assista: por dentro do Blinda Bolsa Família</p></div>}
+        <p className="bb-simple">Simples. Popular. Direto.</p>
+        <BuyButton placement="produto" />
+        <p className="bb-muted">R$ 12,99 — pagamento único</p>
+      </div></section>
+
       <section className="bb-section"><div className="bb-wrap">
         <div className="bb-about">
           <div className="bb-about-photo" role="img" aria-label="Espaço reservado para a foto de Pedro Dias">
@@ -186,21 +203,6 @@ function TslSalesPage() {
             <p className="bb-about-note">Sem promessa milagrosa. Sem fórmula mágica. Só o que eu gostaria que alguém tivesse me mostrado antes.</p>
           </div>
         </div>
-      </div></section>
-
-      <section className="bb-section bb-band" id="produto"><div className="bb-wrap">
-        <h2>BLINDA BOLSA FAMÍLIA</h2>
-        <p className="bb-subtitle">Treinamento em vídeo que revela os <strong>10 erros do dia a dia</strong> e mostra o que fazer com cada um.</p>
-        <div className="bb-grid">
-          <div className="bb-card"><b><span className="bb-check">✓</span>A revelação dos 10 erros</b></div>
-          <div className="bb-card"><b><span className="bb-check">✓</span>Por que cada um é perigoso</b></div>
-          <div className="bb-card"><b><span className="bb-check">✓</span>Como identificar se você comete algum</b></div>
-          <div className="bb-card"><b><span className="bb-check">✓</span>O que evitar na rotina</b></div>
-        </div>
-        {COURSE_VIDEO_URL ? <VideoCard src={COURSE_VIDEO_URL} title="Demonstração do Blinda Bolsa Família" caption="Assista: por dentro do Blinda Bolsa Família" /> : <div className="bb-video-card"><div className="bb-video-poster"><span className="bb-play">▶</span></div><p className="bb-video-caption">Assista: por dentro do Blinda Bolsa Família</p></div>}
-        <p className="bb-simple">Simples. Popular. Direto.</p>
-        <BuyButton placement="produto" />
-        <p className="bb-muted">R$ 12,99 — pagamento único</p>
       </div></section>
 
       <section className="bb-section"><div className="bb-wrap">
