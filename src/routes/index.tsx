@@ -1,11 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useRef, useState } from "react";
+import { createElement, useEffect, useRef, useState } from "react";
 import { trackEvent } from "../lib/api";
 
 const CHECKOUT_URL = "https://pay.cakto.com.br/pp5jvmi_1232005";
-const COURSE_VIDEO_URL = "";
-const TESTIMONIAL_VIDEO_ONE_URL = "https://fast.wistia.net/embed/iframe/adwbyvr4dx?seo=false&videoFoam=true";
-const TESTIMONIAL_VIDEO_TWO_URL = "https://fast.wistia.net/embed/iframe/h627ywi3d4?seo=false&videoFoam=true";
+const COURSE_VIDEO_URL = "rzlgjjbxdu";
 
 // A/B: A (padrão) — headline: VOCÊ PODE ESTAR COMETENDO UM DOS 10 ERROS QUE COLOCAM SEU BOLSA FAMÍLIA EM RISCO — AGORA MESMO, SEM SABER | CTA: QUERO BLINDAR MEU BOLSA FAMÍLIA
 // B — headline: OS 10 ERROS DO DIA A DIA QUE PODEM COLOCAR SEU BOLSA FAMÍLIA EM RISCO — E VOCÊ PODE ESTAR COMETENDO ALGUM AGORA | CTA: QUERO CONHECER OS 10 ERROS AGORA
@@ -72,14 +70,39 @@ function BuyButton({ placement, full = false }: { placement: string; full?: bool
   );
 }
 
-function VideoCard({ src, title, caption }: { src: string; title: string; caption: string }) {
-  const isMp4 = src.toLowerCase().includes(".mp4");
+function WistiaPlayer({ mediaId, title }: { mediaId: string; title: string }) {
+  useEffect(() => {
+    if (!document.getElementById("wistia-player-script")) {
+      const playerScript = document.createElement("script");
+      playerScript.id = "wistia-player-script";
+      playerScript.src = "https://fast.wistia.com/player.js";
+      playerScript.async = true;
+      document.head.appendChild(playerScript);
+    }
+    const embedScriptId = `wistia-embed-${mediaId}`;
+    if (!document.getElementById(embedScriptId)) {
+      const embedScript = document.createElement("script");
+      embedScript.id = embedScriptId;
+      embedScript.src = `https://fast.wistia.com/embed/${mediaId}.js`;
+      embedScript.async = true;
+      embedScript.type = "module";
+      document.head.appendChild(embedScript);
+    }
+  }, [mediaId]);
+
+  return (
+    <div className="bb-wistia-player">
+      <style>{`wistia-player[media-id="${mediaId}"]:not(:defined) { background: center / contain no-repeat url("https://fast.wistia.com/embed/medias/${mediaId}/swatch"); display: block; filter: blur(5px); padding-top: 177.78%; }`}</style>
+      {createElement("wistia-player", { "media-id": mediaId, aspect: "0.5625", "aria-label": title })}
+    </div>
+  );
+}
+
+function VideoCard({ mediaId, title, caption }: { mediaId: string; title: string; caption: string }) {
   return (
     <div className="bb-video-card">
-      <div className="bb-video-frame" style={src.includes("wistia.net") ? { aspectRatio: "9 / 16" } : undefined}>
-        {isMp4
-          ? <video src={src} controls playsInline preload="metadata" />
-          : <iframe src={src} title={title} loading="lazy" allow="autoplay; fullscreen; picture-in-picture" allowFullScreen />}
+      <div className="bb-video-frame" style={{ aspectRatio: "9 / 16" }}>
+        <WistiaPlayer mediaId={mediaId} title={title} />
       </div>
       <p className="bb-video-caption">{caption}</p>
     </div>
@@ -169,7 +192,7 @@ function TslSalesPage() {
           <div className="bb-card"><b><span className="bb-check">✓</span>Como identificar se você comete algum</b></div>
           <div className="bb-card"><b><span className="bb-check">✓</span>O que evitar na rotina</b></div>
         </div>
-        {COURSE_VIDEO_URL ? <VideoCard src={COURSE_VIDEO_URL} title="Demonstração do Blinda Bolsa Família" caption="Assista: por dentro do Blinda Bolsa Família" /> : <div className="bb-video-card"><div className="bb-video-poster"><span className="bb-play">▶</span></div><p className="bb-video-caption">Assista: por dentro do Blinda Bolsa Família</p></div>}
+        <div className="bb-video-card"><div className="bb-video-frame" style={{ aspectRatio: "9 / 16" }}><WistiaPlayer mediaId={COURSE_VIDEO_URL} title="Por dentro do Blinda Bolsa Família" /></div><p className="bb-video-caption">Assista: por dentro do Blinda Bolsa Família</p></div>
         <p className="bb-simple">Simples. Popular. Direto.</p>
         <BuyButton placement="produto" />
         <p className="bb-muted">R$ 27,90 — pagamento único</p>
@@ -203,8 +226,8 @@ function TslSalesPage() {
       <section className="bb-section"><div className="bb-wrap">
         <h2 className="bb-white-title">VEJA O QUE QUEM CONHECEU O BLINDA DIZ</h2>
         <div className="bb-video-grid">
-          <VideoCard src={TESTIMONIAL_VIDEO_ONE_URL} title="Depoimento Guilherme" caption="Depoimento — Guilherme" />
-          <VideoCard src={TESTIMONIAL_VIDEO_TWO_URL} title="Depoimento Danielle" caption="Depoimento — Danielle" />
+          <VideoCard mediaId="adwbyvr4dx" title="Depoimento Guilherme" caption="Depoimento — Guilherme" />
+          <VideoCard mediaId="h627ywi3d4" title="Depoimento Danielle" caption="Depoimento — Danielle" />
         </div>
         <p className="bb-question">SERÁ QUE EU TAMBÉM ESTOU COMETENDO ESSES ERROS?</p>
       </div></section>
