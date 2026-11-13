@@ -73,20 +73,18 @@ function BuyButton({ placement, full = false }: { placement: string; full?: bool
 }
 
 function VideoCard({ src, title, caption }: { src: string; title: string; caption: string }) {
-  const [playing, setPlaying] = useState(false);
   const isMp4 = src.toLowerCase().includes(".mp4");
   return (
     <div className="bb-video-card">
-      {playing && src ? <div className="bb-video-frame" style={src.includes("wistia.net") ? { aspectRatio: "9 / 16" } : undefined}>
-        {isMp4 ? <video src={src} controls autoPlay playsInline /> : <iframe src={src} title={title} loading="lazy" allow="autoplay; fullscreen; picture-in-picture" allowFullScreen />}
-      </div> : <div className="bb-video-poster">
-        <button type="button" aria-label={src ? "Reproduzir " + title : title + " ainda não disponível"} disabled={!src} onClick={() => setPlaying(true)}><span className="bb-play">▶</span></button>
-      </div>}
+      <div className="bb-video-frame" style={src.includes("wistia.net") ? { aspectRatio: "9 / 16" } : undefined}>
+        {isMp4
+          ? <video src={src} controls playsInline preload="metadata" />
+          : <iframe src={src} title={title} loading="lazy" allow="autoplay; fullscreen; picture-in-picture" allowFullScreen />}
+      </div>
       <p className="bb-video-caption">{caption}</p>
     </div>
   );
 }
-
 function TslSalesPage() {
   const [showSticky, setShowSticky] = useState(false);
   const [progress, setProgress] = useState(0);
@@ -206,7 +204,7 @@ function TslSalesPage() {
         <h2 className="bb-white-title">VEJA O QUE QUEM CONHECEU O BLINDA DIZ</h2>
         <div className="bb-video-grid">
           <VideoCard src={TESTIMONIAL_VIDEO_ONE_URL} title="Depoimento Guilherme" caption="Depoimento — Guilherme" />
-          <VideoCard src={TESTIMONIAL_VIDEO_TWO_URL} title="Depoimento 2" caption="Depoimento 2" />
+          <VideoCard src={TESTIMONIAL_VIDEO_TWO_URL} title="Depoimento Danielle" caption="Depoimento — Danielle" />
         </div>
         <p className="bb-question">SERÁ QUE EU TAMBÉM ESTOU COMETENDO ESSES ERROS?</p>
       </div></section>
