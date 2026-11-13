@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 import { trackEvent } from "../lib/api";
 
-const CHECKOUT_URL = "https://pay.cakto.com.br/38xq22v_1131074";
+const CHECKOUT_URL = "https://pay.cakto.com.br/pp5jvmi_1232005";
 const COURSE_VIDEO_URL = "";
 const TESTIMONIAL_VIDEO_ONE_URL = "";
 const TESTIMONIAL_VIDEO_TWO_URL = "";
