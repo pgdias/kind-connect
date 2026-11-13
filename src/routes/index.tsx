@@ -5,7 +5,7 @@ import { trackEvent } from "../lib/api";
 const CHECKOUT_URL = "https://pay.cakto.com.br/pp5jvmi_1232005";
 const COURSE_VIDEO_URL = "";
 const TESTIMONIAL_VIDEO_ONE_URL = "https://fast.wistia.net/embed/iframe/adwbyvr4dx?seo=false&videoFoam=true";
-const TESTIMONIAL_VIDEO_TWO_URL = "";
+const TESTIMONIAL_VIDEO_TWO_URL = "https://fast.wistia.net/embed/iframe/h627ywi3d4?seo=false&videoFoam=true";
 
 // A/B: A (padrão) — headline: VOCÊ PODE ESTAR COMETENDO UM DOS 10 ERROS QUE COLOCAM SEU BOLSA FAMÍLIA EM RISCO — AGORA MESMO, SEM SABER | CTA: QUERO BLINDAR MEU BOLSA FAMÍLIA
 // B — headline: OS 10 ERROS DO DIA A DIA QUE PODEM COLOCAR SEU BOLSA FAMÍLIA EM RISCO — E VOCÊ PODE ESTAR COMETENDO ALGUM AGORA | CTA: QUERO CONHECER OS 10 ERROS AGORA
