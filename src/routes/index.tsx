@@ -4,7 +4,7 @@ import { trackEvent } from "../lib/api";
 
 const CHECKOUT_URL = "https://pay.cakto.com.br/pp5jvmi_1232005";
 const COURSE_VIDEO_URL = "";
-const TESTIMONIAL_VIDEO_ONE_URL = "";
+const TESTIMONIAL_VIDEO_ONE_URL = "https://fast.wistia.net/embed/iframe/adwbyvr4dx?seo=false&videoFoam=true";
 const TESTIMONIAL_VIDEO_TWO_URL = "";
 
 // A/B: A (padrão) — headline: VOCÊ PODE ESTAR COMETENDO UM DOS 10 ERROS QUE COLOCAM SEU BOLSA FAMÍLIA EM RISCO — AGORA MESMO, SEM SABER | CTA: QUERO BLINDAR MEU BOLSA FAMÍLIA
@@ -77,8 +77,8 @@ function VideoCard({ src, title, caption }: { src: string; title: string; captio
   const isMp4 = src.toLowerCase().includes(".mp4");
   return (
     <div className="bb-video-card">
-      {playing && src ? <div className="bb-video-frame">
-        {isMp4 ? <video src={src} controls autoPlay playsInline /> : <iframe src={src} title={title} loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowFullScreen />}
+      {playing && src ? <div className="bb-video-frame" style={src.includes("wistia.net") ? { aspectRatio: "9 / 16" } : undefined}>
+        {isMp4 ? <video src={src} controls autoPlay playsInline /> : <iframe src={src} title={title} loading="lazy" allow="autoplay; fullscreen; picture-in-picture" allowFullScreen />}
       </div> : <div className="bb-video-poster">
         <button type="button" aria-label={src ? "Reproduzir " + title : title + " ainda não disponível"} disabled={!src} onClick={() => setPlaying(true)}><span className="bb-play">▶</span></button>
       </div>}
