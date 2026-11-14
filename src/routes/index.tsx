@@ -7,7 +7,7 @@ const COURSE_VIDEO_URL = "rzlgjjbxdu";
 
 // A/B: A (padrão) — headline: VOCÊ PODE ESTAR COMETENDO UM DOS 10 ERROS QUE COLOCAM SEU BOLSA FAMÍLIA EM RISCO — AGORA MESMO, SEM SABER | CTA: QUERO BLINDAR MEU BOLSA FAMÍLIA
 // B — headline: OS 10 ERROS DO DIA A DIA QUE PODEM COLOCAR SEU BOLSA FAMÍLIA EM RISCO — E VOCÊ PODE ESTAR COMETENDO ALGUM AGORA | CTA: QUERO CONHECER OS 10 ERROS AGORA
-// C — headline: SERÁ QUE VOCÊ ESTÁ COMETENDO ALGUM DESSES 10 ERROS COM O SEU BOLSA FAMÍLIA? | CTA: QUERO PROTEGER MEU BOLSA FAMÍLIA POR R$ 27
+// C — headline: SERÁ QUE VOCÊ ESTÁ COMETENDO ALGUM DESSES 10 ERROS COM O SEU BOLSA FAMÍLIA? | CTA: QUERO PROTEGER MEU BOLSA FAMÍLIA POR R$ 27,00
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -151,7 +151,7 @@ function TslSalesPage() {
         <p className="bb-subtitle">A lista está trancada dentro do Blinda Bolsa Família. Enquanto você não conhece, os erros continuam acontecendo.</p>
         <BuyButton placement="hero" />
         <p className="bb-trust">🔒 Compra segura · Acesso imediato · Sem mensalidade</p>
-        <p className="bb-muted">R$ 27 — pagamento único</p>
+        <p className="bb-muted">R$ 27,00 — pagamento único</p>
       </div></header>
 
       <section className="bb-section bb-band"><div className="bb-wrap">
@@ -178,7 +178,7 @@ function TslSalesPage() {
         <p className="bb-question">SERÁ QUE EU ESTOU COMETENDO ALGUM DESSES ERROS E NEM SEI?</p>
         <p>Se você não sabe a resposta, esse é o sinal.</p>
         <BuyButton placement="curiosidade" />
-        <p className="bb-muted">R$ 27 — pagamento único</p>
+        <p className="bb-muted">R$ 27,00 — pagamento único</p>
       </div></section>
 
 
@@ -195,7 +195,7 @@ function TslSalesPage() {
         <div className="bb-video-card"><div className="bb-video-frame" style={{ aspectRatio: "9 / 16" }}><WistiaPlayer mediaId={COURSE_VIDEO_URL} title="Por dentro do Blinda Bolsa Família" /></div><p className="bb-video-caption">Assista: por dentro do Blinda Bolsa Família</p></div>
         <p className="bb-simple">Simples. Popular. Direto.</p>
         <BuyButton placement="produto" />
-        <p className="bb-muted">R$ 27 — pagamento único</p>
+        <p className="bb-muted">R$ 27,00 — pagamento único</p>
       </div></section>
 
       <section className="bb-section"><div className="bb-wrap">
@@ -241,12 +241,12 @@ function TslSalesPage() {
             <li><span className="bb-check">✓</span>Acesso imediato</li>
           </ul>
           <div className="bb-divider" />
-          <p className="bb-price"><strong>R$ 27</strong> — pagamento único.</p>
+          <p className="bb-price"><strong>R$ 27,00</strong> — pagamento único.</p>
           <p>Menos que uma pizza.</p>
-          <p>Por R$ 27 você finalmente descobre quais são os 10 erros — <strong>antes que seja tarde.</strong></p>
+          <p>Por R$ 27,00 você finalmente descobre quais são os 10 erros — <strong>antes que seja tarde.</strong></p>
           <p className="bb-muted">Você paga uma vez. Assiste quando quiser.</p>
           <BuyButton placement="oferta-final" full />
-          <p className="bb-muted">R$ 27 — pagamento único</p>
+          <p className="bb-muted">R$ 27,00 — pagamento único</p>
         </div>
       </div></section>
 
@@ -259,7 +259,7 @@ function TslSalesPage() {
           <h2>GARANTIA DE 7 DIAS</h2>
           <p>Compre sem risco.</p>
           <p>Você tem 7 dias para acessar o treinamento e ver se faz sentido para você.</p>
-          <p>Se não fizer, basta pedir o reembolso dentro desse prazo. Devolvemos os R$ 27 sem burocracia, sem perguntas e sem letras miúdas.</p>
+          <p>Se não fizer, basta pedir o reembolso dentro desse prazo. Devolvemos os R$ 27,00 sem burocracia, sem perguntas e sem letras miúdas.</p>
           <p className="bb-guarantee-note">Reembolso integral. Sem discussão. Sem enrolação.</p>
         </div>
       </div></section>
@@ -280,15 +280,15 @@ function TslSalesPage() {
       <section className="bb-section bb-band bb-bottomline"><div className="bb-wrap">
         <h2 className="bb-white-title">VOCÊ TEM DUAS OPÇÕES</h2>
         <div className="bb-choice"><strong>1.</strong> Fechar esta página e continuar sem saber quais são os 10 erros.</div>
-        <div className="bb-choice bb-choice-green"><strong>2.</strong> Pagar R$ 27 e descobrir <strong>hoje</strong> o que pode estar colocando seu Bolsa Família em risco.</div>
+        <div className="bb-choice bb-choice-green"><strong>2.</strong> Pagar R$ 27,00 e descobrir <strong>hoje</strong> o que pode estar colocando seu Bolsa Família em risco.</div>
         <p className="bb-question">A LISTA ESTÁ LÁ DENTRO. E ENQUANTO VOCÊ NÃO CONHECE, ELA CONTINUA ESCONDIDA.</p>
         <BuyButton placement="fechamento" />
-        <p className="bb-muted">R$ 27 — pagamento único</p>
+        <p className="bb-muted">R$ 27,00 — pagamento único</p>
         <p className="bb-muted">Acesso liberado na hora, direto no seu celular.</p>
       </div></section>
 
       <div className={"bb-sticky" + (showSticky ? " bb-sticky-show" : "")}>
-        <div className="bb-sticky-inner"><BuyButton placement="barra-fixa-mobile" /><span className="bb-sticky-price">R$ 27</span></div>
+        <div className="bb-sticky-inner"><BuyButton placement="barra-fixa-mobile" /><span className="bb-sticky-price">R$ 27,00</span></div>
       </div>
     </main>
   );
