@@ -105,9 +105,9 @@ function RootComponent(){
         return;
       }
 
-      if (destination.hostname !== "pay.cakto.com.br") return;
+      if (destination.hostname !== "ggcheckout.app") return;
 
-      // Keep campaign attribution on Cakto checkout links even after quiz URLs change.
+      // Keep campaign attribution on GG Checkout links even after quiz URLs change.
       const utmParams = getStoredUtmParams();
       for (const [key, value] of Object.entries(utmParams)) {
         if (value && !destination.searchParams.has(key)) {
@@ -120,12 +120,12 @@ function RootComponent(){
       if (now - lastCheckoutClickAt < 800) return;
       lastCheckoutClickAt = now;
 
-      // Button click is an intent signal; Cakto itself reports Initiated Checkout
+      // Button click is an intent signal; GG Checkout itself reports Initiated Checkout
       // after the checkout page opens and Purchase after payment confirmation.
       trackKwaiEvent("buttonClick");
       void trackEvent("checkout_click", {
         page: window.location.pathname,
-        checkout_provider: "cakto",
+        checkout_provider: "ggcheckout",
       });
     };
 
