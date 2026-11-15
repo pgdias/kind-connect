@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { createElement, useEffect, useRef, useState } from "react";
 import { trackEvent } from "../lib/api";
 
-const CHECKOUT_URL = "https://pay.cakto.com.br/pp5jvmi_1232005";
+const CHECKOUT_URL = "https://ggcheckout.app/checkout/v5/NrYN7iGqeFcJfom8GLSa94";
 const COURSE_VIDEO_URL = "rzlgjjbxdu";
 
 // A/B: A (padrão) — headline: VOCÊ PODE ESTAR COMETENDO UM DOS 10 ERROS QUE COLOCAM SEU BOLSA FAMÍLIA EM RISCO — AGORA MESMO, SEM SABER | CTA: QUERO BLINDAR MEU BOLSA FAMÍLIA
@@ -63,7 +63,7 @@ function BuyButton({ placement, full = false }: { placement: string; full?: bool
     <a className={"bb-button" + (full ? " bb-full" : "")} href={CHECKOUT_URL}
       onClick={() => {
         fireMeta("InitiateCheckout");
-        void trackEvent("InitiateCheckout", { placement, provider: "cakto", price: 27.00, currency: "BRL" });
+        void trackEvent("InitiateCheckout", { placement, provider: "ggcheckout", price: 27.00, currency: "BRL" });
       }}>
       QUERO BLINDAR MEU BOLSA FAMÍLIA
     </a>
